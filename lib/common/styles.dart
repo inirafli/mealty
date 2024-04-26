@@ -29,7 +29,7 @@ final TextTheme appTextTheme = TextTheme(
   labelLarge: GoogleFonts.nunitoSans(
       fontSize: 14, fontWeight: FontWeight.w600, letterSpacing: 1.25),
   bodySmall: GoogleFonts.nunitoSans(
-      fontSize: 10, fontWeight: FontWeight.w400, letterSpacing: 0.4),
+      fontSize: 12, fontWeight: FontWeight.w500, letterSpacing: 0.4),
   labelSmall: GoogleFonts.nunitoSans(
       fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 1.5),
 );

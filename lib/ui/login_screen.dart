@@ -1,7 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:mealty/widgets/auth_bottom_action.dart';
 
-class LoginScreen extends StatelessWidget {
+import '../widgets/custom_text_field.dart';
+import '../widgets/password_text_field.dart';
+import '../widgets/welcome_message.dart';
+
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _passwordObscure = true;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,44 +37,15 @@ class LoginScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 24.0),
-                  Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: RichText(
-                      textAlign: TextAlign.start,
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'Selamat datang kembali\ndi ',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineSmall
-                                ?.copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                          TextSpan(
-                            text: 'Mealty.',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineMedium
-                                ?.copyWith(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  const WelcomeMessage(
+                    firstText: 'Selamat datang kembali\ndi ',
                   ),
                   const SizedBox(height: 24.0),
                   Expanded(
                     child: Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 32.0, vertical: 36.0),
+                      padding: const EdgeInsets.only(
+                          left: 32.0, right: 32.0, top: 36.0, bottom: 24.0),
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.onPrimary,
                         borderRadius: const BorderRadius.only(
@@ -77,124 +69,87 @@ class LoginScreen extends StatelessWidget {
                             textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 24.0),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Email',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onBackground,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                              ),
-                              const SizedBox(height: 8),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .surface
-                                      .withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: TextField(
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onBackground,
-                                          fontWeight: FontWeight.w600),
-                                  decoration: InputDecoration(
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16, vertical: 10),
-                                    border: InputBorder.none,
-                                    hintText: 'Masukkan Email-mu',
-                                    hintStyle: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onBackground,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                  ),
-                                ),
-                              ),
-                            ],
+                          CustomTextField(
+                            controller: _emailController,
+                            labelText: 'Email',
+                            hintText: 'Masukkan Email-mu',
                           ),
                           const SizedBox(height: 16.0),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Kata Sandi',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onBackground,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                              ),
-                              const SizedBox(height: 8),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .surface
-                                      .withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: TextField(
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium
-                                      ?.copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onBackground,
-                                          fontWeight: FontWeight.w600),
-                                  decoration: InputDecoration(
-                                    contentPadding: const EdgeInsets.symmetric(
-                                        horizontal: 16, vertical: 10),
-                                    border: InputBorder.none,
-                                    hintText: 'Masukkan Kata Sandi-mu',
-                                    hintStyle: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onBackground,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                    suffixIcon: IconButton(
-                                      icon: Icon(
-                                        Icons.visibility,
-                                        size: 18.0,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onBackground
-                                            .withOpacity(0.5),
-                                      ),
-                                      onPressed: () {
-                                        // Toggle password visibility
-                                      },
-                                    ),
-                                  ),
-                                  obscureText: true,
+                          PasswordTextField(
+                            controller: _passwordController,
+                            obscureText: _passwordObscure,
+                            togglePasswordVisibility: () {
+                              setState(() {
+                                _passwordObscure = !_passwordObscure;
+                              });
+                            },
+                          ),
+                          const SizedBox(height: 28.0),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: () {
+
+                              },
+                              child: Text(
+                                'Masuk',
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  color: Theme.of(context).colorScheme.onPrimary,
+                                  fontWeight: FontWeight.w800,
                                 ),
                               ),
-                            ],
+                            ),
+                          ),
+                          const SizedBox(height: 8.0),
+                          Text(
+                            'atau',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onBackground,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 8.0),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton.icon(
+                              onPressed: () {
+                                // Implement login with Google logic
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                                foregroundColor: Theme.of(context).colorScheme.onBackground,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                  side: BorderSide(
+                                    color: Theme.of(context).colorScheme.primary,
+                                  )
+                                )
+                              ),
+                              icon: Image.asset(
+                                'images/google_icon.png',
+                                width: 18,
+                                height: 18,
+                              ),
+                              label: Text(
+                                'Masuk dengan Google',
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const Spacer(),
+                          FormActionRow(
+                            message: 'Belum punya Akun?',
+                            buttonText: 'Daftar disini',
+                            onButtonPressed: () {
+                              // Handle registration navigation
+                            },
                           ),
                         ],
                       ),

@@ -39,6 +39,9 @@ class MyApp extends StatelessWidget {
             backgroundColor: primaryColor,
             foregroundColor: onPrimaryColor,
             padding: const EdgeInsets.symmetric(vertical: 12.0),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
           ),
         ),
         textTheme: appTextTheme,
