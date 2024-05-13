@@ -146,7 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           const Spacer(),
                           FormActionRow(
                             message: 'Belum punya Akun?',
-                            buttonText: 'Daftar disini',
+                            buttonText: 'Daftar disini!',
                             onButtonPressed: () {
                               // Handle registration navigation
                             },
