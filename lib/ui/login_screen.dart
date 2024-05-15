@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mealty/widgets/auth_bottom_action.dart';
 
 import '../widgets/custom_text_field.dart';
@@ -148,7 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             message: 'Belum punya Akun?',
                             buttonText: 'Daftar disini!',
                             onButtonPressed: () {
-                              // Handle registration navigation
+                              context.go('/register');
                             },
                           ),
                         ],

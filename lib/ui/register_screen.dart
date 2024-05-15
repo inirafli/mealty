@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../widgets/auth_bottom_action.dart';
 import '../widgets/custom_text_field.dart';
@@ -116,6 +117,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             buttonText: 'Masuk disini!',
                             onButtonPressed: () {
                               // Handle registration navigation
+                              context.go('/login');
                             },
                           ),
                         ],
