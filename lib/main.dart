@@ -58,6 +58,8 @@ class MyApp extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: primaryColor,
             foregroundColor: onPrimaryColor,
+            disabledBackgroundColor: primaryColor,
+            disabledForegroundColor: onPrimaryColor,
             padding: const EdgeInsets.symmetric(vertical: 12.0),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20.0),

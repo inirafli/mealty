@@ -14,23 +14,30 @@ class FormActionRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(message, style: Theme.of(context).textTheme.bodySmall),
-        const SizedBox(width: 6.0),
-        TextButton(
-          onPressed: onButtonPressed,
-          style: TextButton.styleFrom(
-            minimumSize: Size.zero, // Set this
-            padding: EdgeInsets.zero, // and this
-          ),
-          child: Text(
-            buttonText,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.bold,
-                ),
+        Text(
+          message,
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 4),
+          child: TextButton(
+            onPressed: onButtonPressed,
+            style: TextButton.styleFrom(
+              minimumSize: Size.zero,
+              padding: EdgeInsets.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap, // Reduce tap target size
+            ),
+            child: Text(
+              buttonText,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ),
       ],

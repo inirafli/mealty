@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mealty/common/auth_state.dart';
 import 'package:mealty/widgets/auth_bottom_action.dart';
+import 'package:mealty/widgets/custom_loading_indicator.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/auth_provider.dart';
+import '../widgets/auth_action_button.dart';
+import '../widgets/custom_snackbar.dart';
 import '../widgets/custom_text_field.dart';
+import '../widgets/google_login_button.dart';
 import '../widgets/password_text_field.dart';
 import '../widgets/welcome_message.dart';
 
@@ -48,8 +52,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   Expanded(
                     child: Container(
                       width: double.infinity,
-                      padding: const EdgeInsets.only(
-                          left: 32.0, right: 32.0, top: 36.0, bottom: 24.0),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 36.0, horizontal: 32.0),
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.onPrimary,
                         borderRadius: const BorderRadius.only(
@@ -72,13 +76,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                             textAlign: TextAlign.center,
                           ),
-                          const SizedBox(height: 24.0),
+                          const SizedBox(height: 48.0),
                           CustomTextField(
                             controller: _emailController,
                             labelText: 'Email',
                             hintText: 'Masukkan Email-mu',
                           ),
-                          const SizedBox(height: 16.0),
+                          const SizedBox(height: 24.0),
                           PasswordTextField(
                             controller: _passwordController,
                             obscureText: _passwordObscure,
@@ -88,45 +92,22 @@ class _LoginScreenState extends State<LoginScreen> {
                               });
                             },
                           ),
-                          const SizedBox(height: 28.0),
-                          Consumer<AuthProvider>(
-                            builder: (context, authProvider, child) {
-                              return SizedBox(
-                                width: double.infinity,
-                                child: ElevatedButton(
-                                  onPressed: authProvider.authState == AuthState.loading ? null : () async {
-                                    final email = _emailController.text;
-                                    final password = _passwordController.text;
-
-                                    await authProvider.signInWithEmailPassword(email, password);
-
-                                    if(!context.mounted) return;
-
-                                    if (authProvider.authState == AuthState.error) {
-                                      ScaffoldMessenger.of(context)
-                                          ..hideCurrentSnackBar()
-                                          ..showSnackBar(SnackBar(content: Text(authProvider.errorMessage)));
-                                    } else if (authProvider.authState == AuthState.authorized) {
-                                      context.go('/home');
-                                    }
-                                  },
-                                  // Make the Text changed into a Loading Indicator when state is loading
-                                  child: authProvider.authState == AuthState.loading
-                                      ? CircularProgressIndicator(color: Theme.of(context).colorScheme.onPrimary)
-                                      : Text(
-                                    'Masuk',
-                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                      color: Theme.of(context).colorScheme.onPrimary,
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }
+                          const SizedBox(height: 36.0),
+                          AuthActionButton(
+                            emailController: _emailController,
+                            passwordController: _passwordController,
+                            buttonText: 'Masuk',
+                            action: (String email, String password,
+                                [String? username]) {
+                              return Provider.of<AuthProvider>(context,
+                                      listen: false)
+                                  .signInWithEmailPassword(email, password);
+                            },
+                            successRoute: '/home',
                           ),
-                          const SizedBox(height: 8.0),
+                          const SizedBox(height: 18.0),
                           Text(
-                            'atau',
+                            '─────   atau   ─────',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
@@ -137,48 +118,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                   fontWeight: FontWeight.w600,
                                 ),
                           ),
-                          const SizedBox(height: 8.0),
-                          SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton.icon(
-                              onPressed: () {
-                                // Implement login with Google logic
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                  foregroundColor: Theme.of(context)
-                                      .colorScheme
-                                      .onBackground,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20.0),
-                                      side: BorderSide(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ))),
-                              icon: Image.asset(
-                                'images/google_icon.png',
-                                width: 18,
-                                height: 18,
-                              ),
-                              label: Text(
-                                'Masuk dengan Google',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                              ),
-                            ),
-                          ),
+                          const SizedBox(height: 18.0),
+                          const GoogleSignInButton(),
                           const Spacer(),
+                          const SizedBox(height: 36.0),
                           FormActionRow(
                             message: 'Belum punya Akun?',
                             buttonText: 'Daftar disini!',
                             onButtonPressed: () {
-                              // Handle registration navigation
                               context.go('/login/register');
                             },
                           ),

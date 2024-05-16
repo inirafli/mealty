@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: const Duration(seconds: 1),
+      duration: const Duration(milliseconds: 850),
       vsync: this,
     );
     _animationController.forward();
@@ -35,16 +35,16 @@ class _SplashScreenState extends State<SplashScreen>
 
   void _navigateToNextScreen() async {
     // Wait for 3 seconds to show the splash screen
-    await Provider.of<AuthProvider>(context, listen: false).initializationComplete;
+    await Provider.of<AuthProvider>(context, listen: false)
+        .initializationComplete;
 
-    await Future.delayed(const Duration(milliseconds: 1250));
+    await Future.delayed(const Duration(milliseconds: 1150));
 
     // Mounting check
     if (!mounted) return;
 
     // Check authentication status and navigate accordingly
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    print('Splash Screen auth state: ${authProvider.authState}');
     if (authProvider.authState == AuthState.authorized) {
       context.go('/home');
     } else {
@@ -63,7 +63,7 @@ class _SplashScreenState extends State<SplashScreen>
           FadeTransition(
             opacity: _animationController,
             child: Image.asset('images/mealty_icon.png',
-                width: 280), // Ensure you have the correct asset path
+                width: 300), // Ensure you have the correct asset path
           ),
           const Spacer(), // Takes up available space
           Align(

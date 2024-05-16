@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:mealty/common/auth_state.dart';
+import 'package:mealty/utils/auth_error_handling.dart';
 
 class AuthProvider extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -38,6 +39,13 @@ class AuthProvider extends ChangeNotifier {
   String get errorMessage => _errorMessage;
 
   Future<void> signInWithEmailPassword(String email, String password) async {
+    if (email.isEmpty || password.isEmpty) {
+      _errorMessage = 'Email and password cannot be empty.';
+      _authState = AuthState.error;
+      notifyListeners();
+      return;
+    }
+
     try {
       _authState = AuthState.loading;
       notifyListeners();
@@ -47,7 +55,7 @@ class AuthProvider extends ChangeNotifier {
       _authState = AuthState.authorized;
       notifyListeners();
     } on FirebaseAuthException catch (e) {
-      _errorMessage = e.message ?? 'An unknown error occurred';
+      _errorMessage = AuthErrorHandler.parseError(e.code);
       _authState = AuthState.error;
       notifyListeners();
     }
@@ -55,6 +63,13 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> createUserWithEmailPassword(
       String email, String password, String displayName) async {
+    if (email.isEmpty || password.isEmpty || displayName.isEmpty) {
+      _errorMessage = 'Email, username, and password cannot be empty.';
+      _authState = AuthState.error;
+      notifyListeners();
+      return;
+    }
+
     try {
       _authState = AuthState.loading;
       notifyListeners();
@@ -68,7 +83,7 @@ class AuthProvider extends ChangeNotifier {
       _authState = AuthState.registered;
       notifyListeners();
     } on FirebaseAuthException catch (e) {
-      _errorMessage = e.message ?? 'An unknown error occurred';
+      _errorMessage = AuthErrorHandler.parseError(e.code);
       _authState = AuthState.error;
       notifyListeners();
     }
@@ -93,7 +108,7 @@ class AuthProvider extends ChangeNotifier {
       _authState = AuthState.authorized;
       notifyListeners();
     } on FirebaseAuthException catch (e) {
-      _errorMessage = e.message ?? 'An unknown error occurred';
+      _errorMessage = AuthErrorHandler.parseError(e.code);
       _authState = AuthState.error;
       notifyListeners();
     }
