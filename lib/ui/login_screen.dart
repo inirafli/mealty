@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mealty/widgets/auth_bottom_action.dart';
+import 'package:provider/provider.dart';
 
+import '../provider/auth_provider.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/password_text_field.dart';
 import '../widgets/welcome_message.dart';
@@ -89,15 +91,18 @@ class _LoginScreenState extends State<LoginScreen> {
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
-                              onPressed: () {
-
-                              },
+                              onPressed: () {},
                               child: Text(
                                 'Masuk',
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  color: Theme.of(context).colorScheme.onPrimary,
-                                  fontWeight: FontWeight.w800,
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary,
+                                      fontWeight: FontWeight.w800,
+                                    ),
                               ),
                             ),
                           ),
@@ -108,11 +113,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                 .textTheme
                                 .bodyMedium
                                 ?.copyWith(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onBackground,
-                              fontWeight: FontWeight.w600,
-                            ),
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground,
+                                  fontWeight: FontWeight.w600,
+                                ),
                           ),
                           const SizedBox(height: 8.0),
                           SizedBox(
@@ -122,15 +127,18 @@ class _LoginScreenState extends State<LoginScreen> {
                                 // Implement login with Google logic
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Theme.of(context).colorScheme.onPrimary,
-                                foregroundColor: Theme.of(context).colorScheme.onBackground,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                  side: BorderSide(
-                                    color: Theme.of(context).colorScheme.primary,
-                                  )
-                                )
-                              ),
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                  foregroundColor: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20.0),
+                                      side: BorderSide(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                      ))),
                               icon: Image.asset(
                                 'images/google_icon.png',
                                 width: 18,
@@ -138,9 +146,12 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               label: Text(
                                 'Masuk dengan Google',
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                  fontWeight: FontWeight.w800,
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.w800,
+                                    ),
                               ),
                             ),
                           ),
@@ -149,7 +160,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             message: 'Belum punya Akun?',
                             buttonText: 'Daftar disini!',
                             onButtonPressed: () {
-                              context.go('/register');
+                              // Handle registration navigation
+                              context.go('/login/register');
                             },
                           ),
                         ],

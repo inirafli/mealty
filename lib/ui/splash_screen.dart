@@ -1,0 +1,104 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
+import '../provider/auth_provider.dart';
+
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    );
+    _animationController.forward();
+
+    _navigateToNextScreen();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _navigateToNextScreen() async {
+    // Wait for 3 seconds to show the splash screen
+    await Future.delayed(const Duration(seconds: 2));
+
+    // Mounting check
+    if (!mounted) return;
+
+    // Check authentication status and navigate accordingly
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    if (authProvider.authState == AuthState.authorized) {
+      context.go('/home');
+    } else {
+      context.go('/login');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          const Spacer(flex: 3),
+          FadeTransition(
+            opacity: _animationController,
+            child: Image.asset('images/mealty_icon.png',
+                width: 280), // Ensure you have the correct asset path
+          ),
+          const Spacer(), // Takes up available space
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Column(
+              children: [
+                RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          height: 1.25,
+                        ),
+                    children: [
+                      TextSpan(
+                        text: 'Meal ',
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            color: Theme.of(context).colorScheme.secondary,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      const TextSpan(text: 'with\nthe'),
+                      TextSpan(
+                        text: ' Community',
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              color: Theme.of(context).colorScheme.secondary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Image.asset('assets/loading_secondary.gif', width: 44),
+                const SizedBox(height: 36),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
