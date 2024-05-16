@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import '../common/auth_state.dart';
 import '../provider/auth_provider.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -18,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 1),
       vsync: this,
     );
     _animationController.forward();
@@ -34,13 +35,16 @@ class _SplashScreenState extends State<SplashScreen>
 
   void _navigateToNextScreen() async {
     // Wait for 3 seconds to show the splash screen
-    await Future.delayed(const Duration(seconds: 2));
+    await Provider.of<AuthProvider>(context, listen: false).initializationComplete;
+
+    await Future.delayed(const Duration(milliseconds: 1250));
 
     // Mounting check
     if (!mounted) return;
 
     // Check authentication status and navigate accordingly
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    print('Splash Screen auth state: ${authProvider.authState}');
     if (authProvider.authState == AuthState.authorized) {
       context.go('/home');
     } else {

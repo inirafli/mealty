@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mealty/common/auth_state.dart';
 import 'package:mealty/widgets/auth_bottom_action.dart';
 import 'package:provider/provider.dart';
 
@@ -88,23 +89,40 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                           ),
                           const SizedBox(height: 28.0),
-                          SizedBox(
-                            width: double.infinity,
-                            child: ElevatedButton(
-                              onPressed: () {},
-                              child: Text(
-                                'Masuk',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium
-                                    ?.copyWith(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
+                          Consumer<AuthProvider>(
+                            builder: (context, authProvider, child) {
+                              return SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                  onPressed: authProvider.authState == AuthState.loading ? null : () async {
+                                    final email = _emailController.text;
+                                    final password = _passwordController.text;
+
+                                    await authProvider.signInWithEmailPassword(email, password);
+
+                                    if(!context.mounted) return;
+
+                                    if (authProvider.authState == AuthState.error) {
+                                      ScaffoldMessenger.of(context)
+                                          ..hideCurrentSnackBar()
+                                          ..showSnackBar(SnackBar(content: Text(authProvider.errorMessage)));
+                                    } else if (authProvider.authState == AuthState.authorized) {
+                                      context.go('/home');
+                                    }
+                                  },
+                                  // Make the Text changed into a Loading Indicator when state is loading
+                                  child: authProvider.authState == AuthState.loading
+                                      ? CircularProgressIndicator(color: Theme.of(context).colorScheme.onPrimary)
+                                      : Text(
+                                    'Masuk',
+                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                      color: Theme.of(context).colorScheme.onPrimary,
                                       fontWeight: FontWeight.w800,
                                     ),
-                              ),
-                            ),
+                                  ),
+                                ),
+                              );
+                            }
                           ),
                           const SizedBox(height: 8.0),
                           Text(

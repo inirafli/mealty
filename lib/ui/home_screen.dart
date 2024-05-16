@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/auth_provider.dart';
@@ -18,13 +19,14 @@ class HomeScreen extends StatelessWidget {
             icon: const Icon(Icons.logout),
             onPressed: () async {
               await authProvider.signOut();
+              if (context.mounted) context.go('/login');
             },
           ),
         ],
       ),
       body: Center(
         child: Text(
-          'Welcome, ${authProvider.user?.email}',
+          'Welcome, ${authProvider.user?.displayName}',
           style: Theme.of(context).textTheme.titleLarge,
         ),
       ),

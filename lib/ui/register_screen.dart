@@ -119,7 +119,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             buttonText: 'Masuk disini!',
                             onButtonPressed: () {
                               // Handle registration navigation
-                              context.go('/login');
+                              context.pop();
                             },
                           ),
                         ],
