@@ -40,7 +40,7 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> signInWithEmailPassword(String email, String password) async {
     if (email.isEmpty || password.isEmpty) {
-      _errorMessage = 'Email and password cannot be empty.';
+      _errorMessage = 'Email and password tidak boleh kosong.';
       _authState = AuthState.error;
       notifyListeners();
       return;
@@ -64,7 +64,7 @@ class AuthProvider extends ChangeNotifier {
   Future<void> createUserWithEmailPassword(
       String email, String password, String displayName) async {
     if (email.isEmpty || password.isEmpty || displayName.isEmpty) {
-      _errorMessage = 'Email, username, and password cannot be empty.';
+      _errorMessage = 'Email, username, dan kata sandi tidak boleh kosong.';
       _authState = AuthState.error;
       notifyListeners();
       return;

@@ -51,8 +51,16 @@ class AuthActionButton extends StatelessWidget {
                           contentText: authProvider.errorMessage,
                           context: context,
                         ));
-                    } else if (authProvider.authState == AuthState.authorized ||
-                        authProvider.authState == AuthState.registered) {
+                    } else if (authProvider.authState == AuthState.authorized) {
+                      context.go(successRoute);
+                    } else if (authProvider.authState == AuthState.registered) {
+                      ScaffoldMessenger.of(context)
+                        ..hideCurrentSnackBar()
+                        ..showSnackBar(CustomSnackBar(
+                          contentText:
+                              'Berhasil melakukan registrasi, silahkan masuk dengan akun',
+                          context: context,
+                        ));
                       context.go(successRoute);
                     }
                   },
