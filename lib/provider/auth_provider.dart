@@ -95,8 +95,15 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
 
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) {
+        _errorMessage = 'Pilih akun Google-mu untuk masuk dengan Google.';
+        _authState = AuthState.error;
+        notifyListeners();
+        return;
+      }
+
       final GoogleSignInAuthentication googleAuth =
-          await googleUser!.authentication;
+          await googleUser.authentication;
 
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
@@ -117,6 +124,8 @@ class AuthProvider extends ChangeNotifier {
   Future<void> signOut() async {
     try {
       await _auth.signOut();
+      await _googleSignIn.signOut();
+
       _authState = AuthState.unauthorized;
       notifyListeners();
     } on FirebaseAuthException catch (e) {
