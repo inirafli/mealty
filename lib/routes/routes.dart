@@ -4,6 +4,7 @@ import '../ui/home_screen.dart';
 import '../ui/login_screen.dart';
 import '../ui/register_screen.dart';
 import '../ui/splash_screen.dart';
+import '../utils/custom_page_transitions.dart';
 
 class AppRouter {
   static GoRouter configureRouter() {
@@ -16,11 +17,19 @@ class AppRouter {
         ),
         GoRoute(
           path: '/login',
-          builder: (context, state) => const LoginScreen(),
+          pageBuilder: (context, state) {
+            return createSlideFromLeftTransitionPage(
+              page: const LoginScreen(),
+            );
+          },
           routes: [
             GoRoute(
-              path: 'register', // Accessible as '/login/register'
-              builder: (context, state) => const RegisterScreen(),
+              path: 'register',
+              pageBuilder: (context, state) {
+                return createSlideFromRightTransitionPage(
+                  page: const RegisterScreen(),
+                );
+              },
             ),
           ],
         ),

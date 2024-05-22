@@ -121,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           const SizedBox(height: 36.0),
                           FormActionRow(
                             message: 'Belum punya Akun?',
-                            buttonText: 'Daftar disini!',
+                            buttonText: 'Daftar disini',
                             onButtonPressed: () {
                               context.go('/login/register');
                             },

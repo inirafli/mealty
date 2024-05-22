@@ -40,7 +40,7 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> signInWithEmailPassword(String email, String password) async {
     if (email.isEmpty || password.isEmpty) {
-      _errorMessage = 'Email and password tidak boleh kosong.';
+      _errorMessage = 'Email dan kata sandi tidak boleh kosong.';
       _authState = AuthState.error;
       notifyListeners();
       return;
@@ -80,6 +80,8 @@ class AuthProvider extends ChangeNotifier {
       await _auth.currentUser?.updateDisplayName(displayName);
       await _auth.currentUser?.reload();
 
+      await signOut();
+      
       _authState = AuthState.registered;
       notifyListeners();
     } on FirebaseAuthException catch (e) {

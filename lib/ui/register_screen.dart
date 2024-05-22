@@ -115,7 +115,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           const SizedBox(height: 36.0),
                           FormActionRow(
                             message: 'Sudah punya akun Mealty?',
-                            buttonText: 'Masuk disini!',
+                            buttonText: 'Masuk disini',
                             onButtonPressed: () {
                               // Handle registration navigation
                               context.pop();

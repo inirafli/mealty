@@ -25,26 +25,32 @@ class CustomTextField extends StatelessWidget {
               ),
         ),
         const SizedBox(height: 8),
-        Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: TextField(
-            controller: controller,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+        TextField(
+          controller: controller,
+          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onBackground,
+                fontWeight: FontWeight.w600,
+              ),
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: Theme.of(context).colorScheme.surface.withOpacity(0.2),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            hintText: hintText,
+            hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onBackground,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w500,
                 ),
-            decoration: InputDecoration(
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              border: InputBorder.none,
-              hintText: hintText,
-              hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
-                    fontWeight: FontWeight.w500,
-                  ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide.none,
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide(
+                  color:
+                      Theme.of(context).colorScheme.primary.withOpacity(0.65),
+                  width: 2.0),
             ),
           ),
         ),
