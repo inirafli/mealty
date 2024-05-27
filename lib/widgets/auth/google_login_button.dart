@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../common/auth_state.dart';
-import '../provider/auth_provider.dart';
-import 'custom_snackbar.dart';
+import '../../common/auth_state.dart';
+import '../../provider/auth_provider.dart';
+import '../common/custom_snackbar.dart';
 
 class GoogleSignInButton extends StatelessWidget {
   const GoogleSignInButton({super.key});
@@ -29,7 +29,7 @@ class GoogleSignInButton extends StatelessWidget {
                     context: context,
                   ));
               } else if (authProvider.authState == AuthState.authorized) {
-                context.go('/home');
+                context.go('/main');
               }
             },
             icon: Image.asset(

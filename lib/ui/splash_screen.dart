@@ -46,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen>
     // Check authentication status and navigate accordingly
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     if (authProvider.authState == AuthState.authorized) {
-      context.go('/home');
+      context.go('/main');
     } else {
       context.go('/login');
     }

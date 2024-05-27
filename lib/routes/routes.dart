@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:mealty/ui/main_screen.dart';
 
 import '../ui/home_screen.dart';
 import '../ui/login_screen.dart';
@@ -34,8 +35,8 @@ class AppRouter {
           ],
         ),
         GoRoute(
-          path: '/home',
-          builder: (context, state) => const HomeScreen(),
+          path: '/main',
+          builder: (context, state) => const MainScreen(),
         ),
       ],
     );

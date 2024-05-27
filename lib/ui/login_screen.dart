@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mealty/widgets/auth_bottom_action.dart';
+import 'package:mealty/widgets/auth/auth_bottom_action.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/auth_provider.dart';
-import '../widgets/auth_action_button.dart';
-import '../widgets/custom_text_field.dart';
-import '../widgets/google_login_button.dart';
-import '../widgets/password_text_field.dart';
-import '../widgets/welcome_message.dart';
+import '../widgets/auth/auth_action_button.dart';
+import '../widgets/auth/custom_text_field.dart';
+import '../widgets/auth/google_login_button.dart';
+import '../widgets/auth/password_text_field.dart';
+import '../widgets/auth/welcome_message.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -100,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       listen: false)
                                   .signInWithEmailPassword(email, password);
                             },
-                            successRoute: '/home',
+                            successRoute: '/main',
                           ),
                           const SizedBox(height: 18.0),
                           Text(

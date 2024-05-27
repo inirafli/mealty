@@ -3,11 +3,11 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/auth_provider.dart';
-import '../widgets/auth_action_button.dart';
-import '../widgets/auth_bottom_action.dart';
-import '../widgets/custom_text_field.dart';
-import '../widgets/password_text_field.dart';
-import '../widgets/welcome_message.dart';
+import '../widgets/auth/auth_action_button.dart';
+import '../widgets/auth/auth_bottom_action.dart';
+import '../widgets/auth/custom_text_field.dart';
+import '../widgets/auth/password_text_field.dart';
+import '../widgets/auth/welcome_message.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});

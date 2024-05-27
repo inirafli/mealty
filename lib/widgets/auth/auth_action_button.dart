@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../common/auth_state.dart';
-import '../provider/auth_provider.dart';
-import 'custom_loading_indicator.dart';
-import 'custom_snackbar.dart';
+import '../../common/auth_state.dart';
+import '../../provider/auth_provider.dart';
+import '../common/custom_loading_indicator.dart';
+import '../common/custom_snackbar.dart';
 
 class AuthActionButton extends StatelessWidget {
   final TextEditingController emailController;
