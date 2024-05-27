@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+import '../widgets/home/filter_button.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -29,6 +31,48 @@ class _HomeScreenState extends State<HomeScreen> {
     _searchController.removeListener(_updateInputStatus);
     _searchController.dispose();
     super.dispose();
+  }
+
+  void _showFilterDialog(String filterType) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Filter $filterType',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              // Add your filter list here
+              ListView(
+                shrinkWrap: true,
+                children: [
+                  ListTile(
+                    title: const Text('Filter Option 1'),
+                    onTap: () {
+                      // Handle filter option 1
+                    },
+                  ),
+                  ListTile(
+                    title: const Text('Filter Option 2'),
+                    onTap: () {
+                      // Handle filter option 2
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -64,14 +108,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           ? null
                           : Icon(
                               Icons.search,
-                              size: 18.0,
+                              size: 18.5,
                               color: Theme.of(context).colorScheme.primary,
                             ),
                       suffixIcon: _hasInput
                           ? IconButton(
                               icon: Icon(
                                 Icons.close,
-                                size: 18.0,
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                               onPressed: () {
@@ -79,9 +122,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               },
                             )
                           : null,
-                      prefixIconConstraints: const BoxConstraints(
-                        minWidth: 38.0,
-                        minHeight: 40.0,
+                      suffixIconConstraints: const BoxConstraints(
+                        minWidth: 32,
+                        minHeight: 32,
                       ),
                       filled: true,
                       fillColor: Theme.of(context).colorScheme.onPrimary,
@@ -90,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         borderSide: BorderSide.none,
                       ),
                       contentPadding: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 16.0),
+                          horizontal: 16.0, vertical: 8.0),
                     ),
                   ),
                 ),
@@ -117,11 +160,29 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      body: Center(
-        child: Text(
-          'Home Screen',
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: FilterButtons(
+              onCategoryPressed: () {
+                _showFilterDialog('Kategori Makanan');
+              },
+              onSortPressed: () {
+                _showFilterDialog('Urutkan dari');
+              },
+            ),
+          ),
+          // The rest of your home screen body
+          Expanded(
+            child: Center(
+              child: Text(
+                'Home Screen',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -24,18 +24,18 @@ class CustomBottomNavigationBar extends StatelessWidget {
         onTap: onItemTapped,
         items: [
           _buildBottomNavigationBarItem(
-              context, MdiIcons.homeOutline, MdiIcons.home, 'Beranda', 0, 26.0),
+              context, MdiIcons.homeOutline, MdiIcons.home, 'Beranda', 0, 28.0),
           _buildBottomNavigationBarItem(context, MdiIcons.cartOutline,
-              MdiIcons.cart, 'Keranjang', 1, 23.0),
+              MdiIcons.cart, 'Keranjang', 1, 25.0),
           _buildBottomNavigationBarItem(
               context,
               MdiIcons.textBoxMultipleOutline,
               MdiIcons.textBoxMultiple,
               'Riwayat',
               2,
-              20.0),
+              22.0),
           _buildBottomNavigationBarItem(context, MdiIcons.accountOutline,
-              MdiIcons.account, 'Profil', 3, 26.0),
+              MdiIcons.account, 'Profil', 3, 28.0),
         ],
       ),
     );
@@ -54,7 +54,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
     return BottomNavigationBarItem(
       icon: Transform.translate(
-        offset: isSelected ? const Offset(0, 0) : const Offset(0, -7),
+        offset: isSelected ? const Offset(0, 0) : const Offset(0, -6.5),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
