@@ -9,7 +9,7 @@ class CategoryFilterDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.onPrimary,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
@@ -41,56 +41,59 @@ class CategoryFilterDialog extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12.0),
-          Consumer<FilterProvider>(
-            builder: (context, filterProvider, child) {
-              return GridView.count(
-                crossAxisCount: 2,
-                crossAxisSpacing: 8.0,
-                mainAxisSpacing: 8.0,
-                shrinkWrap: true,
-                children: [
-                  _CategoryItem(
-                    image: 'images/all_type_category.webp',
-                    text: 'Semua',
-                    isSelected:
-                        filterProvider.selectedCategories.contains('all'),
-                    onTap: () => filterProvider.toggleCategorySelection('all'),
-                  ),
-                  _CategoryItem(
-                    image: 'images/staple_category.webp',
-                    text: 'Makanan',
-                    isSelected:
-                        filterProvider.selectedCategories.contains('Makanan'),
-                    onTap: () =>
-                        filterProvider.toggleCategorySelection('Makanan'),
-                  ),
-                  _CategoryItem(
-                    image: 'images/drinks_category.webp',
-                    text: 'Minuman',
-                    isSelected:
-                        filterProvider.selectedCategories.contains('Minuman'),
-                    onTap: () =>
-                        filterProvider.toggleCategorySelection('Minuman'),
-                  ),
-                  _CategoryItem(
-                    image: 'images/snacks_category.webp',
-                    text: 'Camilan',
-                    isSelected:
-                        filterProvider.selectedCategories.contains('Camilan'),
-                    onTap: () =>
-                        filterProvider.toggleCategorySelection('Camilan'),
-                  ),
-                  _CategoryItem(
-                    image: 'images/fruits_category.webp',
-                    text: 'Buah dan Sayur',
-                    isSelected:
-                        filterProvider.selectedCategories.contains('BuahSayur'),
-                    onTap: () =>
-                        filterProvider.toggleCategorySelection('BuahSayur'),
-                  ),
-                ],
-              );
-            },
+          Flexible(
+            child: Consumer<FilterProvider>(
+              builder: (context, filterProvider, child) {
+                return GridView.count(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 8.0,
+                  mainAxisSpacing: 8.0,
+                  shrinkWrap: true,
+                  children: [
+                    _CategoryItem(
+                      image: 'images/all_type_category.webp',
+                      text: 'Semua',
+                      isSelected:
+                          filterProvider.selectedCategories.contains('all'),
+                      onTap: () =>
+                          filterProvider.toggleCategorySelection('all'),
+                    ),
+                    _CategoryItem(
+                      image: 'images/staple_category.webp',
+                      text: 'Makanan',
+                      isSelected: filterProvider.selectedCategories
+                          .contains('stapleFood'),
+                      onTap: () =>
+                          filterProvider.toggleCategorySelection('stapleFood'),
+                    ),
+                    _CategoryItem(
+                      image: 'images/drinks_category.webp',
+                      text: 'Minuman',
+                      isSelected:
+                          filterProvider.selectedCategories.contains('drinks'),
+                      onTap: () =>
+                          filterProvider.toggleCategorySelection('drinks'),
+                    ),
+                    _CategoryItem(
+                      image: 'images/snacks_category.webp',
+                      text: 'Camilan',
+                      isSelected:
+                          filterProvider.selectedCategories.contains('snacks'),
+                      onTap: () =>
+                          filterProvider.toggleCategorySelection('snacks'),
+                    ),
+                    _CategoryItem(
+                      image: 'images/fruits_category.webp',
+                      text: 'Buah dan Sayur',
+                      isSelected: filterProvider.selectedCategories
+                          .contains('fruitsVeg'),
+                      onTap: () =>
+                          filterProvider.toggleCategorySelection('fruitsVeg'),
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
           const SizedBox(height: 16.0),
         ],

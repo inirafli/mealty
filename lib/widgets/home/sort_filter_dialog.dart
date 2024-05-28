@@ -10,7 +10,7 @@ class SortFilterDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.onPrimary,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
@@ -23,7 +23,7 @@ class SortFilterDialog extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Urutkan Berdasarkan Dari',
+                'Urutkan Berdasarkan',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.bold,
@@ -45,12 +45,12 @@ class SortFilterDialog extends StatelessWidget {
           Consumer<FilterProvider>(
             builder: (context, filterProvider, child) {
               return Wrap(
-                spacing: 8.0,
-                runSpacing: 8.0,
+                spacing: 10.0,
+                runSpacing: 12.0,
                 children: [
                   _SortOption(
-                    icon: MdiIcons.mapMarker,
-                    iconSize: 18.0,
+                    icon: MdiIcons.storeMarkerOutline,
+                    iconSize: 20.0,
                     text: 'Lokasi Terdekat',
                     isSelected:
                         filterProvider.selectedSortType == 'nearestLocation',
@@ -58,8 +58,8 @@ class SortFilterDialog extends StatelessWidget {
                         filterProvider.toggleSortSelection('nearestLocation'),
                   ),
                   _SortOption(
-                    icon: MdiIcons.trendingDown,
-                    iconSize: 20.0,
+                    icon: MdiIcons.cashCheck,
+                    iconSize: 22.0,
                     text: 'Harga Termurah',
                     isSelected:
                         filterProvider.selectedSortType == 'cheapestPrice',
@@ -67,8 +67,8 @@ class SortFilterDialog extends StatelessWidget {
                         filterProvider.toggleSortSelection('cheapestPrice'),
                   ),
                   _SortOption(
-                    icon: MdiIcons.gift,
-                    iconSize: 16.0,
+                    icon: MdiIcons.giftOutline,
+                    iconSize: 18.0,
                     text: 'Tipe Berbagi',
                     isSelected:
                         filterProvider.selectedSortType == 'sharingType',
@@ -76,8 +76,8 @@ class SortFilterDialog extends StatelessWidget {
                         filterProvider.toggleSortSelection('sharingType'),
                   ),
                   _SortOption(
-                    icon: MdiIcons.timerSand,
-                    iconSize: 18.0,
+                    icon: MdiIcons.storeClockOutline,
+                    iconSize: 18.5,
                     text: 'Waktu Tersisa',
                     isSelected: filterProvider.selectedSortType == 'timeLeft',
                     onTap: () => filterProvider.toggleSortSelection('timeLeft'),
