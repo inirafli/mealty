@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
+import 'package:provider/provider.dart';
+import '../widgets/home/category_filter_dialog.dart';
+import '../provider/filter_provider.dart';
 import '../widgets/home/filter_button.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -33,46 +35,21 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  void _showFilterDialog(String filterType) {
+  void _showCategoryFilterDialog() {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
       builder: (BuildContext context) {
-        return Container(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Filter $filterType',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              // Add your filter list here
-              ListView(
-                shrinkWrap: true,
-                children: [
-                  ListTile(
-                    title: const Text('Filter Option 1'),
-                    onTap: () {
-                      // Handle filter option 1
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('Filter Option 2'),
-                    onTap: () {
-                      // Handle filter option 2
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
+        return const CategoryFilterDialog();
       },
     );
+  }
+
+  void _showSortFilterDialog() {
+    // Placeholder for sorting filter dialog
   }
 
   @override
@@ -165,20 +142,20 @@ class _HomeScreenState extends State<HomeScreen> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: FilterButtons(
-              onCategoryPressed: () {
-                _showFilterDialog('Kategori Makanan');
-              },
-              onSortPressed: () {
-                _showFilterDialog('Urutkan dari');
-              },
+              onCategoryPressed: _showCategoryFilterDialog,
+              onSortPressed: _showSortFilterDialog,
             ),
           ),
           // The rest of your home screen body
           Expanded(
             child: Center(
-              child: Text(
-                'Home Screen',
-                style: Theme.of(context).textTheme.titleLarge,
+              child: Consumer<FilterProvider>(
+                builder: (context, filterProvider, child) {
+                  return Text(
+                    'Selected categories: ${filterProvider.selectedCategories.join(', ')}',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  );
+                },
               ),
             ),
           ),

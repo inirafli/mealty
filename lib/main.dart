@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mealty/common/styles.dart';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:mealty/provider/filter_provider.dart';
 import 'package:mealty/routes/routes.dart';
 import 'package:provider/provider.dart';
 
@@ -17,8 +18,11 @@ void main() async {
   );
 
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => AuthProvider(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => AuthProvider()),
+        ChangeNotifierProvider(create: (context) => FilterProvider()),
+      ],
       child: const MyApp(),
     ),
   );

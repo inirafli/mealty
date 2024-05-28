@@ -1,7 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:mealty/ui/main_screen.dart';
 
-import '../ui/home_screen.dart';
 import '../ui/login_screen.dart';
 import '../ui/register_screen.dart';
 import '../ui/splash_screen.dart';

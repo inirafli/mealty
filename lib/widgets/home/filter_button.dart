@@ -41,6 +41,7 @@ class FilterButtons extends StatelessWidget {
               text,
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.bold,
                   ),
             ),
             const SizedBox(width: 4.0),
