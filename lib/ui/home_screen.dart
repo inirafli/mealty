@@ -1,10 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
+import '../common/dummy_post_data.dart';
 import '../widgets/home/category_filter_dialog.dart';
 import '../provider/filter_provider.dart';
 import '../widgets/home/filter_button.dart';
 import '../widgets/home/sort_filter_dialog.dart';
+
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -62,8 +66,29 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  String _formatPrice(int price) {
+    final formatter = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp. ');
+    return formatter.format(price);
+  }
+
+  String _formatSaleTime(Timestamp saleTime) {
+    final now = DateTime.now();
+    final saleDate = saleTime.toDate();
+    final difference = saleDate.difference(now);
+
+    if (difference.isNegative) {
+      return 'Waktu habis';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours} jam lagi';
+    } else {
+      return '${difference.inDays} hari lagi';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final dummyPosts = DummyPostData.getPosts();
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(66.0),
@@ -148,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.only(top: 24.0, left: 24.0, right: 24.0, bottom: 0.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -160,31 +185,88 @@ class _HomeScreenState extends State<HomeScreen> {
             Text(
               'Eksplorasi Pilihan Mealty',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.bold,
-              ),
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
-            // The rest of your home screen body
+            const SizedBox(height: 16.0),
             Expanded(
-              child: Center(
-                child: Consumer<FilterProvider>(
-                  builder: (context, filterProvider, child) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Selected categories: ${filterProvider.selectedCategories.join(', ')}',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          'Sorting by: ${filterProvider.selectedSortType}',
-                          style: Theme.of(context).textTheme.bodyMedium,
-                        ),
-                      ],
-                    );
-                  },
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 16.0,
+                  mainAxisSpacing: 16.0,
+                  childAspectRatio: 2 / 3,
                 ),
+                itemCount: dummyPosts.length,
+                itemBuilder: (context, index) {
+                  final post = dummyPosts[index];
+                  return Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    elevation: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8.0),
+                            child: Image.network(
+                              post['image'],
+                              height: 100,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          const SizedBox(height: 8.0),
+                          Text(
+                            post['name'],
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 4.0),
+                          Text(
+                            _formatSaleTime(post['saleTime']),
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                          const SizedBox(height: 4.0),
+                          Text(
+                            'Lat: ${post['location'].latitude}, Lng: ${post['location'].longitude}',
+                            style: Theme.of(context).textTheme.bodySmall,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 4.0),
+                          Text(
+                            'User: ${post['userId']}',
+                            style: Theme.of(context).textTheme.bodySmall,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 4.0),
+                          Text(
+                            _formatPrice(post['price']),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ],
