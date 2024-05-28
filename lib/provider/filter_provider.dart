@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 
 class FilterProvider with ChangeNotifier {
   List<String> _selectedCategories = ['all'];
+  String _selectedSortType = 'timeLeft';
 
   List<String> get selectedCategories => _selectedCategories;
+
+  String get selectedSortType => _selectedSortType;
 
   void toggleCategorySelection(String category) {
     if (category == 'all') {
@@ -21,6 +24,11 @@ class FilterProvider with ChangeNotifier {
         _selectedCategories.remove('all');
       }
     }
+    notifyListeners();
+  }
+
+  void toggleSortSelection(String sortType) {
+    _selectedSortType = sortType;
     notifyListeners();
   }
 }

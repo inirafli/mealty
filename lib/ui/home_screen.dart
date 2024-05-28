@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../widgets/home/category_filter_dialog.dart';
 import '../provider/filter_provider.dart';
 import '../widgets/home/filter_button.dart';
+import '../widgets/home/sort_filter_dialog.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -49,7 +50,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _showSortFilterDialog() {
-    // Placeholder for sorting filter dialog
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (BuildContext context) {
+        return const SortFilterDialog();
+      },
+    );
   }
 
   @override
@@ -151,9 +161,19 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Center(
               child: Consumer<FilterProvider>(
                 builder: (context, filterProvider, child) {
-                  return Text(
-                    'Selected categories: ${filterProvider.selectedCategories.join(', ')}',
-                    style: Theme.of(context).textTheme.titleLarge,
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Selected categories: ${filterProvider.selectedCategories.join(', ')}',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Sorting by: ${filterProvider.selectedSortType}',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
                   );
                 },
               ),

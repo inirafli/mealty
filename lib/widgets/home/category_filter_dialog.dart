@@ -92,6 +92,7 @@ class CategoryFilterDialog extends StatelessWidget {
               );
             },
           ),
+          const SizedBox(height: 16.0),
         ],
       ),
     );
