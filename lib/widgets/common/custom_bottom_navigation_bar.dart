@@ -24,18 +24,18 @@ class CustomBottomNavigationBar extends StatelessWidget {
         onTap: onItemTapped,
         items: [
           _buildBottomNavigationBarItem(
-              context, MdiIcons.homeOutline, MdiIcons.home, 'Beranda', 0, 28.0),
+              context, MdiIcons.homeOutline, MdiIcons.home, 'Beranda', 0, 30.0),
           _buildBottomNavigationBarItem(context, MdiIcons.cartOutline,
-              MdiIcons.cart, 'Keranjang', 1, 25.0),
+              MdiIcons.cart, 'Keranjang', 1, 27.0),
           _buildBottomNavigationBarItem(
               context,
               MdiIcons.textBoxMultipleOutline,
               MdiIcons.textBoxMultiple,
               'Riwayat',
               2,
-              22.0),
+              24.0),
           _buildBottomNavigationBarItem(context, MdiIcons.accountOutline,
-              MdiIcons.account, 'Profil', 3, 28.0),
+              MdiIcons.account, 'Profil', 3, 30.0),
         ],
       ),
     );

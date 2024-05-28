@@ -94,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       prefixIcon: _hasInput
                           ? null
                           : Icon(
-                              Icons.search,
+                              MdiIcons.storeSearchOutline,
                               size: 18.5,
                               color: Theme.of(context).colorScheme.primary,
                             ),
@@ -109,9 +109,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               },
                             )
                           : null,
-                      suffixIconConstraints: const BoxConstraints(
-                        minWidth: 32,
-                        minHeight: 32,
+                      prefixIconConstraints: const BoxConstraints(
+                        minWidth: 44,
+                        minHeight: 40,
                       ),
                       filled: true,
                       fillColor: Theme.of(context).colorScheme.onPrimary,
@@ -120,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         borderSide: BorderSide.none,
                       ),
                       contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 8.0),
+                          horizontal: 16.0, vertical: 2.0),
                     ),
                   ),
                 ),
@@ -147,39 +147,48 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: FilterButtons(
+      body: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            FilterButtons(
               onCategoryPressed: _showCategoryFilterDialog,
               onSortPressed: _showSortFilterDialog,
             ),
-          ),
-          // The rest of your home screen body
-          Expanded(
-            child: Center(
-              child: Consumer<FilterProvider>(
-                builder: (context, filterProvider, child) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Selected categories: ${filterProvider.selectedCategories.join(', ')}',
-                        style: Theme.of(context).textTheme.titleLarge,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'Sorting by: ${filterProvider.selectedSortType}',
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ],
-                  );
-                },
+            const SizedBox(height: 24.0),
+            Text(
+              'Eksplorasi Pilihan Mealty',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.bold,
               ),
             ),
-          ),
-        ],
+            // The rest of your home screen body
+            Expanded(
+              child: Center(
+                child: Consumer<FilterProvider>(
+                  builder: (context, filterProvider, child) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Selected categories: ${filterProvider.selectedCategories.join(', ')}',
+                          style: Theme.of(context).textTheme.titleLarge,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          'Sorting by: ${filterProvider.selectedSortType}',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

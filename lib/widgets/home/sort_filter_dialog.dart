@@ -46,7 +46,7 @@ class SortFilterDialog extends StatelessWidget {
             builder: (context, filterProvider, child) {
               return Wrap(
                 spacing: 10.0,
-                runSpacing: 12.0,
+                runSpacing: 10.0,
                 children: [
                   _SortOption(
                     icon: MdiIcons.storeMarkerOutline,
@@ -113,7 +113,7 @@ class _SortOption extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 7.0),
+        padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
         decoration: BoxDecoration(
           color: isSelected
               ? Theme.of(context).colorScheme.primary
