@@ -11,10 +11,10 @@ class DummyPostData {
         'sellingType': 'commercial',
         'price': 2500,
         'saleTime': Timestamp.fromDate(DateTime.parse('2024-05-30 15:14:30')),
-        'userId': 'jKJSSrIl4sVzv26dDVT9T1TqYDC3',
-        'location': const GeoPoint(6.373, 106.8344),
+        'userId': 'rapli',
+        'location': const GeoPoint(-6.370, 106.8200),
         'image':
-            'https://cdn.pixabay.com/photo/2022/01/11/21/48/link-6931554_1280.png',
+            'https://upload.wikimedia.org/wikipedia/id/0/0c/Goreng_pisang.jpg',
       },
       {
         'name': 'Nasi Uduk Bu Nani',
@@ -26,7 +26,7 @@ class DummyPostData {
         'userId': 'user123',
         'location': const GeoPoint(6.371, 106.832),
         'image':
-            'https://cdn.pixabay.com/photo/2022/01/11/21/48/link-6931554_1280.png',
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Nasi_Uduk_Betawi.jpg/330px-Nasi_Uduk_Betawi.jpg',
       },
       {
         'name': 'Es Teh Manis',
@@ -36,9 +36,9 @@ class DummyPostData {
         'price': 3000,
         'saleTime': Timestamp.fromDate(DateTime.parse('2024-05-30 17:00:00')),
         'userId': 'user456',
-        'location': const GeoPoint(6.374, 106.835),
+        'location': const GeoPoint(-6.4038, 106.8310),
         'image':
-            'https://cdn.pixabay.com/photo/2022/01/11/21/48/link-6931554_1280.png',
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Es_teh_gelas_jumbo.jpg/330px-Es_teh_gelas_jumbo.jpg',
       },
       {
         'name': 'Keripik Singkong Pedas',
@@ -50,7 +50,7 @@ class DummyPostData {
         'userId': 'user789',
         'location': const GeoPoint(6.375, 106.836),
         'image':
-            'https://cdn.pixabay.com/photo/2022/01/11/21/48/link-6931554_1280.png',
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Tapioca_Chips.jpg/330px-Tapioca_Chips.jpg',
       },
       {
         'name': 'Jus Alpukat',
@@ -62,7 +62,7 @@ class DummyPostData {
         'userId': 'user101',
         'location': const GeoPoint(6.376, 106.837),
         'image':
-            'https://cdn.pixabay.com/photo/2022/01/11/21/48/link-6931554_1280.png',
+            'https://akcdn.detik.net.id/visual/2023/11/09/ilustrasi-buat-jus-alpukat_169.jpeg?w=650&q=90',
       },
       {
         'name': 'Salad Buah',
@@ -74,7 +74,45 @@ class DummyPostData {
         'userId': 'user102',
         'location': const GeoPoint(6.377, 106.838),
         'image':
-            'https://cdn.pixabay.com/photo/2022/01/11/21/48/link-6931554_1280.png',
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Fruit_cocktail.JPG/330px-Fruit_cocktail.JPG',
+      },
+      {
+        'name': 'Bakso Mang Ujang',
+        'description':
+            'Bakso daging sapi dengan kuah yang gurih dan lezat. Cocok untuk dinikmati saat cuaca dingin.',
+        'category': 'staple',
+        'sellingType': 'sharing',
+        'price': 0,
+        'saleTime': Timestamp.fromDate(DateTime.parse('2024-06-02 13:30:00')),
+        'userId': 'user202',
+        'location': const GeoPoint(-6.200, 106.845),
+        'image':
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Baso_Malang_Karapitan.JPG/330px-Baso_Malang_Karapitan.JPG',
+      },
+      {
+        'name': 'Rujak Buah',
+        'description':
+            'Rujak buah segar dengan bumbu kacang yang pedas dan nikmat. Menyegarkan di siang hari.',
+        'category': 'fruitsVeg',
+        'sellingType': 'sharing',
+        'price': 0,
+        'saleTime': Timestamp.fromDate(DateTime.parse('2024-06-03 11:00:00')),
+        'userId': 'user303',
+        'location': const GeoPoint(-6.300, 106.850),
+        'image':
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Rujak_Buah_%28Indonesian_Fruit_Salad%29.JPG/300px-Rujak_Buah_%28Indonesian_Fruit_Salad%29.JPG',
+      },
+      {
+        'name': 'Kopi Tubruk',
+        'description': 'Kopi tubruk khas Indonesia dengan aroma yang kuat.',
+        'category': 'drinks',
+        'sellingType': 'sharing',
+        'price': 0,
+        'saleTime': Timestamp.fromDate(DateTime.parse('2024-06-01 09:00:00')),
+        'userId': 'user404',
+        'location': const GeoPoint(-6.301, 106.851),
+        'image':
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Menikmati_mendoan_di_musim_hujan.jpg/1920px-Menikmati_mendoan_di_musim_hujan.jpg',
       },
     ];
   }
