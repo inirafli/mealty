@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import '../common/dummy_post_data.dart';
+import '../data/dummy_post_data.dart';
 import '../widgets/home/category_filter_dialog.dart';
 import '../widgets/home/filter_button.dart';
 import '../widgets/home/food_post_card.dart';

@@ -1,15 +1,15 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
 import 'package:mealty/common/auth_state.dart';
 import 'package:mealty/utils/auth_error_handling.dart';
 
 class AuthProvider extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final Completer<void> _initCompleter = Completer<void>();
 
   AuthProvider() {
@@ -21,6 +21,7 @@ class AuthProvider extends ChangeNotifier {
         _authState = AuthState.unauthorized;
       } else {
         _authState = AuthState.authorized;
+        _ensureUserDocument(user);
       }
       notifyListeners();
     });
@@ -74,14 +75,22 @@ class AuthProvider extends ChangeNotifier {
       _authState = AuthState.loading;
       notifyListeners();
 
+      bool isUsernameTaken = await _isUsernameTaken(displayName);
+      if (isUsernameTaken) {
+        _errorMessage = 'Username telah digunakan. Coba yang lain.';
+        _authState = AuthState.error;
+        notifyListeners();
+        return;
+      }
+
       await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
 
       await _auth.currentUser?.updateDisplayName(displayName);
       await _auth.currentUser?.reload();
 
-      await signOut();
-      
+      await _ensureUserDocument(_auth.currentUser!);
+
       _authState = AuthState.registered;
       notifyListeners();
     } on FirebaseAuthException catch (e) {
@@ -114,6 +123,8 @@ class AuthProvider extends ChangeNotifier {
 
       await _auth.signInWithCredential(credential);
 
+      await _ensureUserDocument(_auth.currentUser!);
+
       _authState = AuthState.authorized;
       notifyListeners();
     } on FirebaseAuthException catch (e) {
@@ -135,5 +146,39 @@ class AuthProvider extends ChangeNotifier {
       _authState = AuthState.error;
       notifyListeners();
     }
+  }
+
+  Future<void> _ensureUserDocument(User user) async {
+    final userDoc = _firestore.collection('users').doc(user.uid);
+    final doc = await userDoc.get();
+    if (!doc.exists) {
+      await userDoc.set({
+        'username': user.displayName ?? '',
+        'email': user.email ?? '',
+        'phoneNumber': user.phoneNumber ?? '',
+        'photoUrl': user.photoURL ?? '',
+        'address': const GeoPoint(0, 0),
+        'starRating': 0,
+        'orderHistory': {
+          'sales': [],
+          'purchases': [],
+        },
+        'completedFoodTypes': {
+          'staple': 0,
+          'drinks': 0,
+          'snacks': 0,
+          'fruitsVeg': 0,
+          'total': 0,
+        },
+      });
+    }
+  }
+
+  Future<bool> _isUsernameTaken(String username) async {
+    final result = await _firestore
+        .collection('users')
+        .where('username', isEqualTo: username)
+        .get();
+    return result.docs.isNotEmpty;
   }
 }
