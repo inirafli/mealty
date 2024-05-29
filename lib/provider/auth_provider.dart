@@ -83,13 +83,34 @@ class AuthProvider extends ChangeNotifier {
         return;
       }
 
-      await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
+      UserCredential userCredential = await _auth
+          .createUserWithEmailAndPassword(email: email, password: password);
 
-      await _auth.currentUser?.updateDisplayName(displayName);
-      await _auth.currentUser?.reload();
+      await userCredential.user?.updateDisplayName(displayName);
+      await userCredential.user?.reload();
+      User? user = _auth.currentUser;
 
-      await _ensureUserDocument(_auth.currentUser!);
+      if (user != null) {
+        await _firestore.collection('users').doc(user.uid).set({
+          'username': displayName,
+          'email': user.email ?? '',
+          'phoneNumber': user.phoneNumber ?? '',
+          'photoUrl': user.photoURL ?? '',
+          'address': const GeoPoint(0, 0),
+          'starRating': 0,
+          'orderHistory': {
+            'sales': [],
+            'purchases': [],
+          },
+          'completedFoodTypes': {
+            'staple': 0,
+            'drinks': 0,
+            'snacks': 0,
+            'fruitsVeg': 0,
+            'total': 0,
+          },
+        });
+      }
 
       _authState = AuthState.registered;
       notifyListeners();
