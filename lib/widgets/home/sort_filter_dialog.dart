@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:mealty/provider/filter_provider.dart';
+import 'package:mealty/provider/post_provider.dart';
 import 'package:provider/provider.dart';
 
 class SortFilterDialog extends StatelessWidget {
@@ -42,7 +42,7 @@ class SortFilterDialog extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12.0),
-          Consumer<FilterProvider>(
+          Consumer<PostProvider>(
             builder: (context, filterProvider, child) {
               return Wrap(
                 spacing: 10.0,
