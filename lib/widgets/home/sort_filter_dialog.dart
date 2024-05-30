@@ -49,8 +49,15 @@ class SortFilterDialog extends StatelessWidget {
                 runSpacing: 10.0,
                 children: [
                   _SortOption(
+                    icon: MdiIcons.fire,
+                    iconSize: 21.0,
+                    text: 'Terbaru',
+                    isSelected: foodProvider.selectedSortType == 'latestPost',
+                    onTap: () => foodProvider.toggleSortSelection('latestPost'),
+                  ),
+                  _SortOption(
                     icon: MdiIcons.storeMarkerOutline,
-                    iconSize: 20.0,
+                    iconSize: 21.0,
                     text: 'Lokasi Terdekat',
                     isSelected:
                         foodProvider.selectedSortType == 'nearestLocation',
@@ -59,21 +66,12 @@ class SortFilterDialog extends StatelessWidget {
                   ),
                   _SortOption(
                     icon: MdiIcons.cashCheck,
-                    iconSize: 22.0,
+                    iconSize: 23.0,
                     text: 'Harga Termurah',
                     isSelected:
                         foodProvider.selectedSortType == 'cheapestPrice',
                     onTap: () =>
                         foodProvider.toggleSortSelection('cheapestPrice'),
-                  ),
-                  _SortOption(
-                    icon: MdiIcons.giftOutline,
-                    iconSize: 18.0,
-                    text: 'Tipe Berbagi',
-                    isSelected:
-                        foodProvider.selectedSortType == 'sharingType',
-                    onTap: () =>
-                        foodProvider.toggleSortSelection('sharingType'),
                   ),
                   _SortOption(
                     icon: MdiIcons.storeClockOutline,
@@ -113,7 +111,8 @@ class _SortOption extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 8.0),
+        height: 38.0,
+        padding: const EdgeInsets.only(left: 14.0, right: 16.0, top: 6.0, bottom: 6.0),
         decoration: BoxDecoration(
           color: isSelected
               ? Theme.of(context).colorScheme.primary

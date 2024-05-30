@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../services/firestore_services.dart';
+import '../utils/data_conversion.dart';
 
 class FoodProvider with ChangeNotifier {
   final FirestoreService _firestoreService = FirestoreService();
@@ -10,11 +11,14 @@ class FoodProvider with ChangeNotifier {
   bool _isLoading = true;
 
   List<String> _selectedCategories = ['all'];
-  String _selectedSortType = '';
+  String _selectedSortType = 'latestPost';
 
   List<String> get selectedCategories => _selectedCategories;
+
   String get selectedSortType => _selectedSortType;
+
   List<Map<String, dynamic>> get posts => _filteredPosts;
+
   bool get isLoading => _isLoading;
 
   FoodProvider() {
@@ -76,19 +80,25 @@ class FoodProvider with ChangeNotifier {
 
   void _sortPosts() {
     switch (_selectedSortType) {
-      case 'timeLeft':
+      case 'latestPost':
         _filteredPosts.sort((a, b) {
-          return a['saleTime'].compareTo(b['saleTime']);
+          return b['publishedDate'].compareTo(a['publishedDate']);
         });
         break;
-      case 'price':
+      case 'nearestLocation':
+        _filteredPosts.sort((a, b) {
+          return calculateDistance(a['location'])
+              .compareTo(calculateDistance(b['location']));
+        });
+        break;
+      case 'cheapestPrice':
         _filteredPosts.sort((a, b) {
           return a['price'].compareTo(b['price']);
         });
         break;
-      case 'rating':
+      case 'timeLeft':
         _filteredPosts.sort((a, b) {
-          return b['starRating'].compareTo(a['starRating']);
+          return a['saleTime'].compareTo(b['saleTime']);
         });
         break;
       default:

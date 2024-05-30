@@ -8,8 +8,8 @@ class CustomProgressIndicator extends StatelessWidget {
   const CustomProgressIndicator({
     super.key,
     required this.color,
-    this.size = 14.0,
-    this.strokeWidth = 2.0,
+    required this.size,
+    required this.strokeWidth,
   });
 
   @override

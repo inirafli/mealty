@@ -6,9 +6,11 @@ class FirestoreService {
   Future<List<Map<String, dynamic>>> getFoodPosts() async {
     try {
       QuerySnapshot snapshot = await _db.collection('foods').get();
-      List<Map<String, dynamic>> posts = snapshot.docs
-          .map((doc) => doc.data() as Map<String, dynamic>)
-          .toList();
+      List<Map<String, dynamic>> posts = snapshot.docs.map((doc) {
+        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+        data['id'] = doc.id;
+        return data;
+      }).toList();
       return posts;
     } catch (e) {
       return [];
