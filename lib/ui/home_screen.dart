@@ -8,7 +8,6 @@ import '../widgets/home/food_post_card.dart';
 import '../widgets/home/home_app_bar.dart';
 import '../widgets/home/sort_filter_dialog.dart';
 
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -74,7 +73,8 @@ class _HomeScreenState extends State<HomeScreen> {
         hasInput: _hasInput,
       ),
       body: Padding(
-        padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0, bottom: 0.0),
+        padding: const EdgeInsets.only(
+            top: 16.0, left: 16.0, right: 16.0, bottom: 0.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -83,79 +83,93 @@ class _HomeScreenState extends State<HomeScreen> {
               onSortPressed: _showSortFilterDialog,
             ),
             const SizedBox(height: 16.0),
-            Expanded(
-              child: Consumer<FoodProvider>(
-                builder: (context, foodProvider, child) {
-                  if (foodProvider.isLoading) {
-                    return Center(
-                      child: CustomProgressIndicator(
-                        color: Theme.of(context).colorScheme.primary,
-                        size: 24.0,
-                        strokeWidth: 2.0,
-                      )
-                    );
-                  }
+            Expanded(child:
+                Consumer<FoodProvider>(builder: (context, foodProvider, child) {
+              if (foodProvider.isLoading) {
+                return Center(
+                    child: CustomProgressIndicator(
+                  color: Theme.of(context).colorScheme.primary,
+                  size: 24.0,
+                  strokeWidth: 2.0,
+                ));
+              }
 
-                  if (foodProvider.posts.isEmpty) {
-                    return Center(
-                      child: Text(
-                        'Belum ada Makanan yang tersedia',
-                        style: Theme.of(context).textTheme.bodyMedium,
+              if (foodProvider.posts.isEmpty) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'images/food_not_found.png',
+                        fit: BoxFit.cover,
+                        height: 144.0,
                       ),
-                    );
-                  }
+                      Text(
+                        'Belum ada Makanan atau Minuman\n yang tersedia.',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                );
+              }
 
-                  return RefreshIndicator(
-                    onRefresh: foodProvider.refreshPosts,
-                    child: SingleChildScrollView(
-                      controller: _scrollController,
-                      key: const PageStorageKey<String>('home_scroll_position'),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+              return RefreshIndicator(
+                onRefresh: foodProvider.refreshPosts,
+                child: SingleChildScrollView(
+                  controller: _scrollController,
+                  key: const PageStorageKey<String>('home_scroll_position'),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 8.0),
+                      Row(
                         children: [
-                          const SizedBox(height: 8.0),
-                          Row(
-                            children: [
-                              Text(
-                                'Eksplorasi Pilihan Mealty',
-                                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          Text(
+                            'Eksplorasi Pilihan Mealty',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium
+                                ?.copyWith(
                                   color: Theme.of(context).colorScheme.primary,
                                   fontWeight: FontWeight.bold,
                                 ),
-                              ),
-                              const SizedBox(width: 12.0),
-                              Expanded(
-                                child: Divider(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  thickness: 1.5,
-                                ),
-                              ),
-                            ],
                           ),
-                          const SizedBox(height: 16.0),
-                          GridView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 4.0,
-                              mainAxisSpacing: 12.0,
-                              childAspectRatio: 1.85 / 3,
+                          const SizedBox(width: 12.0),
+                          Expanded(
+                            child: Divider(
+                              color: Theme.of(context).colorScheme.primary,
+                              thickness: 1.5,
                             ),
-                            itemCount: foodProvider.posts.length,
-                            itemBuilder: (context, index) {
-                              final post = foodProvider.posts[index];
-                              return PostCard(post: post);
-                            },
                           ),
-                          const SizedBox(height: 16.0),
                         ],
                       ),
-                    ),
-                  );
-                }
-              )
-            ),
+                      const SizedBox(height: 16.0),
+                      GridView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 4.0,
+                          mainAxisSpacing: 12.0,
+                          childAspectRatio: 1.85 / 3,
+                        ),
+                        itemCount: foodProvider.posts.length,
+                        itemBuilder: (context, index) {
+                          final post = foodProvider.posts[index];
+                          return PostCard(post: post);
+                        },
+                      ),
+                      const SizedBox(height: 16.0),
+                    ],
+                  ),
+                ),
+              );
+            })),
           ],
         ),
       ),
