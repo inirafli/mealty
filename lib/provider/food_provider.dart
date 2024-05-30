@@ -12,13 +12,12 @@ class FoodProvider with ChangeNotifier {
 
   List<String> _selectedCategories = ['all'];
   String _selectedSortType = 'latestPost';
+  String _searchKeyword = '';
 
   List<String> get selectedCategories => _selectedCategories;
-
   String get selectedSortType => _selectedSortType;
-
+  String get searchKeyword => _searchKeyword;
   List<Map<String, dynamic>> get posts => _filteredPosts;
-
   bool get isLoading => _isLoading;
 
   FoodProvider() {
@@ -68,11 +67,26 @@ class FoodProvider with ChangeNotifier {
     _applyFilters();
   }
 
+  void updateSearchKeyword(String keyword) {
+    _searchKeyword = keyword;
+    _applyFilters();
+  }
+
   void _applyFilters() {
     _filteredPosts = _posts.where((post) {
       if (_selectedCategories.contains('all')) return true;
       return _selectedCategories.contains(post['category']);
     }).toList();
+
+    if (_searchKeyword.isNotEmpty) {
+      _filteredPosts = _filteredPosts
+          .where((post) =>
+      post['name'].toLowerCase().contains(_searchKeyword.toLowerCase()) ||
+          post['description']
+              .toLowerCase()
+              .contains(_searchKeyword.toLowerCase()))
+          .toList();
+    }
 
     _sortPosts();
     notifyListeners();

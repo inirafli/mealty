@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:provider/provider.dart';
+
+import '../../provider/food_provider.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final TextEditingController searchController;
@@ -26,6 +29,9 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
               height: 40.0,
               child: TextField(
                 controller: searchController,
+                onChanged: (value) {
+                  Provider.of<FoodProvider>(context, listen: false).updateSearchKeyword(value);
+                },
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.w600,
@@ -51,6 +57,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                           ),
                           onPressed: () {
                             searchController.clear();
+                            Provider.of<FoodProvider>(context, listen: false).updateSearchKeyword('');
                           },
                         )
                       : null,
