@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mealty/common/styles.dart';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:mealty/provider/post_provider.dart';
+import 'package:mealty/provider/food_provider.dart';
 import 'package:mealty/routes/routes.dart';
 import 'package:provider/provider.dart';
 
@@ -21,7 +21,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => AuthProvider()),
-        ChangeNotifierProvider(create: (context) => PostProvider()),
+        ChangeNotifierProvider(create: (context) => FoodProvider()),
       ],
       child: const MyApp(),
     ),

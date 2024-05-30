@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mealty/provider/post_provider.dart';
+import 'package:mealty/provider/food_provider.dart';
 import 'package:provider/provider.dart';
 import '../widgets/home/category_filter_dialog.dart';
 import '../widgets/home/filter_button.dart';
@@ -83,9 +83,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 16.0),
             Expanded(
-              child: Consumer<PostProvider>(
-                builder: (context, postProvider, child) {
-                  if (postProvider.isLoading) {
+              child: Consumer<FoodProvider>(
+                builder: (context, foodProvider, child) {
+                  if (foodProvider.isLoading) {
                     return Center(
                       child: CircularProgressIndicator(
                         color: Theme.of(context).colorScheme.primary,
@@ -93,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     );
                   }
 
-                  if (postProvider.posts.isEmpty) {
+                  if (foodProvider.posts.isEmpty) {
                     return Center(
                       child: Text(
                         'Belum ada Makanan yang tersedia',
@@ -103,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
 
                   return RefreshIndicator(
-                    onRefresh: postProvider.refreshPosts,
+                    onRefresh: foodProvider.refreshPosts,
                     child: SingleChildScrollView(
                       controller: _scrollController,
                       key: const PageStorageKey<String>('home_scroll_position'),
@@ -139,9 +139,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               mainAxisSpacing: 12.0,
                               childAspectRatio: 1.85 / 3,
                             ),
-                            itemCount: postProvider.posts.length,
+                            itemCount: foodProvider.posts.length,
                             itemBuilder: (context, index) {
-                              final post = postProvider.posts[index];
+                              final post = foodProvider.posts[index];
                               return PostCard(post: post);
                             },
                           ),

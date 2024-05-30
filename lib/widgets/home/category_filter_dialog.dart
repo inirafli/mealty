@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../provider/post_provider.dart';
+import '../../provider/food_provider.dart';
 
 class CategoryFilterDialog extends StatelessWidget {
   const CategoryFilterDialog({super.key});
@@ -42,8 +42,8 @@ class CategoryFilterDialog extends StatelessWidget {
           ),
           const SizedBox(height: 12.0),
           Flexible(
-            child: Consumer<PostProvider>(
-              builder: (context, postProvider, child) {
+            child: Consumer<FoodProvider>(
+              builder: (context, foodProvider, child) {
                 return GridView.count(
                   crossAxisCount: 2,
                   crossAxisSpacing: 8.0,
@@ -54,41 +54,41 @@ class CategoryFilterDialog extends StatelessWidget {
                       image: 'images/all_type_category.webp',
                       text: 'Semua',
                       isSelected:
-                          postProvider.selectedCategories.contains('all'),
+                          foodProvider.selectedCategories.contains('all'),
                       onTap: () =>
-                          postProvider.toggleCategorySelection('all'),
+                          foodProvider.toggleCategorySelection('all'),
                     ),
                     _CategoryItem(
                       image: 'images/staple_category.webp',
                       text: 'Makanan',
-                      isSelected: postProvider.selectedCategories
-                          .contains('stapleFood'),
+                      isSelected: foodProvider.selectedCategories
+                          .contains('staple'),
                       onTap: () =>
-                          postProvider.toggleCategorySelection('stapleFood'),
+                          foodProvider.toggleCategorySelection('staple'),
                     ),
                     _CategoryItem(
                       image: 'images/drinks_category.webp',
                       text: 'Minuman',
                       isSelected:
-                          postProvider.selectedCategories.contains('drinks'),
+                          foodProvider.selectedCategories.contains('drinks'),
                       onTap: () =>
-                          postProvider.toggleCategorySelection('drinks'),
+                          foodProvider.toggleCategorySelection('drinks'),
                     ),
                     _CategoryItem(
                       image: 'images/snacks_category.webp',
                       text: 'Camilan',
                       isSelected:
-                          postProvider.selectedCategories.contains('snacks'),
+                          foodProvider.selectedCategories.contains('snacks'),
                       onTap: () =>
-                          postProvider.toggleCategorySelection('snacks'),
+                          foodProvider.toggleCategorySelection('snacks'),
                     ),
                     _CategoryItem(
                       image: 'images/fruits_category.webp',
                       text: 'Buah dan Sayur',
-                      isSelected: postProvider.selectedCategories
+                      isSelected: foodProvider.selectedCategories
                           .contains('fruitsVeg'),
                       onTap: () =>
-                          postProvider.toggleCategorySelection('fruitsVeg'),
+                          foodProvider.toggleCategorySelection('fruitsVeg'),
                     ),
                   ],
                 );

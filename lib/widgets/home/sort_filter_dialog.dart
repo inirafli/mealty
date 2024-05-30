@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:mealty/provider/post_provider.dart';
+import 'package:mealty/provider/food_provider.dart';
 import 'package:provider/provider.dart';
 
 class SortFilterDialog extends StatelessWidget {
@@ -42,8 +42,8 @@ class SortFilterDialog extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12.0),
-          Consumer<PostProvider>(
-            builder: (context, filterProvider, child) {
+          Consumer<FoodProvider>(
+            builder: (context, foodProvider, child) {
               return Wrap(
                 spacing: 10.0,
                 runSpacing: 10.0,
@@ -53,34 +53,34 @@ class SortFilterDialog extends StatelessWidget {
                     iconSize: 20.0,
                     text: 'Lokasi Terdekat',
                     isSelected:
-                        filterProvider.selectedSortType == 'nearestLocation',
+                        foodProvider.selectedSortType == 'nearestLocation',
                     onTap: () =>
-                        filterProvider.toggleSortSelection('nearestLocation'),
+                        foodProvider.toggleSortSelection('nearestLocation'),
                   ),
                   _SortOption(
                     icon: MdiIcons.cashCheck,
                     iconSize: 22.0,
                     text: 'Harga Termurah',
                     isSelected:
-                        filterProvider.selectedSortType == 'cheapestPrice',
+                        foodProvider.selectedSortType == 'cheapestPrice',
                     onTap: () =>
-                        filterProvider.toggleSortSelection('cheapestPrice'),
+                        foodProvider.toggleSortSelection('cheapestPrice'),
                   ),
                   _SortOption(
                     icon: MdiIcons.giftOutline,
                     iconSize: 18.0,
                     text: 'Tipe Berbagi',
                     isSelected:
-                        filterProvider.selectedSortType == 'sharingType',
+                        foodProvider.selectedSortType == 'sharingType',
                     onTap: () =>
-                        filterProvider.toggleSortSelection('sharingType'),
+                        foodProvider.toggleSortSelection('sharingType'),
                   ),
                   _SortOption(
                     icon: MdiIcons.storeClockOutline,
                     iconSize: 18.5,
                     text: 'Waktu Tersisa',
-                    isSelected: filterProvider.selectedSortType == 'timeLeft',
-                    onTap: () => filterProvider.toggleSortSelection('timeLeft'),
+                    isSelected: foodProvider.selectedSortType == 'timeLeft',
+                    onTap: () => foodProvider.toggleSortSelection('timeLeft'),
                   ),
                 ],
               );

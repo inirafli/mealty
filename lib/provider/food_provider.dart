@@ -2,24 +2,22 @@ import 'package:flutter/material.dart';
 
 import '../services/firestore_services.dart';
 
-class PostProvider with ChangeNotifier {
+class FoodProvider with ChangeNotifier {
   final FirestoreService _firestoreService = FirestoreService();
 
   List<Map<String, dynamic>> _posts = [];
+  List<Map<String, dynamic>> _filteredPosts = [];
   bool _isLoading = true;
 
   List<String> _selectedCategories = ['all'];
-  String _selectedSortType = 'timeLeft';
+  String _selectedSortType = '';
 
   List<String> get selectedCategories => _selectedCategories;
-
   String get selectedSortType => _selectedSortType;
-
-  List<Map<String, dynamic>> get posts => _posts;
-
+  List<Map<String, dynamic>> get posts => _filteredPosts;
   bool get isLoading => _isLoading;
 
-  PostProvider() {
+  FoodProvider() {
     fetchPosts();
   }
 
@@ -32,6 +30,8 @@ class PostProvider with ChangeNotifier {
       post['username'] = userData['username'];
       post['starRating'] = userData['starRating'];
     }
+    _filteredPosts = _posts;
+    _applyFilters();
     _isLoading = false;
     notifyListeners();
   }
@@ -56,11 +56,43 @@ class PostProvider with ChangeNotifier {
         _selectedCategories.remove('all');
       }
     }
-    notifyListeners();
+    _applyFilters();
   }
 
   void toggleSortSelection(String sortType) {
     _selectedSortType = sortType;
+    _applyFilters();
+  }
+
+  void _applyFilters() {
+    _filteredPosts = _posts.where((post) {
+      if (_selectedCategories.contains('all')) return true;
+      return _selectedCategories.contains(post['category']);
+    }).toList();
+
+    _sortPosts();
     notifyListeners();
+  }
+
+  void _sortPosts() {
+    switch (_selectedSortType) {
+      case 'timeLeft':
+        _filteredPosts.sort((a, b) {
+          return a['saleTime'].compareTo(b['saleTime']);
+        });
+        break;
+      case 'price':
+        _filteredPosts.sort((a, b) {
+          return a['price'].compareTo(b['price']);
+        });
+        break;
+      case 'rating':
+        _filteredPosts.sort((a, b) {
+          return b['starRating'].compareTo(a['starRating']);
+        });
+        break;
+      default:
+        break;
+    }
   }
 }
