@@ -5,8 +5,10 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 
 import 'package:mealty/utils/data_conversion.dart';
 
+import '../../data/model/food_post.dart';
+
 class PostCard extends StatelessWidget {
-  final Map<String, dynamic> post;
+  final FoodPost post;
 
   const PostCard({super.key, required this.post});
 
@@ -33,8 +35,8 @@ class PostCard extends StatelessWidget {
               Stack(
                 children: [
                   CachedNetworkImage(
-                    cacheKey: 'image-cache-${post['image']}',
-                    imageUrl: post['image'],
+                    cacheKey: 'image-cache-${post.image}',
+                    imageUrl: post.image,
                     height: 153,
                     width: double.infinity,
                     fit: BoxFit.cover,
@@ -50,11 +52,11 @@ class PostCard extends StatelessWidget {
                       ),
                     ),
                     cacheManager: CacheManager(Config(
-                      'image-cache-${post['image']}',
+                      'image-cache-${post.image}',
                       stalePeriod: const Duration(days: 1),
                     )),
                   ),
-                  if (post['sellingType'] == 'sharing')
+                  if (post.sellingType == 'sharing')
                     Positioned(
                       left: 0,
                       right: 0,
@@ -91,7 +93,7 @@ class PostCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      post['name'],
+                      post.name,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             color: primary,
                             height: 1.25,
@@ -112,7 +114,7 @@ class PostCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(4.0),
                           ),
                           child: Text(
-                            formatSaleTime(post['saleTime']),
+                            formatSaleTime(post.saleTime),
                             style:
                                 Theme.of(context).textTheme.bodySmall?.copyWith(
                                       color: primary,
@@ -130,7 +132,7 @@ class PostCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(4.0),
                           ),
                           child: Text(
-                            calculateDistance(post['location']),
+                            post.formattedDistance,
                             style:
                                 Theme.of(context).textTheme.bodySmall?.copyWith(
                                       color: primary,
@@ -146,7 +148,7 @@ class PostCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          post['username'] ?? 'User',
+                          post.username,
                           style:
                               Theme.of(context).textTheme.bodySmall?.copyWith(
                                     fontSize: 13.0,
@@ -167,7 +169,7 @@ class PostCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 2.0),
                         Text(
-                          post['starRating']?.toString() ?? '0.0',
+                          post.starRating.toString(),
                           style:
                               Theme.of(context).textTheme.bodySmall?.copyWith(
                                     fontSize: 13.0,
@@ -185,7 +187,7 @@ class PostCard extends StatelessWidget {
             bottom: 10,
             right: 10,
             child: Text(
-              formatPrice(post['price']),
+              formatPrice(post.price),
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontSize: 16.0,
                     fontWeight: FontWeight.w800,

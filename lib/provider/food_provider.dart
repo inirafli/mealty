@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../data/model/food_post.dart';
 import '../services/firestore_services.dart';
-import '../utils/data_conversion.dart';
 
 class FoodProvider with ChangeNotifier {
   final FirestoreService _firestoreService = FirestoreService();
 
-  List<Map<String, dynamic>> _posts = [];
-  List<Map<String, dynamic>> _filteredPosts = [];
+  List<FoodPost> _posts = [];
+  List<FoodPost> _filteredPosts = [];
   bool _isLoading = true;
 
   List<String> _selectedCategories = ['all'];
@@ -15,9 +15,13 @@ class FoodProvider with ChangeNotifier {
   String _searchKeyword = '';
 
   List<String> get selectedCategories => _selectedCategories;
+
   String get selectedSortType => _selectedSortType;
+
   String get searchKeyword => _searchKeyword;
-  List<Map<String, dynamic>> get posts => _filteredPosts;
+
+  List<FoodPost> get posts => _filteredPosts;
+
   bool get isLoading => _isLoading;
 
   FoodProvider() {
@@ -27,12 +31,12 @@ class FoodProvider with ChangeNotifier {
   Future<void> fetchPosts() async {
     _isLoading = true;
     notifyListeners();
-    _posts = await _firestoreService.getFoodPosts();
-    for (var post in _posts) {
-      var userData = await _firestoreService.getUser(post['userId']);
-      post['username'] = userData['username'];
-      post['starRating'] = userData['starRating'];
-    }
+    final foodDocs = await _firestoreService.getFoodPosts();
+    final futures = foodDocs.map((doc) async {
+      final userData = await _firestoreService.getUser(doc['userId']);
+      return FoodPost.fromFirestore(doc, userData);
+    });
+    _posts = await Future.wait(futures);
     _filteredPosts = _posts;
     _applyFilters();
     _isLoading = false;
@@ -75,16 +79,16 @@ class FoodProvider with ChangeNotifier {
   void _applyFilters() {
     _filteredPosts = _posts.where((post) {
       if (_selectedCategories.contains('all')) return true;
-      return _selectedCategories.contains(post['category']);
+      return _selectedCategories.contains(post.category);
     }).toList();
 
     if (_searchKeyword.isNotEmpty) {
       _filteredPosts = _filteredPosts
           .where((post) =>
-      post['name'].toLowerCase().contains(_searchKeyword.toLowerCase()) ||
-          post['description']
-              .toLowerCase()
-              .contains(_searchKeyword.toLowerCase()))
+              post.name.toLowerCase().contains(_searchKeyword.toLowerCase()) ||
+              post.description
+                  .toLowerCase()
+                  .contains(_searchKeyword.toLowerCase()))
           .toList();
     }
 
@@ -96,23 +100,22 @@ class FoodProvider with ChangeNotifier {
     switch (_selectedSortType) {
       case 'latestPost':
         _filteredPosts.sort((a, b) {
-          return b['publishedDate'].compareTo(a['publishedDate']);
+          return b.publishedDate.compareTo(a.publishedDate);
         });
         break;
       case 'nearestLocation':
         _filteredPosts.sort((a, b) {
-          return calculateDistance(a['location'])
-              .compareTo(calculateDistance(b['location']));
+          return a.distance.compareTo(b.distance);
         });
         break;
       case 'cheapestPrice':
         _filteredPosts.sort((a, b) {
-          return a['price'].compareTo(b['price']);
+          return a.price.compareTo(b.price);
         });
         break;
       case 'timeLeft':
         _filteredPosts.sort((a, b) {
-          return a['saleTime'].compareTo(b['saleTime']);
+          return a.saleTime.compareTo(b.saleTime);
         });
         break;
       default:

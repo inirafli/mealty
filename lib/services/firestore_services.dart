@@ -3,15 +3,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  Future<List<Map<String, dynamic>>> getFoodPosts() async {
+  Future<List<DocumentSnapshot>> getFoodPosts() async {
     try {
       QuerySnapshot snapshot = await _db.collection('foods').get();
-      List<Map<String, dynamic>> posts = snapshot.docs.map((doc) {
-        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-        data['id'] = doc.id;
-        return data;
-      }).toList();
-      return posts;
+      return snapshot.docs;
     } catch (e) {
       return [];
     }
