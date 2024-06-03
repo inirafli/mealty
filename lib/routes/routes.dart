@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:mealty/ui/add_food_screen.dart';
 import 'package:mealty/ui/main_screen.dart';
 
 import '../ui/login_screen.dart';
@@ -35,7 +36,21 @@ class AppRouter {
         ),
         GoRoute(
           path: '/main',
-          builder: (context, state) => const MainScreen(),
+          pageBuilder: (context, state) {
+            return createSlideFromTopTransitionPage(
+              page: const MainScreen(),
+            );
+          },
+          routes: [
+            GoRoute(
+              path: 'addFood',
+              pageBuilder: (context, state) {
+                return createSlideFromBottomTransitionPage(
+                  page: const AddFoodScreen(),
+                );
+              },
+            ),
+          ],
         ),
       ],
     );

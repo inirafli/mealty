@@ -20,6 +20,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   cloud_firestore: ^4.17.3
   firebase_storage: ^11.7.5
+  google_maps_flutter: ^2.6.1
   animated_reorderable: ^1.1.0
   cached_network_image: ^3.3.1
   flutter_cache_manager: ^3.3.1

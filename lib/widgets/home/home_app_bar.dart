@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -30,7 +31,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
               child: TextField(
                 controller: searchController,
                 onChanged: (value) {
-                  Provider.of<FoodProvider>(context, listen: false).updateSearchKeyword(value);
+                  Provider.of<FoodProvider>(context, listen: false)
+                      .updateSearchKeyword(value);
                 },
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Theme.of(context).colorScheme.primary,
@@ -57,7 +59,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                           ),
                           onPressed: () {
                             searchController.clear();
-                            Provider.of<FoodProvider>(context, listen: false).updateSearchKeyword('');
+                            Provider.of<FoodProvider>(context, listen: false)
+                                .updateSearchKeyword('');
                           },
                         )
                       : null,
@@ -91,7 +94,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 color: Theme.of(context).colorScheme.primary,
               ),
               onPressed: () {
-                // Define the action for the hamburger button here
+                context.go('/main/addFood');
               },
             ),
           ),
