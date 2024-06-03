@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
 
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
-        statusBarColor: primaryColor,
+        statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.light,
       ),
     );
