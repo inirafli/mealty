@@ -7,6 +7,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../widgets/foodpost/add_post_header.dart';
 import '../widgets/foodpost/food_text_field.dart';
+import '../widgets/foodpost/food_type_selector.dart';
 
 class AddFoodScreen extends StatefulWidget {
   const AddFoodScreen({super.key});
@@ -18,6 +19,7 @@ class AddFoodScreen extends StatefulWidget {
 class _AddFoodScreenState extends State<AddFoodScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  String _selectedFoodType = '';
   File? _imageFile;
 
   @override
@@ -82,6 +84,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                   padding: const EdgeInsets.symmetric(
                       horizontal: 22.0, vertical: 12.0),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       FoodImagePicker(
                         imageFile: _imageFile,
@@ -97,6 +100,15 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                       FoodTextFields(
                         nameController: _nameController,
                         descriptionController: _descriptionController,
+                      ),
+                      const SizedBox(height: 24.0),
+                      FoodTypeSelector(
+                        selectedType: _selectedFoodType,
+                        onSelectType: (type) {
+                          setState(() {
+                            _selectedFoodType = type;
+                          });
+                        },
                       ),
                       // Add the rest of your screen components here
                     ],

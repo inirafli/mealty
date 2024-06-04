@@ -94,7 +94,7 @@ class FoodTextFields extends StatelessWidget {
           label: 'Deskripsi Makanan',
           controller: descriptionController,
           hintText: 'Masukan deskripsi post makanan-mu.',
-          height: 176.0,
+          height: 124,
           maxLines: 5,
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
