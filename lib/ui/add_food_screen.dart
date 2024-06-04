@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../widgets/foodpost/add_post_header.dart';
+import '../widgets/foodpost/food_text_field.dart';
 
 class AddFoodScreen extends StatefulWidget {
   const AddFoodScreen({super.key});
@@ -15,7 +16,16 @@ class AddFoodScreen extends StatefulWidget {
 }
 
 class _AddFoodScreenState extends State<AddFoodScreen> {
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
   File? _imageFile;
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
 
   Future<void> _pickImageFromGallery() async {
     if (await _requestPermission(Permission.storage)) {
@@ -61,33 +71,49 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
           backgroundColor: onPrimary,
         ),
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            const AddPostHeader(
-              title: 'Tambah Makanan',
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
-              child: Column(
-                children: [
-                  FoodImagePicker(
-                    imageFile: _imageFile,
-                    onImageRemove: () {
-                      setState(() {
-                        _imageFile = null;
-                      });
-                    },
-                    onPickImageFromGallery: _pickImageFromGallery,
-                    onCaptureImageWithCamera: _captureImageWithCamera,
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 60.0),
+            child: SingleChildScrollView(
+              child: SafeArea(
+                top: false,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 22.0, vertical: 12.0),
+                  child: Column(
+                    children: [
+                      FoodImagePicker(
+                        imageFile: _imageFile,
+                        onImageRemove: () {
+                          setState(() {
+                            _imageFile = null;
+                          });
+                        },
+                        onPickImageFromGallery: _pickImageFromGallery,
+                        onCaptureImageWithCamera: _captureImageWithCamera,
+                      ),
+                      const SizedBox(height: 24.0),
+                      FoodTextFields(
+                        nameController: _nameController,
+                        descriptionController: _descriptionController,
+                      ),
+                      // Add the rest of your screen components here
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
-            // Add the rest of your screen components here
-          ],
-        ),
+          ),
+          const Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: AddPostHeader(
+              title: 'Tambah Makanan',
+            ),
+          ),
+        ],
       ),
     );
   }
