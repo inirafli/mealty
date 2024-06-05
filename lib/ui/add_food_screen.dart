@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:mealty/common/styles.dart';
 import 'package:mealty/widgets/foodpost/food_image_picker.dart';
 import 'dart:io';
 
 import 'package:permission_handler/permission_handler.dart';
 
 import '../widgets/foodpost/add_post_header.dart';
+import '../widgets/foodpost/food_location_picker.dart';
 import '../widgets/foodpost/food_price_input.dart';
 import '../widgets/foodpost/food_text_field.dart';
 import '../widgets/foodpost/food_type_selector.dart';
@@ -27,6 +32,9 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
   String _selectedFoodCategory = '';
   String _selectedSellingType = '';
   DateTime? _saleTime;
+  double? _latitude;
+  double? _longitude;
+  String? _address;
   File? _imageFile;
 
   @override
@@ -84,8 +92,16 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
     });
   }
 
+  void _handleLocationPicked(Map<String, double> location) {
+    setState(() {
+      _latitude = location['latitude'];
+      _longitude = location['longitude'];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    Color primary = Theme.of(context).colorScheme.primary;
     Color onPrimary = Theme.of(context).colorScheme.onPrimary;
 
     return Scaffold(
@@ -103,8 +119,8 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
               child: SafeArea(
                 top: false,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 22.0, vertical: 12.0),
+                  padding: const EdgeInsets.only(
+                      left: 22.0, right: 22.0, top: 12.0, bottom: 22.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -157,7 +173,11 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                         ],
                       ),
                       const SizedBox(height: 24.0),
-                      // Add the rest of your screen components here
+                      FoodLocationPicker(
+                        latitude: _latitude,
+                        longitude: _longitude,
+                        onLocationPicked: _handleLocationPicked,
+                      ),
                     ],
                   ),
                 ),

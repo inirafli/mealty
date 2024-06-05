@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:mealty/ui/add_food_screen.dart';
+import 'package:mealty/ui/location_picker_screen.dart';
 import 'package:mealty/ui/main_screen.dart';
 
 import '../ui/login_screen.dart';
@@ -14,7 +15,7 @@ class AppRouter {
       routes: <GoRoute>[
         GoRoute(
           path: '/',
-          builder: (context, state) => const SplashScreen(),
+          builder: (context, state) => const AddFoodScreen(),
         ),
         GoRoute(
           path: '/login',
@@ -43,13 +44,22 @@ class AppRouter {
           },
           routes: [
             GoRoute(
-              path: 'addFood',
-              pageBuilder: (context, state) {
-                return createSlideFromBottomTransitionPage(
-                  page: const AddFoodScreen(),
-                );
-              },
-            ),
+                path: 'addFood',
+                pageBuilder: (context, state) {
+                  return createSlideFromBottomTransitionPage(
+                    page: const AddFoodScreen(),
+                  );
+                },
+                routes: [
+                  GoRoute(
+                    path: 'locationPicker',
+                    pageBuilder: (context, state) {
+                      return createSlideFromBottomTransitionPage(
+                        page: const LocationPickerScreen(),
+                      );
+                    },
+                  )
+                ]),
           ],
         ),
       ],
