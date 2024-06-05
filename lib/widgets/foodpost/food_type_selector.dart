@@ -16,22 +16,22 @@ class FoodTypeSelector extends StatelessWidget {
     final types = {
       'staple': {
         'icon': MdiIcons.foodDrumstickOutline,
-        'iconSize': 18.0,
+        'iconSize': 17.0,
         'text': 'Makanan'
       },
       'drinks': {
         'icon': MdiIcons.beerOutline,
-        'iconSize': 18.5,
+        'iconSize': 17.5,
         'text': 'Minuman'
       },
       'snacks': {
         'icon': MdiIcons.cakeVariantOutline,
-        'iconSize': 18.5,
+        'iconSize': 17.5,
         'text': 'Camilan'
       },
       'fruitsVeg': {
         'icon': MdiIcons.foodAppleOutline,
-        'iconSize': 19.0,
+        'iconSize': 18.0,
         'text': 'Buah dan Sayur'
       },
     };
@@ -67,7 +67,7 @@ class FoodTypeSelector extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 14.0),
                 decoration: BoxDecoration(
                   color: isSelected ? primary : onPrimary,
-                  border: Border.all(color: primary),
+                  border: Border.all(color: primary, width: 0.75),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: Row(

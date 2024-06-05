@@ -23,14 +23,14 @@ class AddFoodScreen extends StatefulWidget {
 class _AddFoodScreenState extends State<AddFoodScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  final TextEditingController _priceController = TextEditingController(text: '0');
+  final TextEditingController _priceController =
+      TextEditingController(text: '0');
   final TextEditingController _saleTimeController = TextEditingController();
   String _selectedFoodCategory = '';
   String _selectedSellingType = '';
   DateTime? _saleTime;
   double? _latitude;
   double? _longitude;
-  String? _address;
   File? _imageFile;
 
   @override
@@ -97,7 +97,6 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Color primary = Theme.of(context).colorScheme.primary;
     Color onPrimary = Theme.of(context).colorScheme.onPrimary;
 
     return Scaffold(
@@ -115,8 +114,8 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
               child: SafeArea(
                 top: false,
                 child: Padding(
-                  padding: const EdgeInsets.only(
-                      left: 22.0, right: 22.0, top: 12.0, bottom: 22.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 22.0, vertical: 12.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -189,6 +188,24 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 22.0, vertical: 16.0),
+        child: SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: () {
+              // Post the data.
+            },
+            child: Text(
+              'Unggah Makanan',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+            ),
+          ),
+        ),
       ),
     );
   }
