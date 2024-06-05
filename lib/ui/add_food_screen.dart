@@ -6,8 +6,11 @@ import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../widgets/foodpost/add_post_header.dart';
+import '../widgets/foodpost/food_price_input.dart';
 import '../widgets/foodpost/food_text_field.dart';
 import '../widgets/foodpost/food_type_selector.dart';
+import '../widgets/foodpost/sale_time_input.dart';
+import '../widgets/foodpost/selling_type_selector.dart';
 
 class AddFoodScreen extends StatefulWidget {
   const AddFoodScreen({super.key});
@@ -19,13 +22,19 @@ class AddFoodScreen extends StatefulWidget {
 class _AddFoodScreenState extends State<AddFoodScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  String _selectedFoodType = '';
+  final TextEditingController _priceController = TextEditingController(text: '0');
+  final TextEditingController _saleTimeController = TextEditingController();
+  String _selectedFoodCategory = '';
+  String _selectedSellingType = '';
+  DateTime? _saleTime;
   File? _imageFile;
 
   @override
   void dispose() {
     _nameController.dispose();
     _descriptionController.dispose();
+    _priceController.dispose();
+    _saleTimeController.dispose();
     super.dispose();
   }
 
@@ -60,11 +69,24 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
     }
   }
 
+  void _handleSelectSellingType(String type) {
+    setState(() {
+      _selectedSellingType = type;
+      if (type == 'sharing') {
+        _priceController.text = '0';
+      }
+    });
+  }
+
+  void _handleSelectSaleTime(DateTime dateTime) {
+    setState(() {
+      _saleTime = dateTime;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    Color primary = Theme.of(context).colorScheme.primary;
     Color onPrimary = Theme.of(context).colorScheme.onPrimary;
-    Color onBackrgound = Theme.of(context).colorScheme.onBackground;
 
     return Scaffold(
       appBar: PreferredSize(
@@ -103,13 +125,38 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                       ),
                       const SizedBox(height: 24.0),
                       FoodTypeSelector(
-                        selectedType: _selectedFoodType,
+                        selectedType: _selectedFoodCategory,
                         onSelectType: (type) {
                           setState(() {
-                            _selectedFoodType = type;
+                            _selectedFoodCategory = type;
                           });
                         },
                       ),
+                      const SizedBox(height: 24.0),
+                      SellingTypeSelector(
+                        selectedType: _selectedSellingType,
+                        onSelectType: _handleSelectSellingType,
+                      ),
+                      const SizedBox(height: 24.0),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: PriceInput(
+                              controller: _priceController,
+                              isEditable: _selectedSellingType == 'commercial',
+                            ),
+                          ),
+                          const SizedBox(width: 8.0),
+                          Expanded(
+                            child: SaleTimeInput(
+                              controller: _saleTimeController,
+                              onSelectDateTime: _handleSelectSaleTime,
+                              initialDateTime: _saleTime,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 24.0),
                       // Add the rest of your screen components here
                     ],
                   ),

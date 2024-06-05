@@ -48,7 +48,7 @@ class FoodTextFields extends StatelessWidget {
       required String label,
       required TextEditingController controller,
       required String hintText,
-      double height = 44.0,
+      double height = 40.0,
       int maxLines = 1,
       EdgeInsetsGeometry contentPadding =
           const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.5),
