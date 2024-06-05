@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:mealty/common/styles.dart';
 import 'package:mealty/widgets/foodpost/food_image_picker.dart';
 import 'dart:io';
 

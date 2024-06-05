@@ -91,8 +91,8 @@ class _PriceInputState extends State<PriceInput> {
                   keyboardType: TextInputType.number,
                   enabled: widget.isEditable,
                   decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 0.0),
+                    contentPadding: const EdgeInsets.only(
+                        left: 16.0, right: 8.0, bottom: 0, top: 21.5),
                     filled: true,
                     fillColor: onPrimary,
                     enabledBorder: OutlineInputBorder(

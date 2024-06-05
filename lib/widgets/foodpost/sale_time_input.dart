@@ -134,8 +134,8 @@ class _SaleTimeInputState extends State<SaleTimeInput> {
                     controller: widget.controller,
                     enabled: false,
                     decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 8.0),
+                      contentPadding: const EdgeInsets.only(
+                          left: 16.0, right: 8.0, bottom: 0, top: 21.5),
                       filled: true,
                       fillColor: onPrimary,
                       disabledBorder: OutlineInputBorder(
