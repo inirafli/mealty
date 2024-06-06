@@ -48,11 +48,12 @@ class _FoodLocationPickerState extends State<FoodLocationPicker> {
       setState(() {
         _street = place.street;
         _locality =
-            "${place.locality}, ${place.administrativeArea}, ${place.country}";
+            "${place.name}, ${place.locality}, ${place.subLocality}, ${place.subAdministrativeArea}, "
+                "${place.postalCode}, ${place.administrativeArea}, ${place.country}.";
       });
     } catch (e) {
       setState(() {
-        _street = "Could not determine address";
+        _street = "Tidak bisa menampilkan Alamat";
         _locality = "";
       });
     }
@@ -92,7 +93,7 @@ class _FoodLocationPickerState extends State<FoodLocationPicker> {
                   _street!,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: onBackground,
-                        fontSize: 15.0,
+                        fontSize: 16.0,
                         fontWeight: FontWeight.bold,
                       ),
                 ),

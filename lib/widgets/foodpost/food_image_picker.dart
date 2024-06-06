@@ -30,7 +30,7 @@ class FoodImagePicker extends StatelessWidget {
               borderRadius: BorderRadius.circular(12.0),
               child: imageFile == null
                   ? Container(
-                      height: 240,
+                      height: 280,
                       width: double.infinity,
                       color: Colors.grey[200],
                       child: const Center(
@@ -38,7 +38,7 @@ class FoodImagePicker extends StatelessWidget {
                     )
                   : Image.file(
                       imageFile!,
-                      height: 240,
+                      height: 280,
                       width: double.infinity,
                       fit: BoxFit.cover,
                     ),
