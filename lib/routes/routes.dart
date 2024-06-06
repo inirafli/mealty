@@ -15,7 +15,7 @@ class AppRouter {
       routes: <GoRoute>[
         GoRoute(
           path: '/',
-          builder: (context, state) => const AddFoodScreen(),
+          builder: (context, state) => const SplashScreen(),
         ),
         GoRoute(
           path: '/login',

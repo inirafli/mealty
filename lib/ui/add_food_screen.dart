@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mealty/provider/add_food_provider.dart';
 import 'package:mealty/widgets/foodpost/food_image_picker.dart';
 
 import 'package:provider/provider.dart';
 
+import '../common/post_state.dart';
+import '../provider/food_provider.dart';
+import '../widgets/common/custom_loading_indicator.dart';
+import '../widgets/common/custom_snackbar.dart';
 import '../widgets/foodpost/add_post_header.dart';
 import '../widgets/foodpost/food_location_picker.dart';
 import '../widgets/foodpost/food_price_input.dart';
@@ -116,19 +121,55 @@ class AddFoodScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 22.0, vertical: 16.0),
         child: SizedBox(
           width: double.infinity,
-          child: Consumer<AddFoodProvider>(
-            builder: (context, provider, child) {
+          child: Consumer2<AddFoodProvider, FoodProvider>(
+            builder: (context, addFoodProvider, foodProvider, child) {
               return ElevatedButton(
-                onPressed: () {
-                  provider.addFoodPost();
-                },
-                child: Text(
-                  'Unggah Makanan',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
-                ),
+                onPressed:
+                    addFoodProvider.postState.status == PostStatus.loading
+                        ? null
+                        : () async {
+                            await addFoodProvider.addFoodPost();
+
+                            if (context.mounted) {
+                              if (addFoodProvider.postState.status ==
+                                  PostStatus.error) {
+                                ScaffoldMessenger.of(context)
+                                  ..hideCurrentSnackBar()
+                                  ..showSnackBar(CustomSnackBar(
+                                    contentText:
+                                        addFoodProvider.postState.errorMessage,
+                                    context: context,
+                                  ));
+                              } else if (addFoodProvider.postState.status ==
+                                  PostStatus.success) {
+                                ScaffoldMessenger.of(context)
+                                  ..hideCurrentSnackBar()
+                                  ..showSnackBar(CustomSnackBar(
+                                    contentText:
+                                        'Berhasil menambahkan unggahan Makanan.',
+                                    context: context,
+                                  ));
+                                await foodProvider.fetchPosts();
+
+                                if (context.mounted) {
+                                  context.pop();
+                                }
+                              }
+                            }
+                          },
+                child: addFoodProvider.postState.status == PostStatus.loading
+                    ? CustomProgressIndicator(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        size: 16.0,
+                        strokeWidth: 2,
+                      )
+                    : Text(
+                        'Unggah Makanan',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.onPrimary,
+                            ),
+                      ),
               );
             },
           ),
