@@ -130,30 +130,30 @@ class AddFoodScreen extends StatelessWidget {
                         : () async {
                             await addFoodProvider.addFoodPost();
 
-                            if (context.mounted) {
-                              if (addFoodProvider.postState.status ==
-                                  PostStatus.error) {
-                                ScaffoldMessenger.of(context)
-                                  ..hideCurrentSnackBar()
-                                  ..showSnackBar(CustomSnackBar(
-                                    contentText:
-                                        addFoodProvider.postState.errorMessage,
-                                    context: context,
-                                  ));
-                              } else if (addFoodProvider.postState.status ==
-                                  PostStatus.success) {
-                                ScaffoldMessenger.of(context)
-                                  ..hideCurrentSnackBar()
-                                  ..showSnackBar(CustomSnackBar(
-                                    contentText:
-                                        'Berhasil menambahkan unggahan Makanan.',
-                                    context: context,
-                                  ));
-                                await foodProvider.fetchPosts();
+                            if (!context.mounted) return;
 
-                                if (context.mounted) {
-                                  context.pop();
-                                }
+                            if (addFoodProvider.postState.status ==
+                                PostStatus.error) {
+                              ScaffoldMessenger.of(context)
+                                ..hideCurrentSnackBar()
+                                ..showSnackBar(CustomSnackBar(
+                                  contentText:
+                                      addFoodProvider.postState.errorMessage,
+                                  context: context,
+                                ));
+                            } else if (addFoodProvider.postState.status ==
+                                PostStatus.success) {
+                              ScaffoldMessenger.of(context)
+                                ..hideCurrentSnackBar()
+                                ..showSnackBar(CustomSnackBar(
+                                  contentText:
+                                      'Berhasil menambahkan unggahan Makanan.',
+                                  context: context,
+                                ));
+                              await foodProvider.fetchPosts();
+
+                              if (context.mounted) {
+                                context.go('/main');
                               }
                             }
                           },

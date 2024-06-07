@@ -3,6 +3,8 @@ import 'package:mealty/ui/add_food_screen.dart';
 import 'package:mealty/ui/location_picker_screen.dart';
 import 'package:mealty/ui/main_screen.dart';
 
+import '../data/model/food_post.dart';
+import '../ui/food_detail_screen.dart';
 import '../ui/login_screen.dart';
 import '../ui/register_screen.dart';
 import '../ui/splash_screen.dart';
@@ -44,22 +46,32 @@ class AppRouter {
           },
           routes: [
             GoRoute(
-                path: 'addFood',
-                pageBuilder: (context, state) {
-                  return createSlideFromBottomTransitionPage(
-                    page: const AddFoodScreen(),
-                  );
-                },
-                routes: [
-                  GoRoute(
-                    path: 'locationPicker',
-                    pageBuilder: (context, state) {
-                      return createSlideFromBottomTransitionPage(
-                        page: const LocationPickerScreen(),
-                      );
-                    },
-                  )
-                ]),
+              path: 'addFood',
+              pageBuilder: (context, state) {
+                return createSlideFromBottomTransitionPage(
+                  page: const AddFoodScreen(),
+                );
+              },
+              routes: [
+                GoRoute(
+                  path: 'locationPicker',
+                  pageBuilder: (context, state) {
+                    return createSlideFromBottomTransitionPage(
+                      page: const LocationPickerScreen(),
+                    );
+                  },
+                ),
+              ],
+            ),
+            GoRoute(
+              path: 'foodDetail',
+              pageBuilder: (context, state) {
+                final FoodPost post = state.extra as FoodPost;
+                return createSlideFromBottomTransitionPage(
+                  page: FoodDetailScreen(post: post),
+                );
+              },
+            ),
           ],
         ),
       ],

@@ -81,7 +81,7 @@ class _FoodLocationPickerState extends State<FoodLocationPicker> {
           Container(
             width: double.infinity,
             padding:
-                const EdgeInsets.symmetric(horizontal: 18.0, vertical: 16.0),
+                const EdgeInsets.symmetric(horizontal: 18.0, vertical: 14.0),
             decoration: BoxDecoration(
               color: secondary,
               borderRadius: BorderRadius.circular(12.0),

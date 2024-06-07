@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'dart:io';
 
 import 'package:permission_handler/permission_handler.dart';
@@ -112,9 +113,14 @@ class AddFoodProvider with ChangeNotifier {
 
   Future<void> addFoodPost() async {
     // Checking for null fields
-    if (nameController.text.isEmpty || descriptionController.text.isEmpty ||
-        _selectedFoodCategory.isEmpty || _selectedSellingType.isEmpty ||
-        _saleTime == null || _latitude == null || _longitude == null || _imageFile == null) {
+    if (nameController.text.isEmpty ||
+        descriptionController.text.isEmpty ||
+        _selectedFoodCategory.isEmpty ||
+        _selectedSellingType.isEmpty ||
+        _saleTime == null ||
+        _latitude == null ||
+        _longitude == null ||
+        _imageFile == null) {
       _postState = PostState.error('Pastikan semua Field telah terisi.');
       notifyListeners();
       return;
@@ -124,9 +130,13 @@ class AddFoodProvider with ChangeNotifier {
     notifyListeners();
 
     try {
+      String formattedDate =
+          DateFormat('yyyyMMddHHmmss').format(DateTime.now());
+
       // Upload image to Firebase Storage
-      String fileName = 'foods-${DateTime.now().millisecondsSinceEpoch}';
-      Reference storageRef = FirebaseStorage.instance.ref().child('foods').child(fileName);
+      String fileName = 'foods-$formattedDate';
+      Reference storageRef =
+          FirebaseStorage.instance.ref().child('foods').child(fileName);
       UploadTask uploadTask = storageRef.putFile(_imageFile!);
       TaskSnapshot storageSnapshot = await uploadTask.whenComplete(() => {});
       String downloadUrl = await storageSnapshot.ref.getDownloadURL();
@@ -140,7 +150,9 @@ class AddFoodProvider with ChangeNotifier {
       }
 
       // Create a new document in Firestore
-      DocumentReference newPostRef = FirebaseFirestore.instance.collection('foods').doc('posts-${DateTime.now().millisecondsSinceEpoch}');
+      DocumentReference newPostRef = FirebaseFirestore.instance
+          .collection('foods')
+          .doc('posts-$formattedDate');
       await newPostRef.set({
         'category': _selectedFoodCategory,
         'description': descriptionController.text,
