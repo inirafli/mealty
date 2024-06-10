@@ -88,7 +88,7 @@ class FoodDetailScreen extends StatelessWidget {
               width: double.infinity,
               color: Colors.grey[200],
               padding: const EdgeInsets.only(
-                  left: 24.0, right: 24.0, top: 20.0, bottom: 24.0),
+                  left: 24.0, right: 24.0, top: 20.0, bottom: 20.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

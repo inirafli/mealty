@@ -51,7 +51,7 @@ class _CountdownTimerWidgetState extends State<CountdownTimerWidget> {
     Color secondary = Theme.of(context).colorScheme.secondary;
     Color onBackground = Theme.of(context).colorScheme.onBackground;
 
-    return _remainingTime.inHours < 24
+    return _remainingTime > Duration.zero && _remainingTime.inHours < 24
         ? Column(
           children: [
             Container(
