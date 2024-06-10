@@ -33,7 +33,7 @@ class AppRouter {
       user: User(
         id: '2Sp05tZUHnNEdOcq1Oc7dyNuYfZ2',
         email: 'iniakunnyaraflirayhan@gmail.com',
-        phoneNumber: '',
+        phoneNumber: '081213564203',
         photoUrl:
             'https://lh3.googleusercontent.com/a/ACg8ocKJm_6eNbzvSTmfMPDk37zMaNuYeff1Ou5kn4UaKnWESw5MRo0=s96-c',
         starRating: 0,
