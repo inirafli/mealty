@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class FoodLocationWidget extends StatefulWidget {
   final GeoPoint location;
@@ -19,6 +20,7 @@ class FoodLocationWidget extends StatefulWidget {
 class _FoodLocationWidgetState extends State<FoodLocationWidget> {
   late GoogleMapController _controller;
   late CameraPosition _initialCameraPosition;
+  late BitmapDescriptor _customMarker;
   String _address = 'Memuat alamat...';
 
   @override
@@ -28,7 +30,15 @@ class _FoodLocationWidgetState extends State<FoodLocationWidget> {
       target: LatLng(widget.location.latitude, widget.location.longitude),
       zoom: 14.0,
     );
+    _loadCustomMarker();
     _getAddressFromLatLng();
+  }
+
+  Future<void> _loadCustomMarker() async {
+    _customMarker = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(size: Size(48, 48)),
+      'assets/location_pointer_mini.png',
+    );
   }
 
   Future<void> _getAddressFromLatLng() async {
@@ -49,6 +59,17 @@ class _FoodLocationWidgetState extends State<FoodLocationWidget> {
     }
   }
 
+  void _moveToCurrentLocation() {
+    _controller.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(
+          target: LatLng(widget.location.latitude, widget.location.longitude),
+          zoom: 14.0,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Color primary = Theme.of(context).colorScheme.primary;
@@ -64,32 +85,54 @@ class _FoodLocationWidgetState extends State<FoodLocationWidget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            height: 240.0,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12.0),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12.0),
-              child: GoogleMap(
-                initialCameraPosition: _initialCameraPosition,
-                onMapCreated: (GoogleMapController controller) {
-                  _controller = controller;
-                },
-                markers: {
-                  Marker(
-                    markerId: const MarkerId('postLocation'),
-                    position: LatLng(
-                        widget.location.latitude, widget.location.longitude),
+          Stack(
+            children: [
+              Container(
+                height: 240.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12.0),
+                  child: GoogleMap(
+                    initialCameraPosition: _initialCameraPosition,
+                    onMapCreated: (GoogleMapController controller) {
+                      _controller = controller;
+                      // Ensure custom marker is set only after the map is created
+                      setState(() {});
+                    },
+                    markers: {
+                      Marker(
+                        markerId: const MarkerId('postLocation'),
+                        position: LatLng(widget.location.latitude,
+                            widget.location.longitude),
+                        icon: _customMarker,
+                      ),
+                    },
+                    zoomControlsEnabled: false,
+                    gestureRecognizers: {
+                      Factory<OneSequenceGestureRecognizer>(
+                          () => EagerGestureRecognizer())
+                    },
                   ),
-                },
-                zoomControlsEnabled: false,
-                gestureRecognizers: {
-                  Factory<OneSequenceGestureRecognizer>(
-                      () => EagerGestureRecognizer())
-                },
+                ),
               ),
-            ),
+              Positioned(
+                bottom: 10,
+                right: 10,
+                child: CircleAvatar(
+                  backgroundColor: onPrimary,
+                  radius: 20,
+                  child: IconButton(
+                    icon: Icon(
+                      MdiIcons.crosshairsGps,
+                      color: onBackground,
+                    ),
+                    onPressed: _moveToCurrentLocation,
+                  ),
+                ),
+              ),
+            ],
           ),
           Padding(
             padding: const EdgeInsets.only(

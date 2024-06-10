@@ -25,20 +25,41 @@ class FoodDetailScreen extends StatelessWidget {
             expandedHeight: 300,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              background: Image.network(
-                post.image,
-                fit: BoxFit.cover,
+              collapseMode: CollapseMode.parallax,
+              title: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  return constraints.biggest.height > 90
+                      ? const SizedBox.shrink()
+                      : Text(
+                          post.name,
+                          style:
+                              Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: onPrimary,
+                                  ),
+                        );
+                },
+              ),
+              background: GestureDetector(
+                onTap: () => context.push('/main/imageFullScreen', extra: post.image),
+                child: Image.network(
+                  post.image,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-            leading: IconButton(
-              icon: Icon(
-                MdiIcons.arrowLeft,
-                color: onPrimary,
-                size: 28.0,
+            leading: Padding(
+              padding: const EdgeInsets.only(bottom: 6),
+              child: IconButton(
+                icon: Icon(
+                  MdiIcons.arrowLeft,
+                  color: onPrimary,
+                  size: 24.0,
+                ),
+                onPressed: () {
+                  context.pop();
+                },
               ),
-              onPressed: () {
-                context.pop();
-              },
             ),
           ),
           SliverToBoxAdapter(
@@ -82,6 +103,22 @@ class FoodDetailScreen extends StatelessWidget {
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 22.0, vertical: 16.0),
+        child: SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: () {},
+            child: Text(
+              'Tambahkan ke Keranjang',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+            ),
+          ),
+        ),
       ),
     );
   }
