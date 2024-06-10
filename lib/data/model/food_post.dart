@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mealty/data/model/user.dart';
 
 import '../../utils/data_conversion.dart';
 
@@ -14,8 +15,7 @@ class FoodPost {
   final Timestamp saleTime;
   final String sellingType;
   final String userId;
-  final String username;
-  final int starRating;
+  final User user;
   final double distance;
   final String formattedDistance;
 
@@ -31,14 +31,12 @@ class FoodPost {
     required this.saleTime,
     required this.sellingType,
     required this.userId,
-    required this.username,
-    required this.starRating,
+    required this.user,
     required this.distance,
     required this.formattedDistance,
   });
 
-  factory FoodPost.fromFirestore(
-      DocumentSnapshot doc, Map<String, dynamic> userData) {
+  factory FoodPost.fromFirestore(DocumentSnapshot doc, User user) {
     final data = doc.data() as Map<String, dynamic>;
     final double distance = calculateDistance(data['location']);
     return FoodPost(
@@ -53,8 +51,7 @@ class FoodPost {
       saleTime: data['saleTime'],
       sellingType: data['sellingType'],
       userId: data['userId'],
-      username: userData['username'],
-      starRating: userData['starRating'],
+      user: user,
       distance: distance,
       formattedDistance: formatDistance(distance),
     );

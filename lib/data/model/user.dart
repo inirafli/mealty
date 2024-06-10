@@ -1,24 +1,46 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class User {
-  final String uid;
-  final String? email;
-  final String? displayName;
-  final String? photoURL;
+  final String id;
+  final String email;
+  final String phoneNumber;
+  final String photoUrl;
+  final int starRating;
+  final String username;
+  final GeoPoint address;
+  final Map<String, dynamic> completedFoodTypes;
+  final Map<String, dynamic> orderHistory;
+  final List<dynamic> purchases;
+  final List<dynamic> sales;
 
   User({
-    required this.uid,
-    this.email,
-    this.displayName,
-    this.photoURL,
+    required this.id,
+    required this.email,
+    required this.phoneNumber,
+    required this.photoUrl,
+    required this.starRating,
+    required this.username,
+    required this.address,
+    required this.completedFoodTypes,
+    required this.orderHistory,
+    required this.purchases,
+    required this.sales,
   });
 
-  factory User.fromFirebaseUser(UserInfo? firebaseUser) {
+  factory User.fromFirestore(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
     return User(
-      uid: firebaseUser?.uid ?? '',
-      email: firebaseUser?.email,
-      displayName: firebaseUser?.displayName,
-      photoURL: firebaseUser?.photoURL,
+      id: doc.id,
+      email: data['email'],
+      phoneNumber: data['phoneNumber'] ?? '',
+      photoUrl: data['photoUrl'] ?? '',
+      starRating: data['starRating'],
+      username: data['username'],
+      address: data['address'],
+      completedFoodTypes: data['completedFoodTypes'],
+      orderHistory: data['orderHistory'],
+      purchases: data['purchases'] ?? [],
+      sales: data['sales'] ?? [],
     );
   }
 }

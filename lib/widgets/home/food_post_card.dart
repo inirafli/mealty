@@ -160,7 +160,7 @@ class PostCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            post.username,
+                            post.user.username,
                             style:
                                 Theme.of(context).textTheme.bodySmall?.copyWith(
                                       fontSize: 13.0,
@@ -181,7 +181,7 @@ class PostCard extends StatelessWidget {
                           ),
                           const SizedBox(width: 2.0),
                           Text(
-                            post.starRating.toString(),
+                            post.user.starRating.toString(),
                             style:
                                 Theme.of(context).textTheme.bodySmall?.copyWith(
                                       fontSize: 13.0,

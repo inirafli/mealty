@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mealty/data/model/user.dart';
 
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -12,12 +13,12 @@ class FirestoreService {
     }
   }
 
-  Future<Map<String, dynamic>> getUser(String userId) async {
+  Future<User> getUser(String userId) async {
     try {
       DocumentSnapshot doc = await _db.collection('users').doc(userId).get();
-      return doc.data() as Map<String, dynamic>;
+      return User.fromFirestore(doc);
     } catch (e) {
-      return {};
+      rethrow;
     }
   }
 }
