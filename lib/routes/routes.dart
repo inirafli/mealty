@@ -22,7 +22,7 @@ class AppRouter {
           'Kentang goreng lezat buatan rumahan asli tanpa penyedap dan langsung dari kentang di kebun.',
       image:
           'https://firebasestorage.googleapis.com/v0/b/mealty-408b8.appspot.com/o/foods%2Ffoods-1717648062566?alt=media&token=0e28a9fb-bb0b-4ba7-b299-a9289a84a7d1',
-      location: const GeoPoint(0, 0),
+      location: const GeoPoint(-6.401476593216709, 106.83764453977346),
       // Dummy location
       name: 'Kentang Goreng Rumahan',
       price: 20000,
