@@ -1,11 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 
 import '../data/model/food_post.dart';
 import '../services/firestore_services.dart';
 
 class FoodProvider with ChangeNotifier {
   final FirestoreService _firestoreService = FirestoreService();
-
+  final Location _location = Location();
   List<FoodPost> _posts = [];
   List<FoodPost> _filteredPosts = [];
   bool _isLoading = true;
@@ -25,16 +27,47 @@ class FoodProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
 
   FoodProvider() {
+    _checkLocationServices();
+  }
+
+  Future<void> _checkLocationServices() async {
+    bool serviceEnabled;
+    PermissionStatus permissionGranted;
+
+    serviceEnabled = await _location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await _location.requestService();
+      if (!serviceEnabled) {
+        return;
+      }
+    }
+
+    permissionGranted = await _location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await _location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
     fetchPosts();
   }
 
   Future<void> fetchPosts() async {
     _isLoading = true;
     notifyListeners();
+    final LocationData userLocation = await Future.any([
+      _location.getLocation(),
+      Future.delayed(const Duration(seconds: 2), () => _location.getLocation()),
+    ]);
+
+    final GeoPoint userGeoPoint =
+        GeoPoint(userLocation.latitude!, userLocation.longitude!);
+
     final foodDocs = await _firestoreService.getFoodPosts();
     final futures = foodDocs.map((doc) async {
       final userData = await _firestoreService.getUser(doc['userId']);
-      return FoodPost.fromFirestore(doc, userData);
+      return FoodPost.fromFirestore(doc, userData, userGeoPoint);
     });
     _posts = await Future.wait(futures);
     _filteredPosts = _posts;

@@ -67,6 +67,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Color primary = Theme.of(context).colorScheme.primary;
+    Color onPrimary = Theme.of(context).colorScheme.onPrimary;
+
     return Scaffold(
       appBar: HomeAppBar(
         searchController: _searchController,
@@ -88,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
               if (foodProvider.isLoading) {
                 return Center(
                     child: CustomProgressIndicator(
-                  color: Theme.of(context).colorScheme.primary,
+                  color: primary,
                   size: 24.0,
                   strokeWidth: 2.0,
                 ));
@@ -107,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Text(
                         'Belum ada Makanan atau Minuman\n yang tersedia.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: Theme.of(context).colorScheme.primary,
+                              color: primary,
                               fontWeight: FontWeight.bold,
                             ),
                         textAlign: TextAlign.center,
@@ -134,15 +137,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                 .textTheme
                                 .titleMedium
                                 ?.copyWith(
-                                  color: Theme.of(context).colorScheme.primary,
+                                  color: primary,
                                   fontWeight: FontWeight.bold,
                                 ),
                           ),
                           const SizedBox(width: 12.0),
                           Expanded(
                             child: Divider(
-                              color: Theme.of(context).colorScheme.primary,
-                              thickness: 1.5,
+                              color: primary,
+                              thickness: 1.25,
                             ),
                           ),
                         ],

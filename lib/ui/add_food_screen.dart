@@ -150,11 +150,12 @@ class AddFoodScreen extends StatelessWidget {
                                       'Berhasil menambahkan unggahan Makanan.',
                                   context: context,
                                 ));
-                              await foodProvider.fetchPosts();
 
                               if (context.mounted) {
                                 context.go('/main');
                               }
+
+                              await foodProvider.fetchPosts();
                             }
                           },
                 child: addFoodProvider.postState.status == PostStatus.loading

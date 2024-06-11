@@ -21,15 +21,13 @@ String formatSaleTime(Timestamp saleTime) {
   }
 }
 
-double calculateDistance(GeoPoint location) {
-  // TODO: Replace this with real-time current location.
-  const myLocation = GeoPoint(-6.4038, 106.8395);
-  const earthRadius = 6371000; // in meters
+double calculateDistance(GeoPoint location, GeoPoint userLocation) {
+  const earthRadius = 6371000;
 
   double toRadians(double degree) => degree * (math.pi / 180);
 
-  final lat1 = toRadians(myLocation.latitude);
-  final lon1 = toRadians(myLocation.longitude);
+  final lat1 = toRadians(userLocation.latitude);
+  final lon1 = toRadians(userLocation.longitude);
   final lat2 = toRadians(location.latitude);
   final lon2 = toRadians(location.longitude);
 

@@ -36,9 +36,9 @@ class FoodPost {
     required this.formattedDistance,
   });
 
-  factory FoodPost.fromFirestore(DocumentSnapshot doc, User user) {
+  factory FoodPost.fromFirestore(DocumentSnapshot doc, User user, GeoPoint userLocation) {
     final data = doc.data() as Map<String, dynamic>;
-    final double distance = calculateDistance(data['location']);
+    final double distance = calculateDistance(data['location'], userLocation);
     return FoodPost(
       id: doc.id,
       category: data['category'],
