@@ -14,9 +14,9 @@ class AddFoodProvider with ChangeNotifier {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController priceController =
-      TextEditingController(text: '0');
+  TextEditingController(text: '0');
   final TextEditingController stockController =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController saleTimeController = TextEditingController();
 
   String _selectedFoodCategory = '';
@@ -87,21 +87,37 @@ class AddFoodProvider with ChangeNotifier {
   Future<void> pickImageFromGallery() async {
     if (await requestPermission(Permission.storage)) {
       final pickedFile =
-          await ImagePicker().pickImage(source: ImageSource.gallery);
+      await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 85);
       if (pickedFile != null) {
-        _imageFile = File(pickedFile.path);
-        notifyListeners();
+        File? compressedImage = await _compressImage(File(pickedFile.path));
+        if (compressedImage != null) {
+          setImage(compressedImage);
+        }
       }
     }
   }
 
   Future<void> captureImageWithCamera() async {
     final pickedFile =
-        await ImagePicker().pickImage(source: ImageSource.camera);
+    await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 85);
     if (pickedFile != null) {
-      _imageFile = File(pickedFile.path);
-      notifyListeners();
+      File? compressedImage = await _compressImage(File(pickedFile.path));
+      if (compressedImage != null) {
+        setImage(compressedImage);
+      }
     }
+  }
+
+  Future<File?> _compressImage(File imageFile) async {
+    const int maxSize = 8 * 1024 * 1024; // 8 MB in bytes
+
+    if (await imageFile.length() > maxSize) {
+      _postState = PostState.error('Image size exceeds the 8MB limit.');
+      notifyListeners();
+      return null;
+    }
+
+    return imageFile;
   }
 
   @override
@@ -134,12 +150,12 @@ class AddFoodProvider with ChangeNotifier {
 
     try {
       String formattedDate =
-          DateFormat('yyyyMMddHHmmss').format(DateTime.now());
+      DateFormat('yyyyMMddHHmmss').format(DateTime.now());
 
       // Upload image to Firebase Storage
       String fileName = 'foods-$formattedDate';
       Reference storageRef =
-          FirebaseStorage.instance.ref().child('foods').child(fileName);
+      FirebaseStorage.instance.ref().child('foods').child(fileName);
       UploadTask uploadTask = storageRef.putFile(_imageFile!);
       TaskSnapshot storageSnapshot = await uploadTask.whenComplete(() => {});
       String downloadUrl = await storageSnapshot.ref.getDownloadURL();
