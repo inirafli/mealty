@@ -18,7 +18,7 @@ class AppRouter {
     // Dummy FoodPost data
     // final dummyPost = FoodPost(
     //   id: 'posts-1717648063749',
-    //   category: 'snacks',
+    //   category: 'drinks',
     //   description:
     //       'Kentang goreng lezat buatan rumahan asli tanpa penyedap dan langsung dari kentang di kebun.',
     //   image:
@@ -27,6 +27,7 @@ class AppRouter {
     //   // Dummy location
     //   name: 'Kentang Goreng Rumahan',
     //   price: 20000,
+    //   stock: 20,
     //   publishedDate: Timestamp(1717648063, 751663000),
     //   saleTime: Timestamp.fromDate(DateTime(2024, 6, 11, 09, 00, 00)),
     //   sellingType: 'commercial',

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:mealty/widgets/detailpost/category_stock_widget.dart';
 
 import '../data/model/food_post.dart';
 import '../widgets/detailpost/countdown_timer_widget.dart';
 import '../widgets/detailpost/food_location_widget.dart';
-import '../widgets/detailpost/name_description_category_widget.dart';
+import '../widgets/detailpost/name_description_widget.dart';
 import '../widgets/detailpost/price_type_widgets.dart';
 import '../widgets/detailpost/user_detail_widget.dart';
 
@@ -78,7 +79,7 @@ class FoodDetailScreen extends StatelessWidget {
                   PriceTypeWidget(post: post),
                   const SizedBox(height: 16.0),
                   CountdownTimerWidget(post: post),
-                  NameDescriptionCategoryWidget(post: post),
+                  NameDescWidget(post: post),
                 ],
               ),
             ),
@@ -92,6 +93,8 @@ class FoodDetailScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  CategoryStockWidget(post: post),
+                  const SizedBox(height: 20.0),
                   UserProfileWidget(user: post.user),
                   const SizedBox(height: 20.0),
                   FoodLocationWidget(

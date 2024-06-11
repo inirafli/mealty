@@ -11,6 +11,7 @@ class FoodPost {
   final GeoPoint location;
   final String name;
   final int price;
+  final int stock;
   final Timestamp publishedDate;
   final Timestamp saleTime;
   final String sellingType;
@@ -27,6 +28,7 @@ class FoodPost {
     required this.location,
     required this.name,
     required this.price,
+    required this.stock,
     required this.publishedDate,
     required this.saleTime,
     required this.sellingType,
@@ -47,6 +49,7 @@ class FoodPost {
       location: data['location'],
       name: data['name'],
       price: data['price'],
+      stock: data['stock'],
       publishedDate: data['publishedDate'],
       saleTime: data['saleTime'],
       sellingType: data['sellingType'],

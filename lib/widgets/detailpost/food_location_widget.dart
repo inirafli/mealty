@@ -150,7 +150,9 @@ class _FoodLocationWidgetState extends State<FoodLocationWidget> {
                 const SizedBox(height: 8.0),
                 Text(
                   _address,
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        height: 1.35,
+                      ),
                 ),
                 const SizedBox(height: 14.0),
                 Container(
