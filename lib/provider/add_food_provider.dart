@@ -15,6 +15,8 @@ class AddFoodProvider with ChangeNotifier {
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController priceController =
       TextEditingController(text: '0');
+  final TextEditingController stockController =
+      TextEditingController();
   final TextEditingController saleTimeController = TextEditingController();
 
   String _selectedFoodCategory = '';
@@ -108,6 +110,7 @@ class AddFoodProvider with ChangeNotifier {
     descriptionController.dispose();
     priceController.dispose();
     saleTimeController.dispose();
+    stockController.dispose();
     super.dispose();
   }
 
@@ -160,6 +163,7 @@ class AddFoodProvider with ChangeNotifier {
         'location': GeoPoint(_latitude!, _longitude!),
         'name': nameController.text,
         'price': int.parse(priceController.text),
+        'stock': int.parse(stockController.text),
         'publishedDate': Timestamp.now(),
         'saleTime': Timestamp.fromDate(_saleTime!),
         'sellingType': _selectedSellingType,

@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
 
-class PriceInput extends StatefulWidget {
+class StockInput extends StatefulWidget {
   final TextEditingController controller;
-  final bool isEditable;
 
-  const PriceInput({
-    required this.controller,
-    required this.isEditable,
-    super.key,
-  });
+  const StockInput({required this.controller, super.key});
 
   @override
-  State<PriceInput> createState() => _PriceInputState();
+  State<StockInput> createState() => _StockInputState();
 }
 
-class _PriceInputState extends State<PriceInput> {
+class _StockInputState extends State<StockInput> {
   @override
   void initState() {
     super.initState();
     widget.controller.addListener(_handleInputChange);
+    if (widget.controller.text.isEmpty) {
+      widget.controller.text = '1';
+    }
   }
 
   @override
@@ -29,14 +27,14 @@ class _PriceInputState extends State<PriceInput> {
 
   void _handleInputChange() {
     if (widget.controller.text.isEmpty) {
-      widget.controller.text = '0';
+      return;
+    }
+    int value = int.tryParse(widget.controller.text) ?? 0;
+    if (value == 0) {
+      widget.controller.text = '1';
       widget.controller.selection = TextSelection.fromPosition(
-          TextPosition(offset: widget.controller.text.length));
-    } else if (widget.controller.text != '0' &&
-        widget.controller.text.startsWith('0')) {
-      widget.controller.text = widget.controller.text.substring(1);
-      widget.controller.selection = TextSelection.fromPosition(
-          TextPosition(offset: widget.controller.text.length));
+        TextPosition(offset: widget.controller.text.length),
+      );
     }
   }
 
@@ -49,7 +47,7 @@ class _PriceInputState extends State<PriceInput> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Harga Makanan',
+          'Jumlah Makanan',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: primary,
                 fontWeight: FontWeight.bold,
@@ -62,26 +60,21 @@ class _PriceInputState extends State<PriceInput> {
               width: 45.0,
               height: 38.0,
               padding:
-                  const EdgeInsets.symmetric(horizontal: 11.0, vertical: 8.0),
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
               decoration: BoxDecoration(
                 color: primary,
-                border: Border(
-                  top: BorderSide(color: primary),
-                  left: BorderSide(color: primary),
-                  bottom: BorderSide(color: primary),
-                  right: BorderSide.none, // No border on the right side
-                ),
+                border: Border.all(color: primary),
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(8.0),
                   bottomLeft: Radius.circular(8.0),
                 ),
               ),
               child: Text(
-                'Rp.',
+                'Qty.',
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: onPrimary,
-                  fontWeight: FontWeight.w600,
-                ),
+                      color: onPrimary,
+                      fontWeight: FontWeight.w600,
+                    ),
               ),
             ),
             Expanded(
@@ -90,23 +83,12 @@ class _PriceInputState extends State<PriceInput> {
                 child: TextField(
                   controller: widget.controller,
                   keyboardType: TextInputType.number,
-                  enabled: widget.isEditable,
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.only(
                         left: 16.0, right: 8.0, bottom: 0, top: 21.5),
                     filled: true,
                     fillColor: onPrimary,
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(8.0),
-                        bottomRight: Radius.circular(8.0),
-                      ),
-                      borderSide: BorderSide(
-                        color: primary,
-                        width: 0.75,
-                      ),
-                    ),
-                    disabledBorder: OutlineInputBorder(
                       borderRadius: const BorderRadius.only(
                         topRight: Radius.circular(8.0),
                         bottomRight: Radius.circular(8.0),
@@ -131,11 +113,6 @@ class _PriceInputState extends State<PriceInput> {
                         color: primary,
                         fontWeight: FontWeight.w600,
                       ),
-                  onTap: () {
-                    if (widget.controller.text == '0') {
-                      widget.controller.clear();
-                    }
-                  },
                 ),
               ),
             ),

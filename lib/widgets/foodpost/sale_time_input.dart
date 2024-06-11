@@ -105,6 +105,7 @@ class _SaleTimeInputState extends State<SaleTimeInput> {
           child: Row(
             children: [
               Container(
+                width: 45.0,
                 height: 38.0,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),

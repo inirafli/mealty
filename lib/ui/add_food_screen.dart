@@ -12,6 +12,7 @@ import '../widgets/common/custom_snackbar.dart';
 import '../widgets/foodpost/add_post_header.dart';
 import '../widgets/foodpost/food_location_picker.dart';
 import '../widgets/foodpost/food_price_input.dart';
+import '../widgets/foodpost/food_stock_input.dart';
 import '../widgets/foodpost/food_text_field.dart';
 import '../widgets/foodpost/food_type_selector.dart';
 import '../widgets/foodpost/sale_time_input.dart';
@@ -38,15 +39,15 @@ class AddFoodScreen extends StatelessWidget {
             child: SingleChildScrollView(
               child: SafeArea(
                 top: false,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 22.0, vertical: 12.0),
-                  child: Consumer<AddFoodProvider>(
-                    builder: (context, addFoodProvider, child) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          FoodImagePicker(
+                child: Consumer<AddFoodProvider>(
+                  builder: (context, addFoodProvider, child) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 24.0, vertical: 16.0),
+                          child: FoodImagePicker(
                             imageFile: addFoodProvider.imageFile,
                             onImageRemove: addFoodProvider.removeImage,
                             onPickImageFromGallery:
@@ -54,55 +55,119 @@ class AddFoodScreen extends StatelessWidget {
                             onCaptureImageWithCamera:
                                 addFoodProvider.captureImageWithCamera,
                           ),
-                          const SizedBox(height: 24.0),
-                          FoodTextFields(
-                            nameController: addFoodProvider.nameController,
-                            descriptionController:
-                                addFoodProvider.descriptionController,
-                          ),
-                          const SizedBox(height: 24.0),
-                          FoodTypeSelector(
-                            selectedType: addFoodProvider.selectedFoodCategory,
-                            onSelectType: addFoodProvider.selectFoodCategory,
-                          ),
-                          const SizedBox(height: 24.0),
-                          SellingTypeSelector(
-                            selectedType: addFoodProvider.selectedSellingType,
-                            onSelectType: addFoodProvider.selectSellingType,
-                          ),
-                          const SizedBox(height: 24.0),
-                          Row(
+                        ),
+                        Container(
+                          width: double.infinity,
+                          color: Colors.grey[200],
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20.0, vertical: 16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Expanded(
-                                child: PriceInput(
-                                  controller: addFoodProvider.priceController,
-                                  isEditable:
-                                      addFoodProvider.selectedSellingType ==
-                                          'commercial',
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 16.0, horizontal: 20.0),
+                                decoration: BoxDecoration(
+                                  color: onPrimary,
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(height: 6.0),
+                                    FoodTextFields(
+                                      nameController:
+                                          addFoodProvider.nameController,
+                                      descriptionController:
+                                          addFoodProvider.descriptionController,
+                                    ),
+                                    const SizedBox(height: 24.0),
+                                    FoodTypeSelector(
+                                      selectedType:
+                                          addFoodProvider.selectedFoodCategory,
+                                      onSelectType:
+                                          addFoodProvider.selectFoodCategory,
+                                    ),
+                                    const SizedBox(height: 8.0),
+                                  ],
                                 ),
                               ),
-                              const SizedBox(width: 8.0),
-                              Expanded(
-                                child: SaleTimeInput(
-                                  controller:
-                                      addFoodProvider.saleTimeController,
-                                  onSelectDateTime:
-                                      addFoodProvider.selectSaleTime,
-                                  initialDateTime: addFoodProvider.saleTime,
+                              const SizedBox(height: 16.0),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 16.0, horizontal: 20.0),
+                                decoration: BoxDecoration(
+                                  color: onPrimary,
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(height: 6.0),
+                                    SellingTypeSelector(
+                                      selectedType:
+                                          addFoodProvider.selectedSellingType,
+                                      onSelectType:
+                                          addFoodProvider.selectSellingType,
+                                    ),
+                                    const SizedBox(height: 24.0),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: PriceInput(
+                                            controller:
+                                                addFoodProvider.priceController,
+                                            isEditable: addFoodProvider
+                                                    .selectedSellingType ==
+                                                'commercial',
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8.0),
+                                        Expanded(
+                                          child: StockInput(
+                                            controller:
+                                            addFoodProvider.stockController,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 24.0),
+                                    SaleTimeInput(
+                                      controller:
+                                          addFoodProvider.saleTimeController,
+                                      onSelectDateTime:
+                                          addFoodProvider.selectSaleTime,
+                                      initialDateTime: addFoodProvider.saleTime,
+                                    ),
+                                    const SizedBox(height: 8.0),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 16.0),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 16.0, horizontal: 20.0),
+                                decoration: BoxDecoration(
+                                  color: onPrimary,
+                                  borderRadius: BorderRadius.circular(12.0),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 4.0, bottom: 8.0),
+                                  child: FoodLocationPicker(
+                                    latitude: addFoodProvider.latitude,
+                                    longitude: addFoodProvider.longitude,
+                                    onLocationPicked:
+                                        addFoodProvider.setLocation,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 24.0),
-                          FoodLocationPicker(
-                            latitude: addFoodProvider.latitude,
-                            longitude: addFoodProvider.longitude,
-                            onLocationPicked: addFoodProvider.setLocation,
-                          ),
-                        ],
-                      );
-                    },
-                  ),
+                        )
+                      ],
+                    );
+                  },
                 ),
               ),
             ),
