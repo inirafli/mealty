@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:provider/provider.dart';
+
+import '../../common/post_state.dart';
+import '../../provider/add_food_provider.dart';
+import '../common/custom_loading_indicator.dart';
+import '../common/custom_snackbar.dart';
 
 class FoodImagePicker extends StatelessWidget {
   final File? imageFile;
@@ -22,116 +28,142 @@ class FoodImagePicker extends StatelessWidget {
     Color primary = Theme.of(context).colorScheme.primary;
     Color onPrimary = Theme.of(context).colorScheme.onPrimary;
 
-    return Column(
-      children: [
-        Stack(
+    return Consumer<AddFoodProvider>(
+      builder: (context, addFoodProvider, child) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (addFoodProvider.postState.status == PostStatus.errorCompress) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              CustomSnackBar(
+                contentText: addFoodProvider.postState.errorMessage,
+                context: context,
+              ),
+            );
+          }
+        });
+
+        return Column(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12.0),
-              child: imageFile == null
-                  ? Container(
-                      height: 280,
-                      width: double.infinity,
-                      color: Colors.grey[200],
-                      child: const Center(
-                          child: Text('Belum ada Gambar yang dipilih.')),
-                    )
-                  : Image.file(
-                      imageFile!,
-                      height: 280,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
-            ),
-            if (imageFile != null)
-              Positioned(
-                top: 10,
-                right: 10,
-                child: GestureDetector(
-                  onTap: onImageRemove,
-                  child: CircleAvatar(
-                    radius: 16.0,
-                    backgroundColor: onPrimary,
-                    child: Icon(
-                      Icons.close,
-                      size: 18.0,
-                      color: primary,
-                    ),
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12.0),
+                  child: Container(
+                    height: 280,
+                    width: double.infinity,
+                    color: Colors.grey[200],
+                    child: addFoodProvider.postState.status ==
+                            PostStatus.loadingCompress
+                        ? Center(
+                            child: CustomProgressIndicator(
+                                color: primary, size: 24.0, strokeWidth: 2.0))
+                        : imageFile == null
+                            ? const Center(
+                                child: Text('Belum ada Gambar yang dipilih.'))
+                            : Image.file(
+                                imageFile!,
+                                height: 280,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                              ),
                   ),
                 ),
-              ),
-          ],
-        ),
-        const SizedBox(height: 16.0),
-        Row(
-          children: [
-            Expanded(
-              child: GestureDetector(
-                onTap: onCaptureImageWithCamera,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 8.5),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: primary),
-                    color: primary,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(12.0),
-                      bottomLeft: Radius.circular(12.0),
+                if (imageFile != null &&
+                    addFoodProvider.postState.status !=
+                        PostStatus.loadingCompress)
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    child: GestureDetector(
+                      onTap: onImageRemove,
+                      child: CircleAvatar(
+                        radius: 16.0,
+                        backgroundColor: onPrimary,
+                        child: Icon(
+                          Icons.close,
+                          size: 18.0,
+                          color: primary,
+                        ),
+                      ),
                     ),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(MdiIcons.cameraOutline,
-                          color: onPrimary, size: 18.0),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Kamera',
-                        style:
-                            Theme.of(context).textTheme.bodyMedium?.copyWith(
+              ],
+            ),
+            const SizedBox(height: 16.0),
+            Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: onCaptureImageWithCamera,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 8.5),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: primary),
+                        color: primary,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(12.0),
+                          bottomLeft: Radius.circular(12.0),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(MdiIcons.cameraOutline,
+                              color: onPrimary, size: 18.0),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Kamera',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
                                   color: onPrimary,
                                   fontWeight: FontWeight.bold,
                                 ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              child: GestureDetector(
-                onTap: onPickImageFromGallery,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 8.5),
-                  decoration: BoxDecoration(
-                    color: onPrimary,
-                    border: Border.all(color: primary),
-                    borderRadius: const BorderRadius.only(
-                      topRight: Radius.circular(12.0),
-                      bottomRight: Radius.circular(12.0),
                     ),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(MdiIcons.imageSearchOutline,
-                          color: primary, size: 18.0),
-                      const SizedBox(width: 8),
-                      Text(
-                        'Galeri',
-                        style:
-                            Theme.of(context).textTheme.bodyMedium?.copyWith(
+                ),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: onPickImageFromGallery,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 8.5),
+                      decoration: BoxDecoration(
+                        color: onPrimary,
+                        border: Border.all(color: primary),
+                        borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(12.0),
+                          bottomRight: Radius.circular(12.0),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(MdiIcons.imageSearchOutline,
+                              color: primary, size: 18.0),
+                          const SizedBox(width: 8),
+                          Text(
+                            'Galeri',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
                                   color: primary,
                                   fontWeight: FontWeight.bold,
                                 ),
-                      )
-                    ],
+                          )
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
           ],
-        ),
-      ],
+        );
+      },
     );
   }
 }

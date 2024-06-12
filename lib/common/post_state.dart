@@ -1,4 +1,11 @@
-enum PostStatus { initial, loading, success, error }
+enum PostStatus {
+  initial,
+  loading,
+  success,
+  error,
+  loadingCompress,
+  errorCompress
+}
 
 class PostState {
   final PostStatus status;
@@ -14,4 +21,10 @@ class PostState {
 
   factory PostState.error(String errorMessage) =>
       PostState(status: PostStatus.error, errorMessage: errorMessage);
+
+  factory PostState.loadingCompress() =>
+      PostState(status: PostStatus.loadingCompress);
+
+  factory PostState.errorCompress(String errorMessage) =>
+      PostState(status: PostStatus.errorCompress, errorMessage: errorMessage);
 }
