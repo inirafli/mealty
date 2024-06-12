@@ -5,6 +5,7 @@ import 'package:mealty/common/styles.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:mealty/provider/add_food_provider.dart';
+import 'package:mealty/provider/cart_provider.dart';
 import 'package:mealty/provider/food_provider.dart';
 import 'package:mealty/routes/routes.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +25,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => AuthProvider()),
         ChangeNotifierProvider(create: (context) => FoodProvider()),
         ChangeNotifierProvider(create: (context) => AddFoodProvider()),
+        ChangeNotifierProvider(create: (context) => CartProvider()),
       ],
       child: const MyApp(),
     ),

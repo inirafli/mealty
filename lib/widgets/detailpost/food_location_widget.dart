@@ -5,13 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:mealty/widgets/common/custom_loading_indicator.dart';
 
 class FoodLocationWidget extends StatefulWidget {
   final GeoPoint location;
   final String formattedDistance;
 
-  const FoodLocationWidget(
-      {super.key, required this.location, required this.formattedDistance});
+  const FoodLocationWidget({
+    super.key,
+    required this.location,
+    required this.formattedDistance,
+  });
 
   @override
   State<FoodLocationWidget> createState() => _FoodLocationWidgetState();
@@ -20,7 +24,7 @@ class FoodLocationWidget extends StatefulWidget {
 class _FoodLocationWidgetState extends State<FoodLocationWidget> {
   late GoogleMapController _controller;
   late CameraPosition _initialCameraPosition;
-  late BitmapDescriptor _customMarker;
+  BitmapDescriptor? _customMarker; // Changed to nullable
   String _address = 'Memuat alamat...';
 
   @override
@@ -39,6 +43,7 @@ class _FoodLocationWidgetState extends State<FoodLocationWidget> {
       const ImageConfiguration(size: Size(48, 48)),
       'assets/location_pointer_mini.png',
     );
+    setState(() {});
   }
 
   Future<void> _getAddressFromLatLng() async {
@@ -94,27 +99,32 @@ class _FoodLocationWidgetState extends State<FoodLocationWidget> {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12.0),
-                  child: GoogleMap(
-                    initialCameraPosition: _initialCameraPosition,
-                    onMapCreated: (GoogleMapController controller) {
-                      _controller = controller;
-                      // Ensure custom marker is set only after the map is created
-                      setState(() {});
-                    },
-                    markers: {
-                      Marker(
-                        markerId: const MarkerId('postLocation'),
-                        position: LatLng(widget.location.latitude,
-                            widget.location.longitude),
-                        icon: _customMarker,
-                      ),
-                    },
-                    zoomControlsEnabled: false,
-                    gestureRecognizers: {
-                      Factory<OneSequenceGestureRecognizer>(
-                          () => EagerGestureRecognizer())
-                    },
-                  ),
+                  child: _customMarker == null
+                      ? Center(
+                          child: CustomProgressIndicator(
+                          color: primary,
+                          size: 16.0,
+                          strokeWidth: 2.0,
+                        ))
+                      : GoogleMap(
+                          initialCameraPosition: _initialCameraPosition,
+                          onMapCreated: (GoogleMapController controller) {
+                            _controller = controller;
+                          },
+                          markers: {
+                            Marker(
+                              markerId: const MarkerId('postLocation'),
+                              position: LatLng(widget.location.latitude,
+                                  widget.location.longitude),
+                              icon: _customMarker!,
+                            ),
+                          },
+                          zoomControlsEnabled: false,
+                          gestureRecognizers: {
+                            Factory<OneSequenceGestureRecognizer>(
+                                () => EagerGestureRecognizer())
+                          },
+                        ),
                 ),
               ),
               Positioned(

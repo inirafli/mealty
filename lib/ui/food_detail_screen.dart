@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mealty/widgets/detailpost/category_stock_widget.dart';
+import 'package:provider/provider.dart';
 
 import '../data/model/food_post.dart';
+import '../provider/cart_provider.dart';
+import '../widgets/common/custom_snackbar.dart';
 import '../widgets/detailpost/countdown_timer_widget.dart';
 import '../widgets/detailpost/food_location_widget.dart';
 import '../widgets/detailpost/name_description_widget.dart';
@@ -42,7 +45,8 @@ class FoodDetailScreen extends StatelessWidget {
                 },
               ),
               background: GestureDetector(
-                onTap: () => context.push('/main/imageFullScreen', extra: post.image),
+                onTap: () =>
+                    context.push('/main/imageFullScreen', extra: post.image),
                 child: Image.network(
                   post.image,
                   fit: BoxFit.cover,
@@ -112,7 +116,15 @@ class FoodDetailScreen extends StatelessWidget {
         child: SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Provider.of<CartProvider>(context, listen: false).addToCart(post);
+              ScaffoldMessenger.of(context).showSnackBar(
+                CustomSnackBar(
+                  contentText: '${post.name} ditambahkan ke dalam Keranjang!',
+                  context: context,
+                ),
+              );
+            },
             child: Text(
               'Tambahkan ke Keranjang',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
