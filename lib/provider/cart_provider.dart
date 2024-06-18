@@ -29,7 +29,7 @@ class CartProvider with ChangeNotifier {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           CustomSnackBar(
-            contentText: 'Tidak bisa menambahkan jumlah melebihi stok!,
+            contentText: 'Tidak bisa menambahkan jumlah melebihi stok!',
             context: context,
           ),
         );

@@ -3,9 +3,11 @@ import 'package:go_router/go_router.dart';
 import 'package:mealty/ui/add_food_screen.dart';
 import 'package:mealty/ui/location_picker_screen.dart';
 import 'package:mealty/ui/main_screen.dart';
+import 'package:provider/provider.dart';
 
 import '../data/model/food_post.dart';
 import '../data/model/user.dart';
+import '../provider/food_provider.dart';
 import '../ui/food_detail_screen.dart';
 import '../ui/login_screen.dart';
 import '../ui/register_screen.dart';
@@ -111,9 +113,9 @@ class AppRouter {
             GoRoute(
               path: 'foodDetail',
               pageBuilder: (context, state) {
-                final FoodPost post = state.extra as FoodPost;
+                final String postId = state.extra as String;
                 return createSlideFromBottomTransitionPage(
-                  page: FoodDetailScreen(post: post),
+                  page: FoodDetailScreen(postId: postId),
                 );
               },
             ),

@@ -13,6 +13,15 @@ class FirestoreService {
     }
   }
 
+  Future<DocumentSnapshot?> getFoodPostById(String id) async {
+    try {
+      DocumentSnapshot doc = await _db.collection('foods').doc(id).get();
+      return doc.exists ? doc : null;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<User> getUser(String userId) async {
     try {
       DocumentSnapshot doc = await _db.collection('users').doc(userId).get();

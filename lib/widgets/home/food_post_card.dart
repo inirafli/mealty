@@ -22,7 +22,7 @@ class PostCard extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        context.go('/main/foodDetail', extra: post);
+        context.go('/main/foodDetail', extra: post.id);
       },
       child: Card(
         color: onPrimary,

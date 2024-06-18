@@ -10,7 +10,9 @@ class FoodProvider with ChangeNotifier {
   final Location _location = Location();
   List<FoodPost> _posts = [];
   List<FoodPost> _filteredPosts = [];
+  FoodPost? _selectedPost;
   bool _isLoading = true;
+  bool _isDetailLoading = false;
 
   List<String> _selectedCategories = ['all'];
   String _selectedSortType = 'latestPost';
@@ -25,6 +27,10 @@ class FoodProvider with ChangeNotifier {
   List<FoodPost> get posts => _filteredPosts;
 
   bool get isLoading => _isLoading;
+
+  FoodPost? get selectedPost => _selectedPost;
+
+  bool get isDetailLoading => _isDetailLoading;
 
   FoodProvider() {
     _checkLocationServices();
@@ -73,6 +79,23 @@ class FoodProvider with ChangeNotifier {
     _filteredPosts = _posts;
     _applyFilters();
     _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> fetchPostById(String id) async {
+    _isDetailLoading = true;
+    notifyListeners();
+    final LocationData userLocation = await _location.getLocation();
+    final GeoPoint userGeoPoint = GeoPoint(userLocation.latitude!, userLocation.longitude!);
+
+    final doc = await _firestoreService.getFoodPostById(id);
+    if (doc != null) {
+      final userData = await _firestoreService.getUser(doc['userId']);
+      _selectedPost = FoodPost.fromFirestore(doc, userData, userGeoPoint);
+    } else {
+      _selectedPost = null;
+    }
+    _isDetailLoading = false;
     notifyListeners();
   }
 
