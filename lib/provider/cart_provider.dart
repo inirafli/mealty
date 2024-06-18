@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../data/model/cart.dart';
 import '../data/model/food_post.dart';
 import '../utils/cart_database_helper.dart';
+import '../widgets/common/custom_snackbar.dart';
 
 class CartProvider with ChangeNotifier {
   List<CartItem> _cartItems = [];
@@ -18,12 +19,21 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void addToCart(FoodPost post) async {
+  void addToCart(FoodPost post, BuildContext context) async {
     final existingIndex = _cartItems.indexWhere((item) => item.id == post.id);
 
     if (existingIndex != -1) {
-      _cartItems[existingIndex].quantity += 1;
-      await CartDatabaseHelper().updateCartItem(_cartItems[existingIndex]);
+      if (_cartItems[existingIndex].quantity < post.stock) {
+        _cartItems[existingIndex].quantity += 1;
+        await CartDatabaseHelper().updateCartItem(_cartItems[existingIndex]);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          CustomSnackBar(
+            contentText: 'Tidak bisa menambahkan jumlah melebihi stok!,
+            context: context,
+          ),
+        );
+      }
     } else {
       final cartItem = CartItem(
         id: post.id,
@@ -31,6 +41,7 @@ class CartProvider with ChangeNotifier {
         price: post.price,
         image: post.image,
         quantity: 1,
+        stock: post.stock,
       );
       _cartItems.add(cartItem);
       await CartDatabaseHelper().insertCartItem(cartItem);
@@ -38,13 +49,22 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateCartItemQuantity(String id, int quantity) async {
+  void updateCartItemQuantity(String id, int quantity, int stock, BuildContext context) async {
     final index = _cartItems.indexWhere((item) => item.id == id);
 
     if (index != -1) {
-      _cartItems[index].quantity = quantity;
-      await CartDatabaseHelper().updateCartItem(_cartItems[index]);
-      notifyListeners();
+      if (quantity <= stock) {
+        _cartItems[index].quantity = quantity;
+        await CartDatabaseHelper().updateCartItem(_cartItems[index]);
+        notifyListeners();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          CustomSnackBar(
+            contentText: 'Tidak bisa menambahkan jumlah melebihi stok!',
+            context: context,
+          ),
+        );
+      }
     }
   }
 

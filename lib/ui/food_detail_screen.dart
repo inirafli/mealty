@@ -117,7 +117,7 @@ class FoodDetailScreen extends StatelessWidget {
           width: double.infinity,
           child: ElevatedButton(
             onPressed: () {
-              Provider.of<CartProvider>(context, listen: false).addToCart(post);
+              Provider.of<CartProvider>(context, listen: false).addToCart(post, context);
               ScaffoldMessenger.of(context).showSnackBar(
                 CustomSnackBar(
                   contentText: '${post.name} ditambahkan ke dalam Keranjang!',

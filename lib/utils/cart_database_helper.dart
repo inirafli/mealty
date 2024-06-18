@@ -25,12 +25,17 @@ class CartDatabaseHelper {
     String path = join(await getDatabasesPath(), 'cart.db');
     return await openDatabase(
       path,
+      version: 2,
       onCreate: (db, version) {
         return db.execute(
-          "CREATE TABLE cart(id TEXT PRIMARY KEY, name TEXT, price INTEGER, image TEXT, quantity INTEGER)",
+          "CREATE TABLE cart(id TEXT PRIMARY KEY, name TEXT, price INTEGER, image TEXT, stock INTEGER, quantity INTEGER)",
         );
       },
-      version: 1,
+      onUpgrade: (db, oldVersion, newVersion) {
+        if (oldVersion < 2) {
+          db.execute("ALTER TABLE cart ADD COLUMN stock INTEGER");
+        }
+      },
     );
   }
 

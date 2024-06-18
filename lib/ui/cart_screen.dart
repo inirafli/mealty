@@ -1,6 +1,5 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -36,9 +35,9 @@ class _CartScreenState extends State<CartScreen> {
         title: Text(
           'Keranjang',
           style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: onPrimary,
-              ),
+            fontWeight: FontWeight.bold,
+            color: onPrimary,
+          ),
         ),
       ),
       body: Stack(
@@ -67,13 +66,18 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                     child: Row(
                       children: [
-                        ClipRRect(
-                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), bottomLeft: Radius.circular(10)),
-                          child: Image.network(
-                            item.image,
-                            width: 100,
-                            height: 120,
-                            fit: BoxFit.cover,
+                        GestureDetector(
+                          onTap: () {
+                            context.push('/main/foodDetail', extra: item.id);
+                          },
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), bottomLeft: Radius.circular(10)),
+                            child: Image.network(
+                              item.image,
+                              width: 100,
+                              height: 120,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                         const SizedBox(width: 8.0),
@@ -118,7 +122,7 @@ class _CartScreenState extends State<CartScreen> {
                                           onPressed: () {
                                             if (item.quantity > 1) {
                                               cartProvider.updateCartItemQuantity(
-                                                  item.id, item.quantity - 1);
+                                                  item.id, item.quantity - 1, item.stock, context);
                                             }
                                           },
                                         ),
@@ -138,7 +142,7 @@ class _CartScreenState extends State<CartScreen> {
                                           icon: Icon(MdiIcons.plusCircleOutline, size: 23.0, color: primary),
                                           onPressed: () {
                                             cartProvider.updateCartItemQuantity(
-                                                item.id, item.quantity + 1);
+                                                item.id, item.quantity + 1, item.stock, context);
                                           },
                                         ),
                                       ],
@@ -156,56 +160,61 @@ class _CartScreenState extends State<CartScreen> {
               );
             },
           ),
-          Positioned(
-            bottom: 16,
-            left: 16,
-            right: 16,
-            child: Container(
-              color: onPrimary,
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Total Harga',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: onBackground,
+          Consumer<CartProvider>(
+            builder: (context, cartProvider, child) {
+              return Visibility(
+                visible: cartProvider.cartItems.isNotEmpty,
+                child: Positioned(
+                  bottom: 16,
+                  left: 16,
+                  right: 16,
+                  child: Container(
+                    color: onPrimary,
+                    padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Total Harga',
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                color: onBackground,
+                              ),
                             ),
-                      ),
-                      Text(
-                        formatPrice(Provider.of<CartProvider>(context)
-                            .totalPrice
-                            .toInt()),
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              color: primary,
-                              fontWeight: FontWeight.bold,
+                            Text(
+                              formatPrice(cartProvider.totalPrice.toInt()),
+                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                                color: primary,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                      ),
-                    ],
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      fixedSize: const Size(132.0, 44.0),
-                      padding: EdgeInsets.zero,
-                    ),
-                    onPressed: () {
-                      // Implement the request submission functionality
-                    },
-                    child: Text(
-                      'Buat Pesanan',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: onPrimary,
+                          ],
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            fixedSize: const Size(132.0, 44.0),
+                            padding: EdgeInsets.zero,
                           ),
+                          onPressed: () {
+                            // Implement the request submission functionality
+                          },
+                          child: Text(
+                            'Buat Pesanan',
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: onPrimary,
+                            ),
+                          ),
+                        )
+                      ],
                     ),
-                  )
-                ],
-              ),
-            ),
+                  ),
+                ),
+              );
+            },
           ),
         ],
       ),

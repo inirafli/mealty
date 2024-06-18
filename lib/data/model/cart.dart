@@ -3,6 +3,7 @@ class CartItem {
   final String name;
   final int price;
   final String image;
+  final int stock; // Add the stock field
   int quantity;
 
   CartItem({
@@ -10,6 +11,7 @@ class CartItem {
     required this.name,
     required this.price,
     required this.image,
+    required this.stock,
     required this.quantity,
   });
 
@@ -19,6 +21,7 @@ class CartItem {
       'name': name,
       'price': price,
       'image': image,
+      'stock': stock,
       'quantity': quantity,
     };
   }
@@ -29,6 +32,7 @@ class CartItem {
       name: map['name'],
       price: map['price'],
       image: map['image'],
+      stock: map['stock'],
       quantity: map['quantity'],
     );
   }
