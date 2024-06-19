@@ -18,8 +18,8 @@ class ProfileScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
-              await authProvider.signOut();
               if (context.mounted) context.go('/login');
+              await authProvider.signOut();
             },
           ),
         ],

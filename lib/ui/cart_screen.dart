@@ -73,8 +73,8 @@ class _CartScreenState extends State<CartScreen> {
                       }
                       final foodData = snapshot.data?.data() as Map<String, dynamic>?;
                       if (foodData == null) {
-                        return Center(
-                          child: Text('Food data not found'),
+                        return const Center(
+                          child: Text('Tidak ada Makanan yang ditemukan.'),
                         );
                       }
                       return Container(
@@ -219,17 +219,25 @@ class _CartScreenState extends State<CartScreen> {
                             fixedSize: const Size(132.0, 44.0),
                             padding: EdgeInsets.zero,
                           ),
-                          onPressed: () {
-                            // Implement the request submission functionality
+                          onPressed: cartProvider.isLoading
+                              ? null
+                              : () {
+                            cartProvider.placeOrder(context);
                           },
-                          child: Text(
+                          child: cartProvider.isLoading
+                              ? CustomProgressIndicator(
+                            color: onPrimary,
+                            size: 18.0,
+                            strokeWidth: 2.0,
+                          )
+                              : Text(
                             'Buat Pesanan',
                             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: onPrimary,
                             ),
                           ),
-                        )
+                        ),
                       ],
                     ),
                   ),
