@@ -42,7 +42,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
 
           if (post == null) {
             return const Center(
-              child: Text('Food post not found'),
+              child: Text('Tidak ada Makanan yang ditemukan.'),
             );
           }
 

@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mealty/data/model/user.dart';
 
+import '../data/model/cart.dart';
+
 class FirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
@@ -29,5 +31,22 @@ class FirestoreService {
     } catch (e) {
       rethrow;
     }
+  }
+
+  Future<void> addToCart(String userId, CartItem cartItem) async {
+    await _db.collection('users').doc(userId).collection('cart').doc(cartItem.foodId).set(cartItem.toMap());
+  }
+
+  Future<void> updateCartItemQuantity(String userId, CartItem cartItem) async {
+    await _db.collection('users').doc(userId).collection('cart').doc(cartItem.foodId).update(cartItem.toMap());
+  }
+
+  Future<void> removeFromCart(String userId, String foodId) async {
+    await _db.collection('users').doc(userId).collection('cart').doc(foodId).delete();
+  }
+
+  Future<List<CartItem>> getCartItems(String userId) async {
+    QuerySnapshot snapshot = await _db.collection('users').doc(userId).collection('cart').get();
+    return snapshot.docs.map((doc) => CartItem.fromMap(doc.data() as Map<String, dynamic>)).toList();
   }
 }

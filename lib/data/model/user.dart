@@ -9,9 +9,11 @@ class User {
   final String username;
   final GeoPoint address;
   final Map<String, dynamic> completedFoodTypes;
-  final Map<String, dynamic> orderHistory;
+  final List<dynamic> orderHistory;
   final List<dynamic> purchases;
   final List<dynamic> sales;
+  final List<dynamic> pendingOrders;
+  final List<dynamic> postedFoods;
 
   User({
     required this.id,
@@ -25,6 +27,8 @@ class User {
     required this.orderHistory,
     required this.purchases,
     required this.sales,
+    required this.pendingOrders,
+    required this.postedFoods,
   });
 
   factory User.fromFirestore(DocumentSnapshot doc) {
@@ -38,9 +42,11 @@ class User {
       username: data['username'],
       address: data['address'],
       completedFoodTypes: data['completedFoodTypes'],
-      orderHistory: data['orderHistory'],
+      orderHistory: data['orderHistory'] ?? [],
       purchases: data['purchases'] ?? [],
       sales: data['sales'] ?? [],
+      pendingOrders: data['pendingOrders'] ?? [],
+      postedFoods: data['postedFoods'] ?? [],
     );
   }
 }

@@ -149,7 +149,7 @@ class AddFoodProvider with ChangeNotifier {
         _latitude == null ||
         _longitude == null ||
         _imageFile == null) {
-      _postState = PostState.error('Pastikan semua Field telah terisi.');
+      _postState = PostState.error('Pastikan semua Field(s) telah terisi.');
       notifyListeners();
       return;
     }
@@ -159,12 +159,12 @@ class AddFoodProvider with ChangeNotifier {
 
     try {
       String formattedDate =
-          DateFormat('yyyyMMddHHmmss').format(DateTime.now());
+      DateFormat('yyyyMMddHHmmss').format(DateTime.now());
 
       // Upload image to Firebase Storage
       String fileName = 'foods-$formattedDate';
       Reference storageRef =
-          FirebaseStorage.instance.ref().child('foods').child(fileName);
+      FirebaseStorage.instance.ref().child('foods').child(fileName);
       UploadTask uploadTask = storageRef.putFile(_imageFile!);
       TaskSnapshot storageSnapshot = await uploadTask.whenComplete(() => {});
       String downloadUrl = await storageSnapshot.ref.getDownloadURL();
@@ -193,6 +193,11 @@ class AddFoodProvider with ChangeNotifier {
         'saleTime': Timestamp.fromDate(_saleTime!),
         'sellingType': _selectedSellingType,
         'userId': user.uid,
+      });
+
+      // Add the new post ID to the user's postedFoods field
+      await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+        'postedFoods': FieldValue.arrayUnion([newPostRef.id])
       });
 
       _postState = PostState.success();
