@@ -28,4 +28,9 @@ class OrderProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> updateOrderStatus(String orderId, String newStatus) async {
+    await _firestoreService.updateOrderStatus(orderId, newStatus);
+    await _fetchOrders();
+  }
 }

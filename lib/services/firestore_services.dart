@@ -85,6 +85,14 @@ class FirestoreService {
     });
   }
 
+  Future<void> updateOrderStatus(String orderId, String newStatus) async {
+    try {
+      await _db.collection('orders').doc(orderId).update({'status': newStatus});
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<List<FoodOrder>> getOrdersByBuyerId(String buyerId) async {
     QuerySnapshot snapshot = await _db.collection('orders').where('buyerId', isEqualTo: buyerId).get();
     return snapshot.docs.map((doc) => FoodOrder.fromMap(doc.data() as Map<String, dynamic>)).toList();
