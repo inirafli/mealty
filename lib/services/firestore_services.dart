@@ -84,4 +84,14 @@ class FirestoreService {
       'pendingOrders': FieldValue.arrayUnion([orderId]),
     });
   }
+
+  Future<List<FoodOrder>> getOrdersByBuyerId(String buyerId) async {
+    QuerySnapshot snapshot = await _db.collection('orders').where('buyerId', isEqualTo: buyerId).get();
+    return snapshot.docs.map((doc) => FoodOrder.fromMap(doc.data() as Map<String, dynamic>)).toList();
+  }
+
+  Future<List<FoodOrder>> getOrdersBySellerId(String sellerId) async {
+    QuerySnapshot snapshot = await _db.collection('orders').where('sellerId', isEqualTo: sellerId).get();
+    return snapshot.docs.map((doc) => FoodOrder.fromMap(doc.data() as Map<String, dynamic>)).toList();
+  }
 }

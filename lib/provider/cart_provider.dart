@@ -14,7 +14,14 @@ class CartProvider with ChangeNotifier {
 
   CartProvider() {
     _user = FirebaseAuth.instance.currentUser;
-    loadCartItems();
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      _user = user;
+      if (_user != null) {
+        loadCartItems();
+      } else {
+        clearLocalCart();
+      }
+    });
   }
 
   List<CartItem> get cartItems => _cartItems;
@@ -25,6 +32,11 @@ class CartProvider with ChangeNotifier {
       _cartItems = await _firestoreService.getCartItems(_user!.uid);
       notifyListeners();
     }
+  }
+
+  void clearLocalCart() {
+    _cartItems = [];
+    notifyListeners();
   }
 
   void addToCart(FoodPost post, BuildContext context) async {
@@ -119,7 +131,7 @@ class CartProvider with ChangeNotifier {
 
     await _firestoreService.clearCart(_user!.uid);
 
-    if(!context.mounted) return;
+    if (!context.mounted) return;
 
     ScaffoldMessenger.of(context).showSnackBar(
       CustomSnackBar(

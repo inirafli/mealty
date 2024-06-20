@@ -56,7 +56,7 @@ class _CartScreenState extends State<CartScreen> {
               }
 
               return ListView.builder(
-                padding: const EdgeInsets.only(bottom: 120.0, top: 16.0),
+                padding: const EdgeInsets.only(bottom: 120.0, top: 16.0, left: 4.0, right: 4.0),
                 itemCount: cartProvider.cartItems.length,
                 itemBuilder: (context, index) {
                   final item = cartProvider.cartItems[index];
@@ -187,8 +187,8 @@ class _CartScreenState extends State<CartScreen> {
                 visible: cartProvider.cartItems.isNotEmpty,
                 child: Positioned(
                   bottom: 16,
-                  left: 16,
-                  right: 16,
+                  left: 20,
+                  right: 20,
                   child: Container(
                     color: onPrimary,
                     padding:
