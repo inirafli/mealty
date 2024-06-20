@@ -33,13 +33,17 @@ class _CartScreenState extends State<CartScreen> {
 
     return Scaffold(
       backgroundColor: Colors.grey[200],
-      appBar: AppBar(
-        title: Text(
-          'Keranjang',
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: onPrimary,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(54.0),
+        child: AppBar(
+          title: Text(
+            'Keranjang',
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: primary,
+            ),
           ),
+          backgroundColor: onPrimary,
         ),
       ),
       body: Stack(
@@ -190,9 +194,12 @@ class _CartScreenState extends State<CartScreen> {
                   left: 20,
                   right: 20,
                   child: Container(
-                    color: onPrimary,
                     padding:
                     const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+                    decoration: BoxDecoration(
+                      color: onPrimary,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
