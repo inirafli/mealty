@@ -36,8 +36,7 @@ class FirestoreService {
   }
 
   Future<void> addToCart(String userId, CartItem cartItem) async {
-    final cartItemId = 'cart-${generateRandomId(8)}';
-    await _db.collection('users').doc(userId).collection('cart').doc(cartItemId).set(cartItem.toMap());
+    await _db.collection('users').doc(userId).collection('cart').doc(cartItem.foodId).set(cartItem.toMap());
   }
 
   Future<void> updateCartItemQuantity(String userId, CartItem cartItem) async {

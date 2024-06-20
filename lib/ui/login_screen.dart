@@ -29,6 +29,10 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
+  void _navigateToMain() {
+    context.go('/main');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       listen: false)
                                   .signInWithEmailPassword(email, password);
                             },
-                            successRoute: '/main',
+                            onSuccess: _navigateToMain,
                           ),
                           const SizedBox(height: 18.0),
                           Text(
@@ -116,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                           ),
                           const SizedBox(height: 18.0),
-                          const GoogleSignInButton(),
+                          GoogleSignInButton(onSuccess: _navigateToMain),
                           const Spacer(),
                           const SizedBox(height: 36.0),
                           FormActionRow(

@@ -3,8 +3,10 @@ import 'package:go_router/go_router.dart';
 
 CustomTransitionPage<dynamic> createSlideFromRightTransitionPage({
   required Widget page,
+  required LocalKey key,
 }) {
   return CustomTransitionPage(
+    key: key,
     child: page,
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       const begin = Offset(1.0, 0.0);
@@ -24,8 +26,10 @@ CustomTransitionPage<dynamic> createSlideFromRightTransitionPage({
 
 CustomTransitionPage<dynamic> createSlideFromLeftTransitionPage({
   required Widget page,
+  required LocalKey key,
 }) {
   return CustomTransitionPage(
+    key: key,
     child: page,
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       const begin = Offset(-1.0, 0.0);
@@ -45,8 +49,10 @@ CustomTransitionPage<dynamic> createSlideFromLeftTransitionPage({
 
 CustomTransitionPage<dynamic> createSlideFromTopTransitionPage({
   required Widget page,
+  required LocalKey key,
 }) {
   return CustomTransitionPage(
+    key: key,
     child: page,
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       const begin = Offset(0.0, -1.0);
@@ -66,8 +72,10 @@ CustomTransitionPage<dynamic> createSlideFromTopTransitionPage({
 
 CustomTransitionPage<dynamic> createSlideFromBottomTransitionPage({
   required Widget page,
+  required LocalKey key,
 }) {
   return CustomTransitionPage(
+    key: key,
     child: page,
     transitionsBuilder: (context, animation, secondaryAnimation, child) {
       const begin = Offset(0.0, 1.0);

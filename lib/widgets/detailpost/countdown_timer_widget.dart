@@ -50,70 +50,67 @@ class _CountdownTimerWidgetState extends State<CountdownTimerWidget> {
   Widget build(BuildContext context) {
     Color secondary = Theme.of(context).colorScheme.secondary;
     Color onBackground = Theme.of(context).colorScheme.onBackground;
-    Color onPrimary = Theme.of(context).colorScheme.onPrimary;
 
-    if (_remainingTime > Duration.zero && _remainingTime.inHours < 24) {
-      return Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-            decoration: BoxDecoration(
-              color: secondary.withOpacity(0.75),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Sisa Waktu Pemesanan',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: onBackground,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  _formatDuration(_remainingTime),
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: onBackground,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
+    if (_remainingTime.isNegative) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 16.0),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+          decoration: BoxDecoration(
+            color: secondary.withOpacity(0.75),
+            borderRadius: BorderRadius.circular(8.0),
           ),
-          const SizedBox(height: 16.0),
-        ],
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Waktu penjualan telah habis',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: onBackground,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Icon(
+                Icons.access_time,
+                size: 18.0,
+                color: onBackground,
+              ),
+            ],
+          ),
+        ),
+      );
+    } else if (_remainingTime.inHours < 24) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 16.0),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
+          decoration: BoxDecoration(
+            color: secondary.withOpacity(0.75),
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Sisa Waktu Pemesanan',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: onBackground,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                _formatDuration(_remainingTime),
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: onBackground,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
       );
     } else {
-      return Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 16.0),
-            decoration: BoxDecoration(
-              color: secondary.withOpacity(0.75),
-              borderRadius: BorderRadius.circular(8.0),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Waktu penjualan telah habis',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: onBackground,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Icon(
-                  Icons.access_time,
-                  size: 18.0,
-                  color: onBackground,
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16.0),
-        ],
-      );
+      return const SizedBox.shrink();
     }
   }
 }

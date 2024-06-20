@@ -34,16 +34,13 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   void _navigateToNextScreen() async {
-    // Wait for 3 seconds to show the splash screen
     await Provider.of<AuthProvider>(context, listen: false)
         .initializationComplete;
 
     await Future.delayed(const Duration(milliseconds: 1150));
 
-    // Mounting check
     if (!mounted) return;
 
-    // Check authentication status and navigate accordingly
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     if (authProvider.authState == AuthState.authorized) {
       context.go('/main');

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/auth_state.dart';
@@ -12,9 +11,8 @@ class AuthActionButton extends StatelessWidget {
   final TextEditingController passwordController;
   final TextEditingController? usernameController;
   final String buttonText;
-  final Future<void> Function(String email, String password, [String? username])
-      action;
-  final String successRoute;
+  final Future<void> Function(String email, String password, [String? username]) action;
+  final VoidCallback onSuccess;
 
   const AuthActionButton({
     super.key,
@@ -23,7 +21,7 @@ class AuthActionButton extends StatelessWidget {
     this.usernameController,
     required this.buttonText,
     required this.action,
-    required this.successRoute,
+    required this.onSuccess,
   });
 
   @override
@@ -36,47 +34,46 @@ class AuthActionButton extends StatelessWidget {
             onPressed: authProvider.authState == AuthState.loading
                 ? null
                 : () async {
-                    String email = emailController.text.trim();
-                    String password = passwordController.text.trim();
-                    String? username = usernameController?.text.trim();
+              String email = emailController.text.trim();
+              String password = passwordController.text.trim();
+              String? username = usernameController?.text.trim();
 
-                    await action(email, password, username);
+              await action(email, password, username);
 
-                    if (!context.mounted) return;
+              if (!context.mounted) return;
 
-                    if (authProvider.authState == AuthState.error) {
-                      ScaffoldMessenger.of(context)
-                        ..hideCurrentSnackBar()
-                        ..showSnackBar(CustomSnackBar(
-                          contentText: authProvider.errorMessage,
-                          context: context,
-                        ));
-                    } else if (authProvider.authState == AuthState.authorized) {
-                      context.go(successRoute);
-                    } else if (authProvider.authState == AuthState.registered) {
-                      ScaffoldMessenger.of(context)
-                        ..hideCurrentSnackBar()
-                        ..showSnackBar(CustomSnackBar(
-                          contentText:
-                              'Berhasil melakukan registrasi, silahkan masuk dengan akun',
-                          context: context,
-                        ));
-                      context.go(successRoute);
-                    }
-                  },
+              if (authProvider.authState == AuthState.error) {
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(CustomSnackBar(
+                    contentText: authProvider.errorMessage,
+                    context: context,
+                  ));
+              } else if (authProvider.authState == AuthState.authorized) {
+                onSuccess();
+              } else if (authProvider.authState == AuthState.registered) {
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(CustomSnackBar(
+                    contentText: 'Berhasil melakukan registrasi, silahkan masuk dengan akun',
+                    context: context,
+                  ));
+                onSuccess();
+              }
+            },
             child: authProvider.authState == AuthState.loading
                 ? CustomProgressIndicator(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    size: 16.0,
-                    strokeWidth: 2,
-                  )
+              color: Theme.of(context).colorScheme.onPrimary,
+              size: 16.0,
+              strokeWidth: 2,
+            )
                 : Text(
-                    buttonText,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          fontWeight: FontWeight.w800,
-                        ),
-                  ),
+              buttonText,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onPrimary,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
           ),
         );
       },

@@ -30,6 +30,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
+  void _navigateToLogin() {
+    context.go('/login');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,7 +113,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   .createUserWithEmailPassword(
                                       email, password, username!);
                             },
-                            successRoute: '/login',
+                            onSuccess: _navigateToLogin,
                           ),
                           const Spacer(),
                           const SizedBox(height: 36.0),
@@ -117,7 +121,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             message: 'Sudah punya akun Mealty?',
                             buttonText: 'Masuk disini',
                             onButtonPressed: () {
-                              // Handle registration navigation
                               context.pop();
                             },
                           ),

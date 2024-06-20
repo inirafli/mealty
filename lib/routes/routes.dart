@@ -71,6 +71,7 @@ class AppRouter {
           pageBuilder: (context, state) {
             return createSlideFromLeftTransitionPage(
               page: const LoginScreen(),
+              key: state.pageKey,
             );
           },
           routes: [
@@ -79,6 +80,7 @@ class AppRouter {
               pageBuilder: (context, state) {
                 return createSlideFromRightTransitionPage(
                   page: const RegisterScreen(),
+                  key: state.pageKey,
                 );
               },
             ),
@@ -89,6 +91,7 @@ class AppRouter {
           pageBuilder: (context, state) {
             return createSlideFromTopTransitionPage(
               page: const MainScreen(),
+              key: state.pageKey,
             );
           },
           routes: [
@@ -97,6 +100,7 @@ class AppRouter {
               pageBuilder: (context, state) {
                 return createSlideFromBottomTransitionPage(
                   page: const AddFoodScreen(),
+                  key: state.pageKey,
                 );
               },
               routes: [
@@ -105,6 +109,7 @@ class AppRouter {
                   pageBuilder: (context, state) {
                     return createSlideFromBottomTransitionPage(
                       page: const LocationPickerScreen(),
+                      key: state.pageKey,
                     );
                   },
                 ),
@@ -116,6 +121,7 @@ class AppRouter {
                 final String postId = state.extra as String;
                 return createSlideFromBottomTransitionPage(
                   page: FoodDetailScreen(postId: postId),
+                  key: state.pageKey,
                 );
               },
             ),
@@ -125,6 +131,7 @@ class AppRouter {
                 final String imageUrl = state.extra as String;
                 return createSlideFromBottomTransitionPage(
                   page: ImageFullScreenView(imageUrl: imageUrl),
+                  key: state.pageKey,
                 );
               },
             ),

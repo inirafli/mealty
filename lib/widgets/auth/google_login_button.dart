@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/auth_state.dart';
@@ -7,7 +6,9 @@ import '../../provider/auth_provider.dart';
 import '../common/custom_snackbar.dart';
 
 class GoogleSignInButton extends StatelessWidget {
-  const GoogleSignInButton({super.key});
+  final VoidCallback onSuccess;
+
+  const GoogleSignInButton({super.key, required this.onSuccess});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class GoogleSignInButton extends StatelessWidget {
                     context: context,
                   ));
               } else if (authProvider.authState == AuthState.authorized) {
-                context.go('/main');
+                onSuccess();
               }
             },
             icon: Image.asset(
@@ -40,8 +41,8 @@ class GoogleSignInButton extends StatelessWidget {
             label: Text(
               'Masuk dengan Google',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.w800,
-                  ),
+                fontWeight: FontWeight.w800,
+              ),
             ),
             style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).colorScheme.onPrimary,
