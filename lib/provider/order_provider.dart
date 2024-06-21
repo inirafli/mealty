@@ -10,15 +10,24 @@ class OrderProvider with ChangeNotifier {
   List<FoodOrder> _buyerOrders = [];
   List<FoodOrder> _sellerOrders = [];
   bool _isLoading = true;
+  String _filter = 'all';
 
   OrderProvider() {
     _user = FirebaseAuth.instance.currentUser;
     _fetchOrders();
   }
 
-  List<FoodOrder> get buyerOrders => _buyerOrders;
-  List<FoodOrder> get sellerOrders => _sellerOrders;
+  List<FoodOrder> get buyerOrders {
+    return _applyFilter(_buyerOrders);
+  }
+
+  List<FoodOrder> get sellerOrders {
+    return _applyFilter(_sellerOrders);
+  }
+
   bool get isLoading => _isLoading;
+
+  String get filter => _filter;
 
   Future<void> _fetchOrders() async {
     if (_user != null) {
@@ -26,6 +35,22 @@ class OrderProvider with ChangeNotifier {
       _sellerOrders = await _firestoreService.getOrdersBySellerId(_user!.uid);
       _isLoading = false;
       notifyListeners();
+    }
+  }
+
+  void setFilter(String filter) {
+    _filter = filter;
+    notifyListeners();
+  }
+
+  List<FoodOrder> _applyFilter(List<FoodOrder> orders) {
+    if (_filter == 'all') {
+      orders.sort((a, b) => b.orderDate.compareTo(a.orderDate));
+      return orders;
+    } else {
+      return orders
+          .where((order) => order.status == _filter.toLowerCase())
+          .toList();
     }
   }
 
