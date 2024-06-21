@@ -11,6 +11,7 @@ class OrderProvider with ChangeNotifier {
   List<FoodOrder> _sellerOrders = [];
   bool _isLoading = true;
   String _filter = 'all';
+  int _selectedRating = 1;
 
   OrderProvider() {
     _user = FirebaseAuth.instance.currentUser;
@@ -29,6 +30,8 @@ class OrderProvider with ChangeNotifier {
 
   String get filter => _filter;
 
+  int get selectedRating => _selectedRating;
+
   Future<void> _fetchOrders() async {
     if (_user != null) {
       _buyerOrders = await _firestoreService.getOrdersByBuyerId(_user!.uid);
@@ -41,6 +44,29 @@ class OrderProvider with ChangeNotifier {
   void setFilter(String filter) {
     _filter = filter;
     notifyListeners();
+  }
+
+  void setSelectedRating(int rating) {
+    if (rating < 1) rating = 1;
+    _selectedRating = rating;
+    notifyListeners();
+  }
+
+  String get ratingMessage {
+    switch (_selectedRating) {
+      case 1:
+        return 'Tidak Puas!';
+      case 2:
+        return 'Cukup Kecewa';
+      case 3:
+        return 'Biasa Saja';
+      case 4:
+        return 'Cukup Puas';
+      case 5:
+        return 'Sangat Puas!';
+      default:
+        return '';
+    }
   }
 
   List<FoodOrder> _applyFilter(List<FoodOrder> orders) {
@@ -60,6 +86,12 @@ class OrderProvider with ChangeNotifier {
             (order) => order.orderId == orderId,
             orElse: () => throw 'Order not found'));
     await _firestoreService.updateOrderStatus(orderId, newStatus, order);
+    await _fetchOrders();
+  }
+
+  Future<void> submitOrderRating(String orderId, int rating) async {
+    await _firestoreService.addOrderRating(orderId, rating);
+    _selectedRating = 1;
     await _fetchOrders();
   }
 }

@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mealty/services/firestore_services.dart';
 import 'package:mealty/data/model/user.dart';
 import 'package:mealty/data/model/food_order.dart';
+import 'package:mealty/widgets/foodorder/rating_dialog_widget.dart';
 
 import '../../utils/data_conversion.dart';
 
@@ -119,11 +121,14 @@ class OrderInfoWidget extends StatelessWidget {
                   children: [
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(76.0, 38.0),
+                        minimumSize: const Size(74.0, 37.0),
                         padding: EdgeInsets.zero,
                         backgroundColor: onPrimary,
                         side: BorderSide(color: primary),
                         elevation: 0.0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
                       onPressed: () {
                         onUpdateStatus('cancelled');
@@ -140,8 +145,11 @@ class OrderInfoWidget extends StatelessWidget {
                     const SizedBox(width: 12.0),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(104.0, 38.0),
+                        minimumSize: const Size(100.0, 37.0),
                         padding: EdgeInsets.zero,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                       ),
                       onPressed: () {
                         onUpdateStatus('confirmed');
@@ -168,8 +176,11 @@ class OrderInfoWidget extends StatelessWidget {
                 const SizedBox(height: 18.0),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(108.0, 38.0),
+                    minimumSize: const Size(104.0, 37.0),
                     padding: EdgeInsets.zero,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                   onPressed: () {
                     onUpdateStatus('completed');
@@ -186,6 +197,61 @@ class OrderInfoWidget extends StatelessWidget {
               ],
             ),
           ),
+        if (order.status == 'completed' && !isSeller)
+          order.orderRating == 0
+              ? Align(
+                  alignment: Alignment.bottomRight,
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 18.0),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0.0,
+                          backgroundColor: onPrimary,
+                          minimumSize: const Size(156.0, 37.0),
+                          padding: EdgeInsets.zero,
+                          side: BorderSide(color: primary, width: 1.0),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) =>
+                                RatingDialog(orderId: order.orderId),
+                          );
+                        },
+                        child: Text(
+                          'Beri Rating Penjual',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13.0,
+                                    color: primary,
+                                  ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : Column(
+                children: [
+                  const SizedBox(height: 18.0),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: List.generate(5, (index) {
+                        return Icon(
+                          CupertinoIcons.star_fill,
+                          size: 24.0,
+                          color: index < order.orderRating
+                              ? Colors.orange[300]
+                              : Colors.grey[300],
+                        );
+                      }),
+                    ),
+                ],
+              ),
       ],
     );
   }

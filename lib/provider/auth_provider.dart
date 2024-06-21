@@ -98,7 +98,7 @@ class AuthProvider extends ChangeNotifier {
           'photoUrl': user.photoURL ?? '',
           'address': const GeoPoint(0, 0),
           'starRating': 0,
-          'orderHistory': [],
+          'countRating': 0,
           'purchases': [],
           'sales': [],
           'pendingOrders': [],
@@ -108,11 +108,14 @@ class AuthProvider extends ChangeNotifier {
             'drinks': 0,
             'snacks': 0,
             'fruitsVeg': 0,
-            'total': 0,
           },
         });
 
-        await _firestore.collection('users').doc(user.uid).collection('cart').add({});
+        await _firestore
+            .collection('users')
+            .doc(user.uid)
+            .collection('cart')
+            .add({});
       }
 
       _authState = AuthState.registered;
@@ -183,7 +186,7 @@ class AuthProvider extends ChangeNotifier {
         'photoUrl': user.photoURL ?? '',
         'address': const GeoPoint(0, 0),
         'starRating': 0,
-        'orderHistory': [],
+        'countRating': 0,
         'purchases': [],
         'sales': [],
         'pendingOrders': [],
@@ -193,7 +196,6 @@ class AuthProvider extends ChangeNotifier {
           'drinks': 0,
           'snacks': 0,
           'fruitsVeg': 0,
-          'total': 0,
         },
       });
 

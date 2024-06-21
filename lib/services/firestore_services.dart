@@ -90,6 +90,7 @@ class FirestoreService {
       foodItems: items,
       status: 'pending',
       totalPrice: totalPrice,
+      orderRating: 0,
       orderDate: Timestamp.now(),
     );
 
@@ -169,5 +170,32 @@ class FirestoreService {
     return snapshot.docs
         .map((doc) => FoodOrder.fromMap(doc.data() as Map<String, dynamic>))
         .toList();
+  }
+
+  Future<void> addOrderRating(String orderId, int rating) async {
+    final orderRef = _db.collection('orders').doc(orderId);
+
+    await orderRef.update({
+      'orderRating': rating,
+    });
+
+    final orderSnapshot = await orderRef.get();
+    final order =
+        FoodOrder.fromMap(orderSnapshot.data() as Map<String, dynamic>);
+
+    final sellerRef = _db.collection('users').doc(order.sellerId);
+    final sellerSnapshot = await sellerRef.get();
+    final sellerData = sellerSnapshot.data() as Map<String, dynamic>;
+
+    final currentRating = sellerData['starRating'] ?? 0;
+    final countRating = sellerData['countRating'] ?? 0;
+
+    final newRating =
+        ((currentRating * countRating) + rating) / (countRating + 1);
+
+    await sellerRef.update({
+      'starRating': newRating,
+      'countRating': countRating + 1,
+    });
   }
 }
