@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:mealty/services/firestore_services.dart';
 import 'package:mealty/data/model/user.dart';
 import 'package:mealty/data/model/food_order.dart';
+
+import '../../utils/data_conversion.dart';
 
 class OrderInfoWidget extends StatelessWidget {
   final FoodOrder order;
@@ -39,7 +40,7 @@ class OrderInfoWidget extends StatelessWidget {
                       ),
                 ),
                 Text(
-                  DateFormat.yMMMd().format(order.orderDate.toDate()),
+                  formatDate(order.orderDate),
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: primary,
@@ -47,6 +48,7 @@ class OrderInfoWidget extends StatelessWidget {
                 ),
               ],
             ),
+            const SizedBox(width: 16.0),
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [

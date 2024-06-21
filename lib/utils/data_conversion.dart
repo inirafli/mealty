@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'dart:math' as math;
 
 String formatPrice(int price) {
@@ -49,4 +50,10 @@ String formatDistance(double distance) {
   } else {
     return '${distance.toStringAsFixed(0)} m';
   }
+}
+
+String formatDate(Timestamp timestamp) {
+  final dateTime = timestamp.toDate();
+  final DateFormat dateFormat = DateFormat('d MMMM yyyy, h:mm a', 'id_ID');
+  return dateFormat.format(dateTime);
 }

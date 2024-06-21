@@ -14,7 +14,6 @@ class BuyerOrdersTab extends StatelessWidget {
   Widget build(BuildContext context) {
     Color primary = Theme.of(context).colorScheme.primary;
     Color onPrimary = Theme.of(context).colorScheme.onPrimary;
-    Color onBackground = Theme.of(context).colorScheme.onBackground;
 
     return Consumer<OrderProvider>(
       builder: (context, orderProvider, child) {

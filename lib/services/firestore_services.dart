@@ -36,30 +36,50 @@ class FirestoreService {
   }
 
   Future<void> addToCart(String userId, CartItem cartItem) async {
-    await _db.collection('users').doc(userId).collection('cart').doc(cartItem.foodId).set(cartItem.toMap());
+    await _db
+        .collection('users')
+        .doc(userId)
+        .collection('cart')
+        .doc(cartItem.foodId)
+        .set(cartItem.toMap());
   }
 
   Future<void> updateCartItemQuantity(String userId, CartItem cartItem) async {
-    await _db.collection('users').doc(userId).collection('cart').doc(cartItem.foodId).update(cartItem.toMap());
+    await _db
+        .collection('users')
+        .doc(userId)
+        .collection('cart')
+        .doc(cartItem.foodId)
+        .update(cartItem.toMap());
   }
 
   Future<void> removeFromCart(String userId, String foodId) async {
-    await _db.collection('users').doc(userId).collection('cart').doc(foodId).delete();
+    await _db
+        .collection('users')
+        .doc(userId)
+        .collection('cart')
+        .doc(foodId)
+        .delete();
   }
 
   Future<List<CartItem>> getCartItems(String userId) async {
-    QuerySnapshot snapshot = await _db.collection('users').doc(userId).collection('cart').get();
-    return snapshot.docs.map((doc) => CartItem.fromMap(doc.data() as Map<String, dynamic>)).toList();
+    QuerySnapshot snapshot =
+        await _db.collection('users').doc(userId).collection('cart').get();
+    return snapshot.docs
+        .map((doc) => CartItem.fromMap(doc.data() as Map<String, dynamic>))
+        .toList();
   }
 
   Future<void> clearCart(String userId) async {
-    final cartItems = await _db.collection('users').doc(userId).collection('cart').get();
+    final cartItems =
+        await _db.collection('users').doc(userId).collection('cart').get();
     for (var doc in cartItems.docs) {
       await doc.reference.delete();
     }
   }
 
-  Future<void> createOrder(String buyerId, String sellerId, List<CartItem> items, int totalPrice) async {
+  Future<void> createOrder(String buyerId, String sellerId,
+      List<CartItem> items, int totalPrice) async {
     final orderId = 'order-${generateRandomId(8)}';
     final orderRef = _db.collection('orders').doc(orderId);
 
@@ -76,7 +96,6 @@ class FirestoreService {
     await orderRef.set(order.toMap());
 
     await _db.collection('users').doc(buyerId).update({
-      'purchases': FieldValue.arrayUnion([orderId]),
       'pendingOrders': FieldValue.arrayUnion([orderId]),
     });
 
@@ -85,21 +104,70 @@ class FirestoreService {
     });
   }
 
-  Future<void> updateOrderStatus(String orderId, String newStatus) async {
-    try {
-      await _db.collection('orders').doc(orderId).update({'status': newStatus});
-    } catch (e) {
-      rethrow;
+  Future<void> updateOrderStatus(
+    String orderId,
+    String newStatus,
+    FoodOrder order,
+  ) async {
+    final orderRef = _db.collection('orders').doc(orderId);
+
+    final buyerRef = _db.collection('users').doc(order.buyerId);
+    final sellerRef = _db.collection('users').doc(order.sellerId);
+
+    final batch = _db.batch();
+
+    if (newStatus == 'completed') {
+      batch.update(orderRef, {
+        'status': newStatus,
+        'completionDate': Timestamp.now(),
+      });
+
+      batch.update(buyerRef, {
+        'pendingOrders': FieldValue.arrayRemove([orderId]),
+        'purchases': FieldValue.arrayUnion([orderId]),
+      });
+
+      batch.update(sellerRef, {
+        'pendingOrders': FieldValue.arrayRemove([orderId]),
+        'sales': FieldValue.arrayUnion([orderId]),
+      });
+
+      for (var item in order.foodItems) {
+        final foodDoc = await _db.collection('foods').doc(item.foodId).get();
+        final foodType = foodDoc['category'];
+
+        batch.update(buyerRef, {
+          'completedFoodTypes.$foodType': FieldValue.increment(item.quantity),
+        });
+
+        batch.update(sellerRef, {
+          'completedFoodTypes.$foodType': FieldValue.increment(item.quantity),
+        });
+      }
+    } else {
+      batch.update(orderRef, {'status': newStatus});
     }
+
+    await batch.commit();
   }
 
   Future<List<FoodOrder>> getOrdersByBuyerId(String buyerId) async {
-    QuerySnapshot snapshot = await _db.collection('orders').where('buyerId', isEqualTo: buyerId).get();
-    return snapshot.docs.map((doc) => FoodOrder.fromMap(doc.data() as Map<String, dynamic>)).toList();
+    QuerySnapshot snapshot = await _db
+        .collection('orders')
+        .where('buyerId', isEqualTo: buyerId)
+        .get();
+    return snapshot.docs
+        .map((doc) => FoodOrder.fromMap(doc.data() as Map<String, dynamic>))
+        .toList();
   }
 
   Future<List<FoodOrder>> getOrdersBySellerId(String sellerId) async {
-    QuerySnapshot snapshot = await _db.collection('orders').where('sellerId', isEqualTo: sellerId).get();
-    return snapshot.docs.map((doc) => FoodOrder.fromMap(doc.data() as Map<String, dynamic>)).toList();
+    QuerySnapshot snapshot = await _db
+        .collection('orders')
+        .where('sellerId', isEqualTo: sellerId)
+        .get();
+    return snapshot.docs
+        .map((doc) => FoodOrder.fromMap(doc.data() as Map<String, dynamic>))
+        .toList();
   }
 }

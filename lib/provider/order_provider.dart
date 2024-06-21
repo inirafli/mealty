@@ -55,7 +55,11 @@ class OrderProvider with ChangeNotifier {
   }
 
   Future<void> updateOrderStatus(String orderId, String newStatus) async {
-    await _firestoreService.updateOrderStatus(orderId, newStatus);
+    final order = _buyerOrders.firstWhere((order) => order.orderId == orderId,
+        orElse: () => _sellerOrders.firstWhere(
+            (order) => order.orderId == orderId,
+            orElse: () => throw 'Order not found'));
+    await _firestoreService.updateOrderStatus(orderId, newStatus, order);
     await _fetchOrders();
   }
 }
