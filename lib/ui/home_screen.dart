@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mealty/provider/food_provider.dart';
 import 'package:mealty/widgets/common/custom_loading_indicator.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import '../data/model/food_post.dart';
 import '../widgets/home/category_filter_dialog.dart';
 import '../widgets/home/filter_button.dart';
 import '../widgets/home/food_post_card.dart';
@@ -88,16 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 16.0),
             Expanded(child:
                 Consumer<FoodProvider>(builder: (context, foodProvider, child) {
-              if (foodProvider.isLoading) {
-                return Center(
-                    child: CustomProgressIndicator(
-                  color: primary,
-                  size: 24.0,
-                  strokeWidth: 2.0,
-                ));
-              }
-
-              if (foodProvider.posts.isEmpty) {
+              if (foodProvider.posts.isEmpty && !foodProvider.isLoading) {
                 return Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -105,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Image.asset(
                         'images/food_not_found.png',
                         fit: BoxFit.cover,
-                        height: 144.0,
+                        height: 104.0,
                       ),
                       Text(
                         'Belum ada Makanan atau Minuman\n yang tersedia.',
@@ -151,21 +144,28 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                       const SizedBox(height: 16.0),
-                      GridView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 4.0,
-                          mainAxisSpacing: 12.0,
-                          childAspectRatio: 1.85 / 3,
+                      Skeletonizer(
+                        enabled: foodProvider.isLoading,
+                        child: GridView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 4.0,
+                            mainAxisSpacing: 12.0,
+                            childAspectRatio: 1.85 / 3,
+                          ),
+                          itemCount: foodProvider.isLoading
+                              ? 6
+                              : foodProvider.posts.length,
+                          itemBuilder: (context, index) {
+                            final post = foodProvider.isLoading
+                                ? FoodPost.generateListPosts()[index]
+                                : foodProvider.posts[index];
+                            return PostCard(post: post);
+                          },
                         ),
-                        itemCount: foodProvider.posts.length,
-                        itemBuilder: (context, index) {
-                          final post = foodProvider.posts[index];
-                          return PostCard(post: post);
-                        },
                       ),
                       const SizedBox(height: 16.0),
                     ],

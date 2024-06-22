@@ -38,7 +38,8 @@ class FoodPost {
     required this.formattedDistance,
   });
 
-  factory FoodPost.fromFirestore(DocumentSnapshot doc, User user, GeoPoint userLocation) {
+  factory FoodPost.fromFirestore(
+      DocumentSnapshot doc, User user, GeoPoint userLocation) {
     final data = doc.data() as Map<String, dynamic>;
     final double distance = calculateDistance(data['location'], userLocation);
     return FoodPost(
@@ -58,5 +59,75 @@ class FoodPost {
       distance: distance,
       formattedDistance: formatDistance(distance),
     );
+  }
+
+  static FoodPost generatePlaceholderPost() {
+    return FoodPost(
+      id: 'placeholder',
+      name: 'Loading...',
+      description: 'Loading...',
+      price: 30000,
+      image: '',
+      stock: 20,
+      publishedDate: Timestamp.now(),
+      saleTime: Timestamp.now(),
+      distance: 12,
+      category: 'staple',
+      location: const GeoPoint(0, 0),
+      formattedDistance: '0 km',
+      user: User(
+        id: 'placeholder',
+        email: 'loading@example.com',
+        phoneNumber: '0000000000',
+        photoUrl: 'https://ui-avatars.com/api/?name=X',
+        starRating: 0,
+        countRating: 0,
+        username: 'Loading...',
+        address: const GeoPoint(0, 0),
+        completedFoodTypes: {},
+        purchases: [],
+        sales: [],
+        pendingOrders: [],
+        postedFoods: [],
+      ),
+      sellingType: 'komersil',
+      userId: 'xxxx',
+    );
+  }
+
+  static List<FoodPost> generateListPosts() {
+    return List.generate(6, (index) {
+      return FoodPost(
+        id: 'placeholder',
+        name: 'Loading...',
+        description: 'Loading...',
+        price: 30000,
+        image: '',
+        stock: 20,
+        publishedDate: Timestamp.now(),
+        saleTime: Timestamp.now(),
+        distance: 12,
+        category: 'staple',
+        location: const GeoPoint(0, 0),
+        formattedDistance: '0 km',
+        user: User(
+          id: 'placeholder',
+          email: 'loading@example.com',
+          phoneNumber: '0000000000',
+          photoUrl: 'https://ui-avatars.com/api/?name=X',
+          starRating: 0,
+          countRating: 0,
+          username: 'Loading...',
+          address: const GeoPoint(0, 0),
+          completedFoodTypes: {},
+          purchases: [],
+          sales: [],
+          pendingOrders: [],
+          postedFoods: [],
+        ),
+        sellingType: 'komersil',
+        userId: 'xxxx',
+      );
+    });
   }
 }

@@ -72,11 +72,13 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                       },
                     ),
                     background: GestureDetector(
-                      onTap: () => context.push('/main/imageFullScreen', extra: post.image),
-                      child: Image.network(
+                      onTap: () => context.push('/main/imageFullScreen', extra: post?.image),
+                      child: post.image != ''
+                          ? Image.network(
                         post.image,
                         fit: BoxFit.cover,
-                      ),
+                      )
+                          : Container(color: Colors.grey[300]),
                     ),
                   ),
                   leading: Padding(
@@ -142,12 +144,12 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                           enabled: foodProvider.isDetailLoading,
                           child: CategoryStockWidget(post: post),
                         ),
-                        const SizedBox(height: 20.0),
+                        const SizedBox(height: 14.0),
                         Skeletonizer(
                           enabled: foodProvider.isDetailLoading,
                           child: UserProfileWidget(user: post.user),
                         ),
-                        const SizedBox(height: 20.0),
+                        const SizedBox(height: 14.0),
                         Skeletonizer(
                           enabled: foodProvider.isDetailLoading,
                           child: FoodLocationWidget(

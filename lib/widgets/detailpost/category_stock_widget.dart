@@ -66,8 +66,7 @@ class CategoryStockWidget extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: 12.0),
-        // Stock Container
+        const SizedBox(width: 14.0),
         Expanded(
           child: Container(
             height: 180.0,

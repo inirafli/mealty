@@ -91,7 +91,6 @@ class OrderProvider with ChangeNotifier {
 
   Future<void> submitOrderRating(String orderId, int rating) async {
     await _firestoreService.addOrderRating(orderId, rating);
-    _selectedRating = 1;
     await _fetchOrders();
   }
 }

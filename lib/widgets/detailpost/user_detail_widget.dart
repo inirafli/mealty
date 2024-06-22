@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -43,7 +44,8 @@ class UserProfileWidget extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Icon(MdiIcons.star, color: Colors.orange, size: 16.0),
+                  const Icon(CupertinoIcons.star_fill,
+                      color: Colors.orange, size: 15.0),
                   const SizedBox(width: 4.0),
                   Text(
                     '${user.starRating}/5.0',

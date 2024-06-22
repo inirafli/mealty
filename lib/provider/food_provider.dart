@@ -12,7 +12,7 @@ class FoodProvider with ChangeNotifier {
   List<FoodPost> _filteredPosts = [];
   FoodPost? _selectedPost;
   bool _isLoading = true;
-  bool _isDetailLoading = false;
+  bool _isDetailLoading = true;
 
   List<String> _selectedCategories = ['all'];
   String _selectedSortType = 'latestPost';
@@ -84,9 +84,12 @@ class FoodProvider with ChangeNotifier {
 
   Future<void> fetchPostById(String id) async {
     _isDetailLoading = true;
+    _selectedPost = FoodPost.generatePlaceholderPost();
     notifyListeners();
+
     final LocationData userLocation = await _location.getLocation();
-    final GeoPoint userGeoPoint = GeoPoint(userLocation.latitude!, userLocation.longitude!);
+    final GeoPoint userGeoPoint =
+        GeoPoint(userLocation.latitude!, userLocation.longitude!);
 
     final doc = await _firestoreService.getFoodPostById(id);
     if (doc != null) {
@@ -141,10 +144,7 @@ class FoodProvider with ChangeNotifier {
     if (_searchKeyword.isNotEmpty) {
       _filteredPosts = _filteredPosts
           .where((post) =>
-              post.name.toLowerCase().contains(_searchKeyword.toLowerCase()) ||
-              post.description
-                  .toLowerCase()
-                  .contains(_searchKeyword.toLowerCase()))
+              post.name.toLowerCase().contains(_searchKeyword.toLowerCase()))
           .toList();
     }
 

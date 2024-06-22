@@ -74,10 +74,10 @@ class RatingDialog extends StatelessWidget {
                     Text(
                       orderProvider.ratingMessage,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontSize: 13.0,
-                        color: onBackground,
-                        fontWeight: FontWeight.bold,
-                      ),
+                            fontSize: 13.0,
+                            color: onBackground,
+                            fontWeight: FontWeight.bold,
+                          ),
                       textAlign: TextAlign.center,
                     ),
                   ],
@@ -93,9 +93,13 @@ class RatingDialog extends StatelessWidget {
                   padding: EdgeInsets.zero,
                 ),
                 onPressed: () async {
-                  final orderProvider = Provider.of<OrderProvider>(context, listen: false);
-                  await orderProvider.submitOrderRating(orderId, orderProvider.selectedRating);
-                  context.pop();
+                  final orderProvider =
+                      Provider.of<OrderProvider>(context, listen: false);
+                  await orderProvider.submitOrderRating(
+                      orderId, orderProvider.selectedRating);
+                  if (context.mounted) {
+                    context.pop();
+                  }
                 },
                 child: Text(
                   'Beri Rating',
