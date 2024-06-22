@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/order_provider.dart';
+import '../widgets/common/custom_snackbar.dart';
+import '../widgets/foodorder/download_order_dialog.dart';
 import 'ordertab/buyer_orders_tab.dart';
 import 'ordertab/seller_order_tab.dart';
 
@@ -10,49 +13,77 @@ class OrderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => OrderProvider(),
-      child: DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          backgroundColor: Colors.grey[200],
-          appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(104.0),
-            child: AppBar(
-              title: Text(
-                'Pesanan',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+    Color primary = Theme.of(context).colorScheme.primary;
+
+    return Consumer<OrderProvider>(
+      builder: (context, orderProvider, child) {
+        if (orderProvider.errorMessage != null) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              CustomSnackBar(
+                contentText: orderProvider.errorMessage!,
+                context: context,
               ),
-              backgroundColor: Theme.of(context).colorScheme.onPrimary,
-              bottom: TabBar(
-                labelColor: Theme.of(context).colorScheme.primary,
-                labelStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
+            );
+            orderProvider.clearErrorMessage();
+          });
+        }
+
+        return DefaultTabController(
+          length: 2,
+          child: Scaffold(
+            backgroundColor: Colors.grey[200],
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(104.0),
+              child: AppBar(
+                title: Text(
+                  'Pesanan',
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: primary,
+                  ),
                 ),
-                tabs: const [
-                  Tab(text: 'Pembelian'),
-                  Tab(text: 'Penjualan'),
+                backgroundColor: Theme.of(context).colorScheme.onPrimary,
+                actions: [
+                  IconButton(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    icon:
+                    Icon(MdiIcons.fileDownloadOutline, color: primary, size: 24.0),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => const DownloadDialog(),
+                      );
+                    },
+                  ),
                 ],
+                bottom: TabBar(
+                  labelColor: Theme.of(context).colorScheme.primary,
+                  labelStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                  tabs: const [
+                    Tab(text: 'Pembelian'),
+                    Tab(text: 'Penjualan'),
+                  ],
+                ),
               ),
             ),
+            body: const TabBarView(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+                  child: BuyerOrdersTab(),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+                  child: SellerOrdersTab(),
+                ),
+              ],
+            ),
           ),
-          body: const TabBarView(
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
-                child: BuyerOrdersTab(),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
-                child: SellerOrdersTab(),
-              ),
-            ],
-          ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

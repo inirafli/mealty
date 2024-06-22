@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:open_file/open_file.dart';
 
 import '../data/model/food_order.dart';
 import '../services/firestore_services.dart';
+import '../utils/pdf_generator.dart';
 
 class OrderProvider with ChangeNotifier {
   final FirestoreService _firestoreService = FirestoreService();
@@ -12,6 +14,7 @@ class OrderProvider with ChangeNotifier {
   bool _isLoading = true;
   String _filter = 'all';
   int _selectedRating = 1;
+  String? _errorMessage;
 
   OrderProvider() {
     _user = FirebaseAuth.instance.currentUser;
@@ -31,6 +34,8 @@ class OrderProvider with ChangeNotifier {
   String get filter => _filter;
 
   int get selectedRating => _selectedRating;
+
+  String? get errorMessage => _errorMessage;
 
   Future<void> _fetchOrders() async {
     if (_user != null) {
@@ -92,5 +97,30 @@ class OrderProvider with ChangeNotifier {
   Future<void> submitOrderRating(String orderId, int rating) async {
     await _firestoreService.addOrderRating(orderId, rating);
     await _fetchOrders();
+  }
+
+  Future<void> downloadSummary(BuildContext context) async {
+    if (_buyerOrders.where((order) => order.status == 'completed').isEmpty &&
+        _sellerOrders.where((order) => order.status == 'completed').isEmpty) {
+      _errorMessage =
+          'Sepertinya kamu belum pernah melakukan Pembelian atau Penjualan.';
+      notifyListeners();
+      return;
+    }
+
+    final pdfGenerator = PDFGenerator(_firestoreService);
+    final currentUser = await _firestoreService.getUser(_user!.uid);
+    final pdfFile = await pdfGenerator.generateSummaryPDF(
+      currentUser,
+      _buyerOrders.where((order) => order.status == 'completed').toList(),
+      _sellerOrders.where((order) => order.status == 'completed').toList(),
+    );
+
+    OpenFile.open(pdfFile.path);
+  }
+
+  void clearErrorMessage() {
+    _errorMessage = null;
+    notifyListeners();
   }
 }
