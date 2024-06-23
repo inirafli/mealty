@@ -61,73 +61,43 @@ class FoodPost {
     );
   }
 
-  static FoodPost generatePlaceholderPost() {
-    return FoodPost(
-      id: 'placeholder',
-      name: 'Loading...',
-      description: 'Loading...',
-      price: 30000,
-      image: '',
-      stock: 20,
-      publishedDate: Timestamp.now(),
-      saleTime: Timestamp.now(),
-      distance: 12,
-      category: 'staple',
-      location: const GeoPoint(0, 0),
-      formattedDistance: '0 km',
-      user: User(
-        id: 'placeholder',
-        email: 'loading@example.com',
-        phoneNumber: '0000000000',
-        photoUrl: 'https://ui-avatars.com/api/?name=X',
-        starRating: 0,
-        countRating: 0,
-        username: 'Loading...',
-        address: const GeoPoint(0, 0),
-        completedFoodTypes: {},
-        purchases: [],
-        sales: [],
-        pendingOrders: [],
-        postedFoods: [],
-      ),
-      sellingType: 'komersil',
-      userId: 'xxxx',
-    );
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'price': price,
+      'image': image,
+      'stock': stock,
+      'publishedDate': publishedDate,
+      'saleTime': saleTime,
+      'distance': distance,
+      'category': category,
+      'location': location,
+      'formattedDistance': formattedDistance,
+      'user': user.toMap(),
+      'sellingType': sellingType,
+      'userId': userId,
+    };
   }
 
-  static List<FoodPost> generateListPosts() {
-    return List.generate(6, (index) {
-      return FoodPost(
-        id: 'placeholder',
-        name: 'Loading...',
-        description: 'Loading...',
-        price: 30000,
-        image: '',
-        stock: 20,
-        publishedDate: Timestamp.now(),
-        saleTime: Timestamp.now(),
-        distance: 12,
-        category: 'staple',
-        location: const GeoPoint(0, 0),
-        formattedDistance: '0 km',
-        user: User(
-          id: 'placeholder',
-          email: 'loading@example.com',
-          phoneNumber: '0000000000',
-          photoUrl: 'https://ui-avatars.com/api/?name=X',
-          starRating: 0,
-          countRating: 0,
-          username: 'Loading...',
-          address: const GeoPoint(0, 0),
-          completedFoodTypes: {},
-          purchases: [],
-          sales: [],
-          pendingOrders: [],
-          postedFoods: [],
-        ),
-        sellingType: 'komersil',
-        userId: 'xxxx',
-      );
-    });
+  factory FoodPost.fromMap(Map<String, dynamic> map) {
+    return FoodPost(
+      id: map['id'],
+      name: map['name'],
+      description: map['description'],
+      price: map['price'],
+      image: map['image'],
+      stock: map['stock'],
+      publishedDate: map['publishedDate'],
+      saleTime: map['saleTime'],
+      distance: map['distance'],
+      category: map['category'],
+      location: map['location'],
+      formattedDistance: map['formattedDistance'],
+      user: User.fromMap(map['user']),
+      sellingType: map['sellingType'],
+      userId: map['userId'],
+    );
   }
 }

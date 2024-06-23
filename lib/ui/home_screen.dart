@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mealty/provider/food_provider.dart';
+import 'package:mealty/utils/fake_data_generator.dart';
 import 'package:mealty/widgets/common/custom_loading_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -161,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               : foodProvider.posts.length,
                           itemBuilder: (context, index) {
                             final post = foodProvider.isLoading
-                                ? FoodPost.generateListPosts()[index]
+                                ? FakeDataGenerator.generateListPosts()[index]
                                 : foodProvider.posts[index];
                             return PostCard(post: post);
                           },

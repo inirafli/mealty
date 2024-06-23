@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:open_file/open_file.dart';
+import 'package:open_filex/open_filex.dart';
 
 import '../data/model/food_order.dart';
 import '../services/firestore_services.dart';
+import '../utils/fake_data_generator.dart';
 import '../utils/pdf_generator.dart';
 
 class OrderProvider with ChangeNotifier {
@@ -18,15 +19,22 @@ class OrderProvider with ChangeNotifier {
 
   OrderProvider() {
     _user = FirebaseAuth.instance.currentUser;
-    _fetchOrders();
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      _user = user;
+      if (_user != null) {
+        _fetchOrders();
+      } else {
+        _clearOrders();
+      }
+    });
   }
 
   List<FoodOrder> get buyerOrders {
-    return _applyFilter(_buyerOrders);
+    return _applyFilter(_isLoading ? FakeDataGenerator.generateFakeOrders() : _buyerOrders);
   }
 
   List<FoodOrder> get sellerOrders {
-    return _applyFilter(_sellerOrders);
+    return _applyFilter(_isLoading ? FakeDataGenerator.generateFakeOrders() : _sellerOrders);
   }
 
   bool get isLoading => _isLoading;
@@ -44,6 +52,12 @@ class OrderProvider with ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  void _clearOrders() {
+    _buyerOrders = [];
+    _sellerOrders = [];
+    notifyListeners();
   }
 
   void setFilter(String filter) {
@@ -116,7 +130,8 @@ class OrderProvider with ChangeNotifier {
       _sellerOrders.where((order) => order.status == 'completed').toList(),
     );
 
-    OpenFile.open(pdfFile.path);
+    OpenFilex.open(pdfFile.path);
+    print('PDF File Path: ${pdfFile.path}');
   }
 
   void clearErrorMessage() {

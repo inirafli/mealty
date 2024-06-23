@@ -49,4 +49,40 @@ class User {
       postedFoods: data['postedFoods'] ?? [],
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'email': email,
+      'phoneNumber': phoneNumber,
+      'photoUrl': photoUrl,
+      'starRating': starRating,
+      'countRating': countRating,
+      'username': username,
+      'address': address,
+      'completedFoodTypes': completedFoodTypes,
+      'purchases': purchases,
+      'sales': sales,
+      'pendingOrders': pendingOrders,
+      'postedFoods': postedFoods,
+    };
+  }
+
+  factory User.fromMap(Map<String, dynamic> map) {
+    return User(
+      id: map['id'],
+      email: map['email'],
+      phoneNumber: map['phoneNumber'],
+      photoUrl: map['photoUrl'],
+      starRating: map['starRating'],
+      countRating: map['countRating'],
+      username: map['username'],
+      address: map['address'],
+      completedFoodTypes: map['completedFoodTypes'],
+      purchases: map['purcahses'],
+      sales: map['sales'],
+      pendingOrders: ['pendingOrders'],
+      postedFoods: map['postedFoods'],
+    );
+  }
 }

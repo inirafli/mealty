@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import 'package:mealty/utils/fake_data_generator.dart';
 
 import '../data/model/food_post.dart';
 import '../services/firestore_services.dart';
@@ -84,7 +85,7 @@ class FoodProvider with ChangeNotifier {
 
   Future<void> fetchPostById(String id) async {
     _isDetailLoading = true;
-    _selectedPost = FoodPost.generatePlaceholderPost();
+    _selectedPost = FakeDataGenerator.generatePlaceholderPost();
     notifyListeners();
 
     final LocationData userLocation = await _location.getLocation();

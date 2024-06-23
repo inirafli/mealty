@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../provider/order_provider.dart';
 import '../../widgets/common/custom_loading_indicator.dart';
@@ -17,17 +18,8 @@ class SellerOrdersTab extends StatelessWidget {
 
     return Consumer<OrderProvider>(
       builder: (context, orderProvider, child) {
-        if (orderProvider.isLoading) {
-          return Center(
-            child: CustomProgressIndicator(
-              color: primary,
-              size: 24.0,
-              strokeWidth: 2.0,
-            ),
-          );
-        }
-
         final orders = orderProvider.sellerOrders;
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -44,41 +36,44 @@ class SellerOrdersTab extends StatelessWidget {
               )
             else
               Expanded(
-                child: ListView.builder(
-                  itemCount: orders.length,
-                  itemBuilder: (context, index) {
-                    final order = orders[index];
-                    return Container(
-                      margin: const EdgeInsets.symmetric(vertical: 6.0),
-                      decoration: BoxDecoration(
-                        color: onPrimary,
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ...order.foodItems.map((item) {
-                              return OrderItemWidget(
-                                item: item,
-                                totalPrice: order.totalPrice,
-                              );
-                            }),
-                            const SizedBox(height: 16.0),
-                            OrderInfoWidget(
-                              order: order,
-                              isSeller: true,
-                              onUpdateStatus: (newStatus) {
-                                orderProvider.updateOrderStatus(
-                                    order.orderId, newStatus);
-                              },
-                            ),
-                          ],
+                child: Skeletonizer(
+                  enabled: orderProvider.isLoading,
+                  child: ListView.builder(
+                    itemCount: orders.length,
+                    itemBuilder: (context, index) {
+                      final order = orders[index];
+                      return Container(
+                        margin: const EdgeInsets.symmetric(vertical: 6.0),
+                        decoration: BoxDecoration(
+                          color: onPrimary,
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
-                      ),
-                    );
-                  },
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ...order.foodItems.map((item) {
+                                return OrderItemWidget(
+                                  item: item,
+                                  totalPrice: order.totalPrice,
+                                );
+                              }),
+                              const SizedBox(height: 16.0),
+                              OrderInfoWidget(
+                                order: order,
+                                isSeller: true,
+                                onUpdateStatus: (newStatus) {
+                                  orderProvider.updateOrderStatus(
+                                      order.orderId, newStatus);
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
           ],

@@ -61,8 +61,8 @@ class RatingDialog extends StatelessWidget {
                             size: 34.0,
                             CupertinoIcons.star_fill,
                             color: index < orderProvider.selectedRating
-                                ? Colors.orange[300]
-                                : Colors.grey[300],
+                                ? Colors.orange[600]
+                                : Colors.grey[400],
                           ),
                           onPressed: () {
                             orderProvider.setSelectedRating(index + 1);
