@@ -5,6 +5,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:provider/provider.dart';
 
 import '../provider/cart_provider.dart';
+import '../provider/order_provider.dart';
 import '../services/firestore_services.dart';
 import '../utils/data_conversion.dart';
 import '../widgets/common/custom_loading_indicator.dart';
@@ -31,6 +32,8 @@ class _CartScreenState extends State<CartScreen> {
     Color onPrimary = Theme.of(context).colorScheme.onPrimary;
     Color onBackground = Theme.of(context).colorScheme.onBackground;
 
+    final orderProvider = Provider.of<OrderProvider>(context);
+
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: PreferredSize(
@@ -39,9 +42,9 @@ class _CartScreenState extends State<CartScreen> {
           title: Text(
             'Keranjang',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: primary,
-            ),
+                  fontWeight: FontWeight.bold,
+                  color: primary,
+                ),
           ),
           backgroundColor: onPrimary,
         ),
@@ -60,7 +63,8 @@ class _CartScreenState extends State<CartScreen> {
               }
 
               return ListView.builder(
-                padding: const EdgeInsets.only(bottom: 120.0, top: 16.0, left: 4.0, right: 4.0),
+                padding: const EdgeInsets.only(
+                    bottom: 120.0, top: 16.0, left: 4.0, right: 4.0),
                 itemCount: cartProvider.cartItems.length,
                 itemBuilder: (context, index) {
                   final item = cartProvider.cartItems[index];
@@ -70,19 +74,21 @@ class _CartScreenState extends State<CartScreen> {
                       if (!snapshot.hasData) {
                         return Center(
                             child: CustomProgressIndicator(
-                              color: primary,
-                              size: 24.0,
-                              strokeWidth: 2.0,
-                            ));
+                          color: primary,
+                          size: 24.0,
+                          strokeWidth: 2.0,
+                        ));
                       }
-                      final foodData = snapshot.data?.data() as Map<String, dynamic>?;
+                      final foodData =
+                          snapshot.data?.data() as Map<String, dynamic>?;
                       if (foodData == null) {
                         return const Center(
                           child: Text('Tidak ada Makanan yang ditemukan.'),
                         );
                       }
                       return Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 8.0),
                         decoration: BoxDecoration(
                           color: onPrimary,
                           borderRadius: BorderRadius.circular(10.0),
@@ -91,10 +97,13 @@ class _CartScreenState extends State<CartScreen> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                context.push('/main/foodDetail', extra: item.foodId);
+                                context.push('/main/foodDetail',
+                                    extra: item.foodId);
                               },
                               child: ClipRRect(
-                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), bottomLeft: Radius.circular(10)),
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10)),
                                 child: Image.network(
                                   foodData['image'],
                                   width: 100,
@@ -112,40 +121,57 @@ class _CartScreenState extends State<CartScreen> {
                                   children: [
                                     Text(
                                       foodData['name'],
-                                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: primary,
-                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyLarge
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            color: primary,
+                                          ),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     const SizedBox(height: 0.5),
                                     Text(
                                       formatPrice(foodData['price']),
-                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                        color: onBackground,
-                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium
+                                          ?.copyWith(
+                                            color: onBackground,
+                                          ),
                                     ),
                                     const SizedBox(height: 2.0),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Container(),
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             IconButton(
-                                              icon: Icon(Icons.delete_outline, size: 23.5, color: primary),
+                                              icon: Icon(Icons.delete_outline,
+                                                  size: 23.5, color: primary),
                                               onPressed: () {
-                                                cartProvider.removeFromCart(item.foodId);
+                                                cartProvider.removeFromCart(
+                                                    item.foodId);
                                               },
                                             ),
                                             IconButton(
-                                              icon: Icon(MdiIcons.minusCircleOutline, size: 23.0, color: primary),
+                                              icon: Icon(
+                                                  MdiIcons.minusCircleOutline,
+                                                  size: 23.0,
+                                                  color: primary),
                                               onPressed: () {
                                                 if (item.quantity > 1) {
-                                                  cartProvider.updateCartItemQuantity(
-                                                      item.foodId, item.quantity - 1, foodData['stock'], context);
+                                                  cartProvider
+                                                      .updateCartItemQuantity(
+                                                          item.foodId,
+                                                          item.quantity - 1,
+                                                          foodData['stock'],
+                                                          context);
                                                 }
                                               },
                                             ),
@@ -156,16 +182,23 @@ class _CartScreenState extends State<CartScreen> {
                                                   .textTheme
                                                   .bodyLarge
                                                   ?.copyWith(
-                                                fontWeight: FontWeight.bold,
-                                                color: primary,
-                                              ),
+                                                    fontWeight: FontWeight.bold,
+                                                    color: primary,
+                                                  ),
                                             ),
                                             const SizedBox(width: 4.0),
                                             IconButton(
-                                              icon: Icon(MdiIcons.plusCircleOutline, size: 23.0, color: primary),
+                                              icon: Icon(
+                                                  MdiIcons.plusCircleOutline,
+                                                  size: 23.0,
+                                                  color: primary),
                                               onPressed: () {
-                                                cartProvider.updateCartItemQuantity(
-                                                    item.foodId, item.quantity + 1, foodData['stock'], context);
+                                                cartProvider
+                                                    .updateCartItemQuantity(
+                                                        item.foodId,
+                                                        item.quantity + 1,
+                                                        foodData['stock'],
+                                                        context);
                                               },
                                             ),
                                           ],
@@ -194,8 +227,8 @@ class _CartScreenState extends State<CartScreen> {
                   left: 20,
                   right: 20,
                   child: Container(
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 10.0),
                     decoration: BoxDecoration(
                       color: onPrimary,
                       borderRadius: BorderRadius.circular(10.0),
@@ -208,16 +241,22 @@ class _CartScreenState extends State<CartScreen> {
                           children: [
                             Text(
                               'Total Harga',
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: onBackground,
-                              ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(
+                                    color: onBackground,
+                                  ),
                             ),
                             Text(
                               formatPrice(cartProvider.totalPrice.toInt()),
-                              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                                color: primary,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge
+                                  ?.copyWith(
+                                    color: primary,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                             ),
                           ],
                         ),
@@ -228,22 +267,26 @@ class _CartScreenState extends State<CartScreen> {
                           ),
                           onPressed: cartProvider.isLoading
                               ? null
-                              : () {
-                            cartProvider.placeOrder(context);
-                          },
+                              : () async {
+                                  await cartProvider.placeOrder(context);
+                                  await orderProvider.refreshOrders();
+                                },
                           child: cartProvider.isLoading
                               ? CustomProgressIndicator(
-                            color: onPrimary,
-                            size: 18.0,
-                            strokeWidth: 2.0,
-                          )
+                                  color: onPrimary,
+                                  size: 18.0,
+                                  strokeWidth: 2.0,
+                                )
                               : Text(
-                            'Buat Pesanan',
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: onPrimary,
-                            ),
-                          ),
+                                  'Buat Pesanan',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: onPrimary,
+                                      ),
+                                ),
                         ),
                       ],
                     ),

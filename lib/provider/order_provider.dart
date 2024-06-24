@@ -30,11 +30,13 @@ class OrderProvider with ChangeNotifier {
   }
 
   List<FoodOrder> get buyerOrders {
-    return _applyFilter(_isLoading ? FakeDataGenerator.generateFakeOrders() : _buyerOrders);
+    return _applyFilter(
+        _isLoading ? FakeDataGenerator.generateFakeOrders() : _buyerOrders);
   }
 
   List<FoodOrder> get sellerOrders {
-    return _applyFilter(_isLoading ? FakeDataGenerator.generateFakeOrders() : _sellerOrders);
+    return _applyFilter(
+        _isLoading ? FakeDataGenerator.generateFakeOrders() : _sellerOrders);
   }
 
   bool get isLoading => _isLoading;
@@ -46,6 +48,8 @@ class OrderProvider with ChangeNotifier {
   String? get errorMessage => _errorMessage;
 
   Future<void> _fetchOrders() async {
+    _isLoading = true;
+    notifyListeners();
     if (_user != null) {
       _buyerOrders = await _firestoreService.getOrdersByBuyerId(_user!.uid);
       _sellerOrders = await _firestoreService.getOrdersBySellerId(_user!.uid);
@@ -58,6 +62,10 @@ class OrderProvider with ChangeNotifier {
     _buyerOrders = [];
     _sellerOrders = [];
     notifyListeners();
+  }
+
+  Future<void> refreshOrders() async {
+    await _fetchOrders();
   }
 
   void setFilter(String filter) {
@@ -100,12 +108,17 @@ class OrderProvider with ChangeNotifier {
   }
 
   Future<void> updateOrderStatus(String orderId, String newStatus) async {
-    final order = _buyerOrders.firstWhere((order) => order.orderId == orderId,
-        orElse: () => _sellerOrders.firstWhere(
-            (order) => order.orderId == orderId,
-            orElse: () => throw 'Order not found'));
-    await _firestoreService.updateOrderStatus(orderId, newStatus, order);
-    await _fetchOrders();
+    try {
+      final order = _buyerOrders.firstWhere((order) => order.orderId == orderId,
+          orElse: () => _sellerOrders.firstWhere(
+              (order) => order.orderId == orderId,
+              orElse: () => throw 'Order not found'));
+      await _firestoreService.updateOrderStatus(orderId, newStatus, order);
+      await _fetchOrders();
+    } catch (e) {
+      _errorMessage = e.toString();
+      notifyListeners();
+    }
   }
 
   Future<void> submitOrderRating(String orderId, int rating) async {
@@ -131,7 +144,6 @@ class OrderProvider with ChangeNotifier {
     );
 
     OpenFilex.open(pdfFile.path);
-    print('PDF File Path: ${pdfFile.path}');
   }
 
   void clearErrorMessage() {

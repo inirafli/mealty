@@ -36,41 +36,44 @@ class BuyerOrdersTab extends StatelessWidget {
               Expanded(
                 child: Skeletonizer(
                   enabled: orderProvider.isLoading,
-                  child: ListView.builder(
-                    itemCount: orders.length,
-                    itemBuilder: (context, index) {
-                      final order = orders[index];
-                      return Container(
-                        margin: const EdgeInsets.symmetric(vertical: 6.0),
-                        decoration: BoxDecoration(
-                          color: onPrimary,
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ...order.foodItems.map((item) {
-                                return OrderItemWidget(
-                                  item: item,
-                                  totalPrice: order.totalPrice,
-                                );
-                              }),
-                              const SizedBox(height: 16.0),
-                              OrderInfoWidget(
-                                order: order,
-                                isSeller: false,
-                                onUpdateStatus: (newStatus) {
-                                  orderProvider.updateOrderStatus(
-                                      order.orderId, newStatus);
-                                },
-                              ),
-                            ],
+                  child: RefreshIndicator(
+                    onRefresh: orderProvider.refreshOrders,
+                    child: ListView.builder(
+                      itemCount: orders.length,
+                      itemBuilder: (context, index) {
+                        final order = orders[index];
+                        return Container(
+                          margin: const EdgeInsets.symmetric(vertical: 6.0),
+                          decoration: BoxDecoration(
+                            color: onPrimary,
+                            borderRadius: BorderRadius.circular(10.0),
                           ),
-                        ),
-                      );
-                    },
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ...order.foodItems.map((item) {
+                                  return OrderItemWidget(
+                                    item: item,
+                                    totalPrice: order.totalPrice,
+                                  );
+                                }),
+                                const SizedBox(height: 16.0),
+                                OrderInfoWidget(
+                                  order: order,
+                                  isSeller: false,
+                                  onUpdateStatus: (newStatus) {
+                                    orderProvider.updateOrderStatus(
+                                        order.orderId, newStatus);
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),

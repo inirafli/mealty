@@ -30,54 +30,57 @@ class OrderInfoWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Tanggal Pemesanan',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: onBackground,
+        Skeletonizer(
+          enabled: Skeletonizer.of(context).enabled,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Tanggal Pemesanan',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: onBackground,
+                    ),
                   ),
-                ),
-                Text(
-                  formatDate(order.orderDate),
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: primary,
+                  Text(
+                    formatDate(order.orderDate),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: primary,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(width: 16.0),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  'Status Pemesanan',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: onBackground,
+                ],
+              ),
+              const SizedBox(width: 16.0),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    'Status Pemesanan',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: onBackground,
+                    ),
                   ),
-                ),
-                Text(
-                  order.status == 'pending'
-                      ? 'Menunggu Konfirmasi'
-                      : order.status == 'confirmed'
-                      ? 'Terkonfirmasi'
-                      : order.status == 'cancelled'
-                      ? 'Tertolak'
-                      : 'Selesai',
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: primary,
+                  Text(
+                    order.status == 'pending'
+                        ? 'Menunggu Konfirmasi'
+                        : order.status == 'confirmed'
+                        ? 'Terkonfirmasi'
+                        : order.status == 'cancelled'
+                        ? 'Tertolak'
+                        : 'Selesai',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: primary,
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
         const SizedBox(height: 16.0),
         FutureBuilder<User>(

@@ -106,18 +106,31 @@ class FirestoreService {
   }
 
   Future<void> updateOrderStatus(
-    String orderId,
-    String newStatus,
-    FoodOrder order,
-  ) async {
+      String orderId,
+      String newStatus,
+      FoodOrder order,
+      ) async {
     final orderRef = _db.collection('orders').doc(orderId);
-
     final buyerRef = _db.collection('users').doc(order.buyerId);
     final sellerRef = _db.collection('users').doc(order.sellerId);
-
     final batch = _db.batch();
 
-    if (newStatus == 'completed') {
+    if (newStatus == 'confirmed') {
+      for (var item in order.foodItems) {
+        final foodDoc = await _db.collection('foods').doc(item.foodId).get();
+        final foodStock = foodDoc['stock'] as int;
+
+        if (item.quantity > foodStock) {
+          throw 'Jumlah yang dipesan melebihi Stok';
+        }
+
+        batch.update(_db.collection('foods').doc(item.foodId), {
+          'stock': FieldValue.increment(-item.quantity),
+        });
+      }
+
+      batch.update(orderRef, {'status': newStatus});
+    } else if (newStatus == 'completed') {
       batch.update(orderRef, {
         'status': newStatus,
         'completionDate': Timestamp.now(),
