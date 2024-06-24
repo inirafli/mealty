@@ -17,6 +17,7 @@ class OrderFilterWidget extends StatelessWidget {
       'completed': 'Selesai',
       'pending': 'Pending',
       'confirmed': 'Terkonfirmasi',
+      'cancelled': 'Tertolak',
     };
 
     return SingleChildScrollView(

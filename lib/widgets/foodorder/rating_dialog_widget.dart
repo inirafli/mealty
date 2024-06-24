@@ -26,14 +26,7 @@ class RatingDialog extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IconButton(
-                  icon: Icon(
-                    Icons.close,
-                    size: 20.0,
-                    color: onBackground,
-                  ),
-                  onPressed: () => context.pop(),
-                ),
+                Container(width: 48),
                 const Spacer(),
                 Text(
                   'Rating Penjual',
@@ -43,7 +36,14 @@ class RatingDialog extends StatelessWidget {
                       ),
                 ),
                 const Spacer(),
-                Container(width: 48),
+                IconButton(
+                  icon: Icon(
+                    Icons.close,
+                    size: 20.0,
+                    color: onBackground,
+                  ),
+                  onPressed: () => context.pop(),
+                ),
               ],
             ),
             const SizedBox(height: 20.0),
@@ -89,7 +89,7 @@ class RatingDialog extends StatelessWidget {
               alignment: Alignment.bottomRight,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(108.0, 40.0),
+                  minimumSize: const Size(double.infinity, 40.0),
                   padding: EdgeInsets.zero,
                 ),
                 onPressed: () async {

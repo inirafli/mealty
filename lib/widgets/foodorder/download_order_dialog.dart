@@ -25,14 +25,7 @@ class DownloadDialog extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IconButton(
-                  icon: Icon(
-                    Icons.close,
-                    size: 20.0,
-                    color: onBackground,
-                  ),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
+                Container(width: 48),
                 const Spacer(),
                 Text(
                   'Unduh Rangkuman',
@@ -42,10 +35,17 @@ class DownloadDialog extends StatelessWidget {
                       ),
                 ),
                 const Spacer(),
-                Container(width: 48),
+                IconButton(
+                  icon: Icon(
+                    Icons.close,
+                    size: 20.0,
+                    color: onBackground,
+                  ),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
               ],
             ),
-            const SizedBox(height: 16.0),
+            const SizedBox(height: 20.0),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Text(
@@ -62,7 +62,7 @@ class DownloadDialog extends StatelessWidget {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: primary,
-                  minimumSize: const Size(84.0, 40.0),
+                  minimumSize: const Size(double.infinity, 40.0),
                   padding: EdgeInsets.zero,
                 ),
                 onPressed: () {
@@ -71,7 +71,7 @@ class DownloadDialog extends StatelessWidget {
                   context.pop();
                 },
                 child: Text(
-                  'Unduh',
+                  'Ya, Unduh',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: onPrimary,
