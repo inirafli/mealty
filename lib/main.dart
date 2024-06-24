@@ -9,6 +9,7 @@ import 'package:mealty/provider/add_food_provider.dart';
 import 'package:mealty/provider/cart_provider.dart';
 import 'package:mealty/provider/food_provider.dart';
 import 'package:mealty/provider/order_provider.dart';
+import 'package:mealty/provider/profile_provider.dart';
 import 'package:mealty/routes/routes.dart';
 import 'package:provider/provider.dart';
 
@@ -31,6 +32,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => AddFoodProvider()),
         ChangeNotifierProvider(create: (context) => CartProvider()),
         ChangeNotifierProvider(create: (context) => OrderProvider()),
+        ChangeNotifierProvider(create: (context) => ProfileProvider())
       ],
       child: const MyApp(),
     ),
@@ -60,8 +62,7 @@ class MyApp extends StatelessWidget {
             secondary: secondaryColor,
             surface: surfaceColor,
             onBackground: onBackgroundColor,
-            onPrimary: onPrimaryColor
-        ),
+            onPrimary: onPrimaryColor),
         appBarTheme: const AppBarTheme(
           scrolledUnderElevation: 0.8,
           backgroundColor: primaryColor,

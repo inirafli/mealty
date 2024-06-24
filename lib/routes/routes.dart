@@ -11,6 +11,7 @@ import '../data/model/user.dart';
 import '../provider/food_provider.dart';
 import '../ui/food_detail_screen.dart';
 import '../ui/login_screen.dart';
+import '../ui/profile_screen.dart';
 import '../ui/register_screen.dart';
 import '../ui/splash_screen.dart';
 import '../utils/custom_page_transitions.dart';
@@ -23,7 +24,7 @@ class AppRouter {
       routes: <GoRoute>[
         GoRoute(
           path: '/',
-          builder: (context, state) => const SplashScreen(),
+          builder: (context, state) => const ProfileScreen(),
         ),
         GoRoute(
           path: '/login',
