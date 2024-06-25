@@ -74,7 +74,7 @@ class ProfileFoodTypes extends StatelessWidget {
                         child:
                             Icon(iconData, size: iconSize, color: onBackground),
                       ),
-                      const SizedBox(width: 12.0),
+                      const SizedBox(width: 14.0),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [

@@ -93,7 +93,7 @@ class ProfileScreen extends StatelessWidget {
                           text: 'Unggahan Makanan',
                           subText: 'Kelola semua unggahan Makanan-mu',
                           onTap: () {
-                            // Handle Lihat Unggahan Makanan tap
+                            context.go('/main/profileFoodList');
                           },
                         ),
                         _buildActionButton(

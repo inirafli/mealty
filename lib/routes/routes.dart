@@ -1,14 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mealty/ui/add_food_screen.dart';
 import 'package:mealty/ui/location_picker_screen.dart';
 import 'package:mealty/ui/main_screen.dart';
-import 'package:mealty/ui/order_screen.dart';
-import 'package:provider/provider.dart';
+import 'package:mealty/ui/profiletab/profile_food_list_screen.dart';
 
-import '../data/model/food_post.dart';
-import '../data/model/user.dart';
-import '../provider/food_provider.dart';
 import '../ui/food_detail_screen.dart';
 import '../ui/login_screen.dart';
 import '../ui/profile_screen.dart';
@@ -81,6 +76,15 @@ class AppRouter {
                 final String postId = state.extra as String;
                 return createSlideFromBottomTransitionPage(
                   page: FoodDetailScreen(postId: postId),
+                  key: state.pageKey,
+                );
+              },
+            ),
+            GoRoute(
+              path: 'profileFoodList',
+              pageBuilder: (context, state) {
+                return createSlideFromBottomTransitionPage(
+                  page: const ProfileFoodScreen(),
                   key: state.pageKey,
                 );
               },

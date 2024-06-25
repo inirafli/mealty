@@ -9,7 +9,7 @@ import '../common/post_state.dart';
 import '../provider/food_provider.dart';
 import '../widgets/common/custom_loading_indicator.dart';
 import '../widgets/common/custom_snackbar.dart';
-import '../widgets/foodpost/add_post_header.dart';
+import '../widgets/common/sub_screen_header.dart';
 import '../widgets/foodpost/food_location_picker.dart';
 import '../widgets/foodpost/food_price_input.dart';
 import '../widgets/foodpost/food_stock_input.dart';
@@ -176,7 +176,7 @@ class AddFoodScreen extends StatelessWidget {
             top: 0,
             left: 0,
             right: 0,
-            child: AddPostHeader(
+            child: SubScreenHeader(
               title: 'Tambah Makanan',
             ),
           ),
