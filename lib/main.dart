@@ -5,7 +5,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:mealty/common/styles.dart';
 
 import 'package:firebase_core/firebase_core.dart';
-import 'package:mealty/provider/add_food_provider.dart';
+import 'package:mealty/provider/manage_food_provider.dart';
 import 'package:mealty/provider/cart_provider.dart';
 import 'package:mealty/provider/food_provider.dart';
 import 'package:mealty/provider/order_provider.dart';
@@ -29,7 +29,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => AuthProvider()),
         ChangeNotifierProvider(create: (context) => FoodProvider()),
-        ChangeNotifierProvider(create: (context) => AddFoodProvider()),
+        ChangeNotifierProvider(create: (context) => ManageFoodProvider()),
         ChangeNotifierProvider(create: (context) => CartProvider()),
         ChangeNotifierProvider(create: (context) => OrderProvider()),
         ChangeNotifierProvider(create: (context) => ProfileProvider())

@@ -9,15 +9,18 @@ import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../common/post_state.dart';
+import '../services/firestore_services.dart';
 
-class AddFoodProvider with ChangeNotifier {
+class ManageFoodProvider with ChangeNotifier {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController priceController =
       TextEditingController(text: '0');
   final TextEditingController stockController = TextEditingController();
   final TextEditingController saleTimeController = TextEditingController();
+  final FirestoreService _firestoreService = FirestoreService();
 
+  Map<String, dynamic>? _originalData;
   String _selectedFoodCategory = '';
   String _selectedSellingType = '';
   DateTime? _saleTime;
@@ -216,9 +219,77 @@ class AddFoodProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> updateFoodPost(String postId) async {
+    if (nameController.text.isEmpty ||
+        descriptionController.text.isEmpty ||
+        _selectedFoodCategory.isEmpty ||
+        _selectedSellingType.isEmpty ||
+        _saleTime == null ||
+        _latitude == null ||
+        _longitude == null) {
+      _postState = PostState.error('Pastikan semua Field(s) telah terisi.');
+      notifyListeners();
+      return;
+    }
+
+    _postState = PostState.loading();
+    notifyListeners();
+
+    try {
+      // Check for changes
+      Map<String, dynamic> updatedData = {
+        'category': _selectedFoodCategory,
+        'description': descriptionController.text,
+        'location': GeoPoint(_latitude!, _longitude!),
+        'name': nameController.text,
+        'price': int.parse(priceController.text),
+        'stock': int.parse(stockController.text),
+        'saleTime': Timestamp.fromDate(_saleTime!),
+        'sellingType': _selectedSellingType,
+      };
+
+      bool hasChanged = false;
+
+      updatedData.forEach((key, value) {
+        if (_originalData![key] != value) {
+          hasChanged = true;
+        }
+      });
+
+      String? downloadUrl;
+      if (_imageFile != null) {
+        String formattedDate = DateFormat('yyyyMMddHHmmss').format(DateTime.now());
+        String fileName = 'foods-$formattedDate';
+        Reference storageRef = FirebaseStorage.instance.ref().child('foods').child(fileName);
+        UploadTask uploadTask = storageRef.putFile(_imageFile!);
+        TaskSnapshot storageSnapshot = await uploadTask.whenComplete(() => {});
+        downloadUrl = await storageSnapshot.ref.getDownloadURL();
+        if (_originalData!['image'] != downloadUrl) {
+          updatedData['image'] = downloadUrl;
+          hasChanged = true;
+        }
+      }
+
+      if (!hasChanged) {
+        _postState = PostState.error('Tidak ada Perubahan');
+        notifyListeners();
+        return;
+      }
+
+      await _firestoreService.updateFoodPost(postId, updatedData);
+
+      _postState = PostState.success();
+    } catch (e) {
+      _postState = PostState.error(e.toString());
+    }
+
+    notifyListeners();
+  }
+
   void initializeData({Map<String, dynamic>? foodData}) {
     setLoading(true);
     if (foodData != null) {
+      _originalData = Map<String, dynamic>.from(foodData);
       nameController.text = foodData['name'];
       descriptionController.text = foodData['description'];
       priceController.text = foodData['price'].toString();
@@ -232,6 +303,7 @@ class AddFoodProvider with ChangeNotifier {
       // Handle setting the image if necessary
     } else {
       // Reset to initial state if no foodData provided
+      _originalData = null;
       nameController.clear();
       descriptionController.clear();
       priceController.text = '0';
@@ -246,9 +318,5 @@ class AddFoodProvider with ChangeNotifier {
       _postState = PostState.initial();
     }
     setLoading(false);
-  }
-
-  Future<void> updateFoodPost(String postId) async {
-    // Implement update logic here
   }
 }

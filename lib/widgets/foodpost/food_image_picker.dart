@@ -5,12 +5,13 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:provider/provider.dart';
 
 import '../../common/post_state.dart';
-import '../../provider/add_food_provider.dart';
+import '../../provider/manage_food_provider.dart';
 import '../common/custom_loading_indicator.dart';
 import '../common/custom_snackbar.dart';
 
 class FoodImagePicker extends StatelessWidget {
   final File? imageFile;
+  final String? imageUrl;
   final VoidCallback onImageRemove;
   final VoidCallback onPickImageFromGallery;
   final VoidCallback onCaptureImageWithCamera;
@@ -18,6 +19,7 @@ class FoodImagePicker extends StatelessWidget {
   const FoodImagePicker({
     super.key,
     required this.imageFile,
+    this.imageUrl,
     required this.onImageRemove,
     required this.onPickImageFromGallery,
     required this.onCaptureImageWithCamera,
@@ -28,13 +30,13 @@ class FoodImagePicker extends StatelessWidget {
     Color primary = Theme.of(context).colorScheme.primary;
     Color onPrimary = Theme.of(context).colorScheme.onPrimary;
 
-    return Consumer<AddFoodProvider>(
-      builder: (context, addFoodProvider, child) {
+    return Consumer<ManageFoodProvider>(
+      builder: (context, manageFoodProvider, child) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (addFoodProvider.postState.status == PostStatus.errorCompress) {
+          if (manageFoodProvider.postState.status == PostStatus.errorCompress) {
             ScaffoldMessenger.of(context).showSnackBar(
               CustomSnackBar(
-                contentText: addFoodProvider.postState.errorMessage,
+                contentText: manageFoodProvider.postState.errorMessage,
                 context: context,
               ),
             );
@@ -51,24 +53,31 @@ class FoodImagePicker extends StatelessWidget {
                     height: 280,
                     width: double.infinity,
                     color: Colors.grey[200],
-                    child: addFoodProvider.postState.status ==
-                            PostStatus.loadingCompress
+                    child: manageFoodProvider.postState.status ==
+                        PostStatus.loadingCompress
                         ? Center(
-                            child: CustomProgressIndicator(
-                                color: primary, size: 24.0, strokeWidth: 2.0))
-                        : imageFile == null
-                            ? const Center(
-                                child: Text('Belum ada Gambar yang dipilih.'))
-                            : Image.file(
-                                imageFile!,
-                                height: 280,
-                                width: double.infinity,
-                                fit: BoxFit.cover,
-                              ),
+                        child: CustomProgressIndicator(
+                            color: primary, size: 24.0, strokeWidth: 2.0))
+                        : imageFile != null
+                        ? Image.file(
+                      imageFile!,
+                      height: 280,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    )
+                        : imageUrl != null
+                        ? Image.network(
+                      imageUrl!,
+                      height: 280,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    )
+                        : const Center(
+                        child: Text('Belum ada Gambar yang dipilih.')),
                   ),
                 ),
-                if (imageFile != null &&
-                    addFoodProvider.postState.status !=
+                if ((imageFile != null) &&
+                    manageFoodProvider.postState.status !=
                         PostStatus.loadingCompress)
                   Positioned(
                     top: 10,
@@ -116,9 +125,9 @@ class FoodImagePicker extends StatelessWidget {
                                 .textTheme
                                 .bodyMedium
                                 ?.copyWith(
-                                  color: onPrimary,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              color: onPrimary,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ],
                       ),
@@ -150,9 +159,9 @@ class FoodImagePicker extends StatelessWidget {
                                 .textTheme
                                 .bodyMedium
                                 ?.copyWith(
-                                  color: primary,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              color: primary,
+                              fontWeight: FontWeight.bold,
+                            ),
                           )
                         ],
                       ),

@@ -60,7 +60,7 @@ class _PriceInputState extends State<PriceInput> {
           children: [
             Container(
               width: 45.0,
-              height: 38.0,
+              height: 39.0,
               padding:
                   const EdgeInsets.symmetric(horizontal: 11.0, vertical: 8.0),
               decoration: BoxDecoration(

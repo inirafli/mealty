@@ -52,7 +52,7 @@ class _FoodLocationPickerState extends State<FoodLocationPicker> {
                 fontWeight: FontWeight.bold,
               ),
         ),
-        const SizedBox(height: 8.0),
+        const SizedBox(height: 12.0),
         if (widget.latitude != null && widget.longitude != null)
           FutureBuilder<Map<String, String>>(
             future: _getAddress(widget.latitude!, widget.longitude!),
@@ -71,51 +71,55 @@ class _FoodLocationPickerState extends State<FoodLocationPicker> {
               } else if (snapshot.hasData) {
                 return Column(
                   children: [
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 18.0, vertical: 14.0),
-                      decoration: BoxDecoration(
-                        color: secondary,
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            snapshot.data!['street']!,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  color: onBackground,
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                          ),
-                          const SizedBox(height: 1.5),
-                          Text(
-                            snapshot.data!['locality']!,
-                            style:
-                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          MdiIcons.mapMarkerRadiusOutline,
+                          size: 20.0,
+                          color: onBackground,
+                        ),
+                        const SizedBox(width: 12.0),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                snapshot.data!['street']!,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
                                       color: onBackground,
-                                      fontSize: 13.0,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold,
                                     ),
+                              ),
+                              const SizedBox(height: 1.5),
+                              Text(
+                                snapshot.data!['locality']!,
+                                style:
+                                    Theme.of(context).textTheme.bodySmall?.copyWith(
+                                          color: onBackground,
+                                          fontSize: 13.0,
+                                        ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 8.0),
+                    const SizedBox(height: 20.0),
                   ],
                 );
               }
-              return Container();
+              return const SizedBox(height: 16.0);
             },
           ),
         GestureDetector(
           onTap: () async {
             final result = await context
-                .push<Map<String, double>>('/main/addFood/locationPicker');
+                .push<Map<String, double>>('/main/manageFood/locationPicker');
             if (result != null) {
               widget.onLocationPicked(result);
               setState(() {});

@@ -43,7 +43,7 @@ class ProfileFoodScreen extends StatelessWidget {
               children: [
                 const Padding(
                   padding:
-                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+                      EdgeInsets.only(left: 20.0, right: 20.0, top: 16.0, bottom: 8.0),
                   child: FoodFilterWidget(),
                 ),
                 Expanded(
@@ -102,7 +102,7 @@ class ProfileFoodScreen extends StatelessWidget {
                                     child: Image.network(
                                       foodPost.image,
                                       width: 120,
-                                      height: 144,
+                                      height: 146,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -191,7 +191,7 @@ class ProfileFoodScreen extends StatelessWidget {
                                             ),
                                           ],
                                         ),
-                                        const SizedBox(height: 12.0),
+                                        const SizedBox(height: 16.0),
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.end,

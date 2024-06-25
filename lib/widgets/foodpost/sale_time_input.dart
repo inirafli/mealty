@@ -20,17 +20,19 @@ class SaleTimeInput extends StatefulWidget {
 
 class _SaleTimeInputState extends State<SaleTimeInput> {
   Future<void> _selectDateTime(BuildContext context) async {
-    DateTime initialDate = widget.initialDateTime ?? DateTime.now();
+    DateTime now = DateTime.now();
+    DateTime initialDate = widget.initialDateTime ?? now;
+    DateTime firstDate = initialDate.isBefore(now) ? initialDate : now;
     TimeOfDay initialTime = widget.initialDateTime != null
         ? TimeOfDay(
-            hour: widget.initialDateTime!.hour,
-            minute: widget.initialDateTime!.minute)
+        hour: widget.initialDateTime!.hour,
+        minute: widget.initialDateTime!.minute)
         : TimeOfDay.now();
 
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: initialDate,
-      firstDate: DateTime.now(),
+      firstDate: firstDate,
       lastDate: DateTime(2101),
       builder: (context, child) {
         return Theme(
@@ -78,7 +80,7 @@ class _SaleTimeInputState extends State<SaleTimeInput> {
         );
 
         widget.controller.text =
-            "${DateFormat.yMMMMd('en_US').add_jms().format(finalDateTime)} UTC+7";
+        "${DateFormat.yMMMMd('en_US').add_jms().format(finalDateTime)} UTC+7";
         widget.onSelectDateTime(finalDateTime);
       }
     }
@@ -95,9 +97,9 @@ class _SaleTimeInputState extends State<SaleTimeInput> {
         Text(
           'Diunggah Sampai',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: primary,
-                fontWeight: FontWeight.bold,
-              ),
+            color: primary,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         const SizedBox(height: 8.0),
         GestureDetector(
@@ -106,9 +108,9 @@ class _SaleTimeInputState extends State<SaleTimeInput> {
             children: [
               Container(
                 width: 45.0,
-                height: 38.0,
+                height: 39.0,
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
+                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
                 decoration: BoxDecoration(
                   color: primary,
                   border: Border(
@@ -151,9 +153,9 @@ class _SaleTimeInputState extends State<SaleTimeInput> {
                       ),
                     ),
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: primary,
-                          fontWeight: FontWeight.w600,
-                        ),
+                      color: primary,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),

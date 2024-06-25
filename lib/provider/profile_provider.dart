@@ -75,6 +75,10 @@ class ProfileProvider with ChangeNotifier {
     }
   }
 
+  Future<void> refreshUserFoodPosts() async {
+    await _fetchUserProfile();
+  }
+
   void _clearProfile() {
     _profile = null;
     _userFoodPosts = [];

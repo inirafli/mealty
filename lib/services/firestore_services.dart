@@ -26,6 +26,14 @@ class FirestoreService {
     }
   }
 
+  Future<void> updateFoodPost(String postId, Map<String, dynamic> updatedData) async {
+    try {
+      await _db.collection('foods').doc(postId).update(updatedData);
+    } catch (e) {
+      throw Exception('Failed to update food post: $e');
+    }
+  }
+
   Future<User> getUser(String userId) async {
     try {
       DocumentSnapshot doc = await _db.collection('users').doc(userId).get();

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mealty/provider/add_food_provider.dart';
+import 'package:mealty/provider/manage_food_provider.dart';
+import 'package:mealty/provider/profile_provider.dart';
 import 'package:mealty/widgets/foodpost/food_image_picker.dart';
 
 import 'package:provider/provider.dart';
@@ -33,7 +34,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<AddFoodProvider>(context, listen: false)
+      Provider.of<ManageFoodProvider>(context, listen: false)
           .initializeData(foodData: widget.foodData);
     });
   }
@@ -56,9 +57,9 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
             child: SingleChildScrollView(
               child: SafeArea(
                 top: false,
-                child: Consumer<AddFoodProvider>(
-                  builder: (context, addFoodProvider, child) {
-                    if (addFoodProvider.isLoading) {
+                child: Consumer<ManageFoodProvider>(
+                  builder: (context, manageFoodProvider, child) {
+                    if (manageFoodProvider.isLoading) {
                       return Center(
                         child: CustomProgressIndicator(
                           color: Theme.of(context).colorScheme.primary,
@@ -75,19 +76,19 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 24.0, vertical: 16.0),
                           child: FoodImagePicker(
-                            imageFile: addFoodProvider.imageFile,
-                            onImageRemove: addFoodProvider.removeImage,
+                            imageFile: manageFoodProvider.imageFile,
+                            imageUrl: widget.foodData?['image'],
+                            onImageRemove: manageFoodProvider.removeImage,
                             onPickImageFromGallery:
-                                addFoodProvider.pickImageFromGallery,
+                                manageFoodProvider.pickImageFromGallery,
                             onCaptureImageWithCamera:
-                                addFoodProvider.captureImageWithCamera,
+                                manageFoodProvider.captureImageWithCamera,
                           ),
                         ),
                         Container(
                           width: double.infinity,
                           color: Colors.grey[200],
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20.0, vertical: 16.0),
+                          padding: const EdgeInsets.all(16.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -104,16 +105,16 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                                     const SizedBox(height: 6.0),
                                     FoodTextFields(
                                       nameController:
-                                          addFoodProvider.nameController,
+                                          manageFoodProvider.nameController,
                                       descriptionController:
-                                          addFoodProvider.descriptionController,
+                                          manageFoodProvider.descriptionController,
                                     ),
                                     const SizedBox(height: 24.0),
                                     FoodTypeSelector(
                                       selectedType:
-                                          addFoodProvider.selectedFoodCategory,
+                                          manageFoodProvider.selectedFoodCategory,
                                       onSelectType:
-                                          addFoodProvider.selectFoodCategory,
+                                          manageFoodProvider.selectFoodCategory,
                                     ),
                                     const SizedBox(height: 8.0),
                                   ],
@@ -133,9 +134,9 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                                     const SizedBox(height: 6.0),
                                     SellingTypeSelector(
                                       selectedType:
-                                          addFoodProvider.selectedSellingType,
+                                          manageFoodProvider.selectedSellingType,
                                       onSelectType:
-                                          addFoodProvider.selectSellingType,
+                                          manageFoodProvider.selectSellingType,
                                     ),
                                     const SizedBox(height: 24.0),
                                     Row(
@@ -143,8 +144,8 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                                         Expanded(
                                           child: PriceInput(
                                             controller:
-                                                addFoodProvider.priceController,
-                                            isEditable: addFoodProvider
+                                                manageFoodProvider.priceController,
+                                            isEditable: manageFoodProvider
                                                     .selectedSellingType ==
                                                 'commercial',
                                           ),
@@ -153,7 +154,7 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                                         Expanded(
                                           child: StockInput(
                                             controller:
-                                                addFoodProvider.stockController,
+                                                manageFoodProvider.stockController,
                                           ),
                                         ),
                                       ],
@@ -161,10 +162,10 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                                     const SizedBox(height: 24.0),
                                     SaleTimeInput(
                                       controller:
-                                          addFoodProvider.saleTimeController,
+                                          manageFoodProvider.saleTimeController,
                                       onSelectDateTime:
-                                          addFoodProvider.selectSaleTime,
-                                      initialDateTime: addFoodProvider.saleTime,
+                                          manageFoodProvider.selectSaleTime,
+                                      initialDateTime: manageFoodProvider.saleTime,
                                     ),
                                     const SizedBox(height: 8.0),
                                   ],
@@ -182,10 +183,10 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                                   padding: const EdgeInsets.only(
                                       top: 4.0, bottom: 8.0),
                                   child: FoodLocationPicker(
-                                    latitude: addFoodProvider.latitude,
-                                    longitude: addFoodProvider.longitude,
+                                    latitude: manageFoodProvider.latitude,
+                                    longitude: manageFoodProvider.longitude,
                                     onLocationPicked:
-                                        addFoodProvider.setLocation,
+                                        manageFoodProvider.setLocation,
                                   ),
                                 ),
                               ),
@@ -213,33 +214,35 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 22.0, vertical: 16.0),
         child: SizedBox(
           width: double.infinity,
-          child: Consumer2<AddFoodProvider, FoodProvider>(
-            builder: (context, addFoodProvider, foodProvider, child) {
+          child: Consumer2<ManageFoodProvider, FoodProvider>(
+            builder: (context, manageFoodProvider, foodProvider, child) {
               return ElevatedButton(
                 onPressed:
-                    addFoodProvider.postState.status == PostStatus.loading
+                    manageFoodProvider.postState.status == PostStatus.loading
                         ? null
                         : () async {
                             if (widget.isEdit) {
-                              await addFoodProvider
+                              await manageFoodProvider
                                   .updateFoodPost(widget.foodData!['id']);
                             } else {
-                              await addFoodProvider.addFoodPost();
+                              await manageFoodProvider.addFoodPost();
                             }
 
                             if (!context.mounted) return;
 
-                            if (addFoodProvider.postState.status ==
+                            if (manageFoodProvider.postState.status ==
                                 PostStatus.error) {
                               ScaffoldMessenger.of(context)
                                 ..hideCurrentSnackBar()
                                 ..showSnackBar(CustomSnackBar(
                                   contentText:
-                                      addFoodProvider.postState.errorMessage,
+                                      manageFoodProvider.postState.errorMessage,
                                   context: context,
                                 ));
-                            } else if (addFoodProvider.postState.status ==
+                            } else if (manageFoodProvider.postState.status ==
                                 PostStatus.success) {
+                              Provider.of<ProfileProvider>(context, listen: false)
+                                  .refreshUserFoodPosts();
                               ScaffoldMessenger.of(context)
                                 ..hideCurrentSnackBar()
                                 ..showSnackBar(CustomSnackBar(
@@ -250,13 +253,13 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                                 ));
 
                               if (context.mounted) {
-                                context.go('/main');
+                                context.pop();
                               }
 
                               await foodProvider.fetchPosts();
                             }
                           },
-                child: addFoodProvider.postState.status == PostStatus.loading
+                child: manageFoodProvider.postState.status == PostStatus.loading
                     ? CustomProgressIndicator(
                         color: Theme.of(context).colorScheme.onPrimary,
                         size: 16.0,
