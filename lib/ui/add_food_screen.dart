@@ -18,8 +18,25 @@ import '../widgets/foodpost/food_type_selector.dart';
 import '../widgets/foodpost/sale_time_input.dart';
 import '../widgets/foodpost/selling_type_selector.dart';
 
-class AddFoodScreen extends StatelessWidget {
-  const AddFoodScreen({super.key});
+class AddFoodScreen extends StatefulWidget {
+  final bool isEdit;
+  final Map<String, dynamic>? foodData;
+
+  const AddFoodScreen({super.key, this.isEdit = false, this.foodData});
+
+  @override
+  State<AddFoodScreen> createState() => _AddFoodScreenState();
+}
+
+class _AddFoodScreenState extends State<AddFoodScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<AddFoodProvider>(context, listen: false)
+          .initializeData(foodData: widget.foodData);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +58,16 @@ class AddFoodScreen extends StatelessWidget {
                 top: false,
                 child: Consumer<AddFoodProvider>(
                   builder: (context, addFoodProvider, child) {
+                    if (addFoodProvider.isLoading) {
+                      return Center(
+                        child: CustomProgressIndicator(
+                          color: Theme.of(context).colorScheme.primary,
+                          strokeWidth: 2.0,
+                          size: 24.0,
+                        ),
+                      );
+                    }
+
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -126,7 +153,7 @@ class AddFoodScreen extends StatelessWidget {
                                         Expanded(
                                           child: StockInput(
                                             controller:
-                                            addFoodProvider.stockController,
+                                                addFoodProvider.stockController,
                                           ),
                                         ),
                                       ],
@@ -172,12 +199,12 @@ class AddFoodScreen extends StatelessWidget {
               ),
             ),
           ),
-          const Positioned(
+          Positioned(
             top: 0,
             left: 0,
             right: 0,
             child: SubScreenHeader(
-              title: 'Tambah Makanan',
+              title: widget.isEdit ? 'Ubah Makanan' : 'Tambah Makanan',
             ),
           ),
         ],
@@ -193,7 +220,12 @@ class AddFoodScreen extends StatelessWidget {
                     addFoodProvider.postState.status == PostStatus.loading
                         ? null
                         : () async {
-                            await addFoodProvider.addFoodPost();
+                            if (widget.isEdit) {
+                              await addFoodProvider
+                                  .updateFoodPost(widget.foodData!['id']);
+                            } else {
+                              await addFoodProvider.addFoodPost();
+                            }
 
                             if (!context.mounted) return;
 
@@ -211,8 +243,9 @@ class AddFoodScreen extends StatelessWidget {
                               ScaffoldMessenger.of(context)
                                 ..hideCurrentSnackBar()
                                 ..showSnackBar(CustomSnackBar(
-                                  contentText:
-                                      'Berhasil menambahkan unggahan Makanan.',
+                                  contentText: widget.isEdit
+                                      ? 'Berhasil mengubah unggahan Makanan.'
+                                      : 'Berhasil menambahkan unggahan Makanan.',
                                   context: context,
                                 ));
 
@@ -230,7 +263,7 @@ class AddFoodScreen extends StatelessWidget {
                         strokeWidth: 2,
                       )
                     : Text(
-                        'Unggah Makanan',
+                        widget.isEdit ? 'Ubah Makanan' : 'Unggah Makanan',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                               color: Theme.of(context).colorScheme.onPrimary,

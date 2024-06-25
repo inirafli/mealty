@@ -94,7 +94,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 color: Theme.of(context).colorScheme.primary,
               ),
               onPressed: () {
-                context.go('/main/addFood');
+                context.go('/main/manageFood', extra: {'isEdit': false});
               },
             ),
           ),

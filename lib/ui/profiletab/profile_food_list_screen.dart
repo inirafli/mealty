@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/profile_provider.dart';
@@ -16,6 +17,7 @@ class ProfileFoodScreen extends StatelessWidget {
     Color primary = Theme.of(context).colorScheme.primary;
     Color onPrimary = Theme.of(context).colorScheme.onPrimary;
     Color onBackground = Theme.of(context).colorScheme.onBackground;
+    Color secondary = Theme.of(context).colorScheme.secondary;
 
     return Scaffold(
       backgroundColor: Colors.grey[200],
@@ -40,7 +42,8 @@ class ProfileFoodScreen extends StatelessWidget {
             child: Column(
               children: [
                 const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
                   child: FoodFilterWidget(),
                 ),
                 Expanded(
@@ -60,9 +63,12 @@ class ProfileFoodScreen extends StatelessWidget {
                         return Center(
                           child: Text(
                             'Belum ada Makanan',
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: onBackground,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color: onBackground,
+                                ),
                           ),
                         );
                       }
@@ -71,10 +77,10 @@ class ProfileFoodScreen extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         itemCount: profileProvider.filteredUserFoodPosts.length,
                         itemBuilder: (context, index) {
-                          final foodPost = profileProvider.filteredUserFoodPosts[index];
+                          final foodPost =
+                              profileProvider.filteredUserFoodPosts[index];
                           return Container(
                             margin: const EdgeInsets.symmetric(
-                              horizontal: 16.0,
                               vertical: 8.0,
                             ),
                             decoration: BoxDecoration(
@@ -95,19 +101,19 @@ class ProfileFoodScreen extends StatelessWidget {
                                     ),
                                     child: Image.network(
                                       foodPost.image,
-                                      width: 100,
-                                      height: 120,
+                                      width: 120,
+                                      height: 144,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
                                 ),
-                                const SizedBox(width: 8.0),
                                 Expanded(
                                   child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 8.0, horizontal: 16.0),
                                     child: Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           foodPost.name,
@@ -115,72 +121,129 @@ class ProfileFoodScreen extends StatelessWidget {
                                               .textTheme
                                               .bodyLarge
                                               ?.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                            color: primary,
-                                          ),
+                                                fontWeight: FontWeight.bold,
+                                                color: primary,
+                                              ),
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                         const SizedBox(height: 0.5),
-                                        Text(
-                                          formatPrice(foodPost.price),
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium
-                                              ?.copyWith(
-                                            color: onBackground,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 2.0),
-                                        Text(
-                                          'Stock: ${foodPost.stock}',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall
-                                              ?.copyWith(
-                                            color: onBackground,
-                                          ),
-                                        ),
-                                        Text(
-                                          'Sale Time: ${foodPost.saleTime}',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall
-                                              ?.copyWith(
-                                            color: onBackground,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4.0),
                                         Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.end,
+                                              MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
                                           children: [
-                                            TextButton(
-                                              onPressed: () {
-                                                // Handle Hapus Makanan
-                                              },
-                                              child: Text(
-                                                'Hapus',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium
-                                                    ?.copyWith(
-                                                  color: Colors.red,
+                                            Text(
+                                              formatPrice(foodPost.price),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium
+                                                  ?.copyWith(
+                                                    color: onBackground,
+                                                  ),
+                                            ),
+                                            const SizedBox(width: 4.0),
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  MdiIcons.packageVariant,
+                                                  color: primary,
+                                                  size: 17.0,
+                                                ),
+                                                const SizedBox(width: 6.0),
+                                                Text(
+                                                  foodPost.stock.toString(),
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyMedium
+                                                      ?.copyWith(
+                                                        color: onBackground,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 2.0),
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              MdiIcons.clockTimeThreeOutline,
+                                              color: primary,
+                                              size: 17.0,
+                                            ),
+                                            const SizedBox(width: 6.0),
+                                            Text(
+                                              formatDate(foodPost.saleTime),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium
+                                                  ?.copyWith(
+                                                    color: onBackground,
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 12.0),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                elevation: 0.0,
+                                                backgroundColor: secondary,
+                                                minimumSize:
+                                                    const Size(46.0, 40.0),
+                                                padding: EdgeInsets.zero,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(50),
                                                 ),
                                               ),
-                                            ),
-                                            TextButton(
                                               onPressed: () {
-                                                // Handle Ubah Makanan
+                                                // TODO: Implement delete Post.
                                               },
-                                              child: Text(
-                                                'Ubah',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium
-                                                    ?.copyWith(
-                                                  color: primary,
+                                              child: Icon(
+                                                MdiIcons.deleteOutline,
+                                                color: onBackground,
+                                                size: 20.0,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 10.0),
+                                            ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                elevation: 0.0,
+                                                backgroundColor: onBackground,
+                                                minimumSize:
+                                                    const Size(46.0, 40.0),
+                                                padding: EdgeInsets.zero,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(50),
                                                 ),
+                                              ),
+                                              onPressed: () {
+                                                // TODO: Implement update Post
+                                                context.push(
+                                                  '/main/manageFood',
+                                                  extra: {
+                                                    'isEdit': true,
+                                                    'foodData': foodPost.toMap(),
+                                                  },
+                                                );
+                                              },
+                                              child: Icon(
+                                                MdiIcons.storefrontEditOutline,
+                                                color: secondary,
+                                                size: 20.0,
                                               ),
                                             ),
                                           ],

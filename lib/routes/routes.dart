@@ -19,7 +19,7 @@ class AppRouter {
       routes: <GoRoute>[
         GoRoute(
           path: '/',
-          builder: (context, state) => const ProfileScreen(),
+          builder: (context, state) => const SplashScreen(),
         ),
         GoRoute(
           path: '/login',
@@ -51,10 +51,14 @@ class AppRouter {
           },
           routes: [
             GoRoute(
-              path: 'addFood',
+              path: 'manageFood',
               pageBuilder: (context, state) {
+                final Map<String, dynamic>? extra = state.extra as Map<String, dynamic>?;
+                final bool isEdit = extra?['isEdit'] ?? false;
+                final Map<String, dynamic>? foodData = extra?['foodData'];
+
                 return createSlideFromBottomTransitionPage(
-                  page: const AddFoodScreen(),
+                  page: AddFoodScreen(isEdit: isEdit, foodData: foodData),
                   key: state.pageKey,
                 );
               },

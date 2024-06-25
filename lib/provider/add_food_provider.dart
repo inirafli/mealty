@@ -25,6 +25,7 @@ class AddFoodProvider with ChangeNotifier {
   double? _longitude;
   File? _imageFile;
   PostState _postState = PostState.initial();
+  bool _isLoading = false;
 
   String get selectedFoodCategory => _selectedFoodCategory;
 
@@ -39,6 +40,13 @@ class AddFoodProvider with ChangeNotifier {
   File? get imageFile => _imageFile;
 
   PostState get postState => _postState;
+
+  bool get isLoading => _isLoading;
+
+  void setLoading(bool loading) {
+    _isLoading = loading;
+    notifyListeners();
+  }
 
   void selectFoodCategory(String category) {
     _selectedFoodCategory = category;
@@ -206,5 +214,41 @@ class AddFoodProvider with ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  void initializeData({Map<String, dynamic>? foodData}) {
+    setLoading(true);
+    if (foodData != null) {
+      nameController.text = foodData['name'];
+      descriptionController.text = foodData['description'];
+      priceController.text = foodData['price'].toString();
+      stockController.text = foodData['stock'].toString();
+      saleTimeController.text = DateFormat.yMMMMd('en_US').add_jms().format((foodData['saleTime'] as Timestamp).toDate());
+      _selectedFoodCategory = foodData['category'];
+      _selectedSellingType = foodData['sellingType'];
+      _saleTime = (foodData['saleTime'] as Timestamp).toDate();
+      _latitude = foodData['location'].latitude;
+      _longitude = foodData['location'].longitude;
+      // Handle setting the image if necessary
+    } else {
+      // Reset to initial state if no foodData provided
+      nameController.clear();
+      descriptionController.clear();
+      priceController.text = '0';
+      stockController.clear();
+      saleTimeController.clear();
+      _selectedFoodCategory = '';
+      _selectedSellingType = '';
+      _saleTime = null;
+      _latitude = null;
+      _longitude = null;
+      _imageFile = null;
+      _postState = PostState.initial();
+    }
+    setLoading(false);
+  }
+
+  Future<void> updateFoodPost(String postId) async {
+    // Implement update logic here
   }
 }

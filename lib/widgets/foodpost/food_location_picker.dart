@@ -3,6 +3,8 @@ import 'package:geocoding/geocoding.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+import '../common/custom_loading_indicator.dart';
+
 class FoodLocationPicker extends StatefulWidget {
   final double? latitude;
   final double? longitude;
@@ -20,43 +22,17 @@ class FoodLocationPicker extends StatefulWidget {
 }
 
 class _FoodLocationPickerState extends State<FoodLocationPicker> {
-  String? _street;
-  String? _locality;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.latitude != null && widget.longitude != null) {
-      _getAddressFromLatLng(widget.latitude!, widget.longitude!);
-    }
-  }
-
-  Future<void> _navigateToLocationPicker() async {
-    final result =
-        await context.push<Map<String, double>>('/main/addFood/locationPicker');
-    if (result != null) {
-      widget.onLocationPicked(result);
-      _getAddressFromLatLng(result['latitude']!, result['longitude']!);
-    }
-  }
-
-  Future<void> _getAddressFromLatLng(double latitude, double longitude) async {
-    try {
-      List<Placemark> placemarks =
-          await placemarkFromCoordinates(latitude, longitude);
-      Placemark place = placemarks[0];
-      setState(() {
-        _street = place.street;
-        _locality =
-            "${place.name}, ${place.locality}, ${place.subLocality}, ${place.subAdministrativeArea}, "
-                "${place.postalCode}, ${place.administrativeArea}, ${place.country}.";
-      });
-    } catch (e) {
-      setState(() {
-        _street = "Tidak bisa menampilkan Alamat";
-        _locality = "";
-      });
-    }
+  Future<Map<String, String>> _getAddress(
+      double latitude, double longitude) async {
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(latitude, longitude);
+    Placemark place = placemarks[0];
+    return {
+      'street': place.street ?? "Unknown street",
+      'locality':
+          "${place.name}, ${place.locality}, ${place.subLocality}, ${place.subAdministrativeArea}, "
+              "${place.postalCode}, ${place.administrativeArea}, ${place.country}.",
+    };
   }
 
   @override
@@ -77,41 +53,74 @@ class _FoodLocationPickerState extends State<FoodLocationPicker> {
               ),
         ),
         const SizedBox(height: 8.0),
-        if (_street != null) ...[
-          Container(
-            width: double.infinity,
-            padding:
-                const EdgeInsets.symmetric(horizontal: 18.0, vertical: 14.0),
-            decoration: BoxDecoration(
-              color: secondary,
-              borderRadius: BorderRadius.circular(12.0),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  _street!,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: onBackground,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
+        if (widget.latitude != null && widget.longitude != null)
+          FutureBuilder<Map<String, String>>(
+            future: _getAddress(widget.latitude!, widget.longitude!),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: CustomProgressIndicator(
+                    color: Theme.of(context).colorScheme.primary,
+                    strokeWidth: 2.0,
+                    size: 24.0,
+                  ),
+                );
+              } else if (snapshot.hasError) {
+                return const Text('Error fetching location',
+                    style: TextStyle(color: Colors.red));
+              } else if (snapshot.hasData) {
+                return Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 18.0, vertical: 14.0),
+                      decoration: BoxDecoration(
+                        color: secondary,
+                        borderRadius: BorderRadius.circular(12.0),
                       ),
-                ),
-                const SizedBox(height: 1.5),
-                Text(
-                  _locality!,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: onBackground,
-                        fontSize: 13.0,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            snapshot.data!['street']!,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color: onBackground,
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                          const SizedBox(height: 1.5),
+                          Text(
+                            snapshot.data!['locality']!,
+                            style:
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: onBackground,
+                                      fontSize: 13.0,
+                                    ),
+                          ),
+                        ],
                       ),
-                ),
-              ],
-            ),
+                    ),
+                    const SizedBox(height: 8.0),
+                  ],
+                );
+              }
+              return Container();
+            },
           ),
-          const SizedBox(height: 8.0),
-        ],
         GestureDetector(
-          onTap: _navigateToLocationPicker,
+          onTap: () async {
+            final result = await context
+                .push<Map<String, double>>('/main/addFood/locationPicker');
+            if (result != null) {
+              widget.onLocationPicked(result);
+              setState(() {});
+            }
+          },
           child: Container(
             height: 40.0,
             padding:
