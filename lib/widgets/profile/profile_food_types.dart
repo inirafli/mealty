@@ -40,13 +40,13 @@ class ProfileFoodTypes extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const SizedBox(height: 28.0),
+        const SizedBox(height: 32.0),
         Text(
           'Rincian Pencapaian',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: Theme.of(context).colorScheme.primary,
-            fontWeight: FontWeight.bold,
-          ),
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.bold,
+              ),
         ),
         const SizedBox(height: 24.0),
         Row(
@@ -71,7 +71,8 @@ class ProfileFoodTypes extends StatelessWidget {
                           color: secondary,
                           borderRadius: BorderRadius.circular(12.0),
                         ),
-                        child: Icon(iconData, size: iconSize, color: onBackground),
+                        child:
+                            Icon(iconData, size: iconSize, color: onBackground),
                       ),
                       const SizedBox(width: 12.0),
                       Column(
@@ -79,17 +80,21 @@ class ProfileFoodTypes extends StatelessWidget {
                         children: [
                           Text(
                             '${completedFoodTypes[type] ?? 0}',
-                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: onBackground,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style:
+                                Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                      color: onBackground,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                           ),
                           Text(
                             text,
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: onBackground,
-                              height: 1.0,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  color: onBackground,
+                                  height: 1.0,
+                                ),
                           ),
                         ],
                       ),
@@ -116,7 +121,8 @@ class ProfileFoodTypes extends StatelessWidget {
                           color: secondary,
                           borderRadius: BorderRadius.circular(12.0),
                         ),
-                        child: Icon(iconData, size: iconSize, color: onBackground),
+                        child:
+                            Icon(iconData, size: iconSize, color: onBackground),
                       ),
                       const SizedBox(width: 12.0),
                       Column(
@@ -124,17 +130,21 @@ class ProfileFoodTypes extends StatelessWidget {
                         children: [
                           Text(
                             '${completedFoodTypes[type] ?? 0}',
-                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: onBackground,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style:
+                                Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                      color: onBackground,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                           ),
                           Text(
                             text,
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              height: 1.0,
-                              color: onBackground,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  height: 1.0,
+                                  color: onBackground,
+                                ),
                           ),
                         ],
                       ),

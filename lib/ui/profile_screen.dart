@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -15,9 +14,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color primary = Theme.of(context).colorScheme.primary;
-    Color secondary = Theme.of(context).colorScheme.secondary;
     Color onPrimary = Theme.of(context).colorScheme.onPrimary;
-    Color onBackground = Theme.of(context).colorScheme.onBackground;
 
     return Scaffold(
       appBar: PreferredSize(
@@ -30,19 +27,7 @@ class ProfileScreen extends StatelessWidget {
                   color: primary,
                 ),
           ),
-          backgroundColor: Theme.of(context).colorScheme.onPrimary,
-          actions: [
-            IconButton(
-              padding: const EdgeInsets.only(right: 8.0),
-              icon: Icon(Icons.logout_outlined, color: primary, size: 24.0),
-              onPressed: () async {
-                final authProvider =
-                    Provider.of<AuthProvider>(context, listen: false);
-                await authProvider.signOut();
-                if (context.mounted) context.go('/login');
-              },
-            ),
-          ],
+          backgroundColor: onPrimary,
         ),
       ),
       body: Consumer<ProfileProvider>(
@@ -78,7 +63,7 @@ class ProfileScreen extends StatelessWidget {
                           starRating: profile.starRating,
                           countRating: profile.countRating,
                           totalCompletedFoodTypes:
-                          profileProvider.totalCompletedFoodTypes,
+                              profileProvider.totalCompletedFoodTypes,
                         ),
                         ProfileFoodTypes(
                           completedFoodTypes: profile.completedFoodTypes,
@@ -89,10 +74,42 @@ class ProfileScreen extends StatelessWidget {
                   Container(
                     color: Colors.grey[200],
                     width: double.infinity,
-                    height: 240.0,
                     child: Column(
-                      children: const [
-                        Text('Action is Here'),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(height: 12.0),
+                        _buildActionButton(
+                          context,
+                          icon: MdiIcons.accountEditOutline,
+                          text: 'Ubah Profil',
+                          subText: 'Kelola data Profil-mu.',
+                          onTap: () {
+                            // Handle Ubah Profil tap
+                          },
+                        ),
+                        _buildActionButton(
+                          context,
+                          icon: MdiIcons.foodOutline,
+                          text: 'Unggahan Makanan',
+                          subText: 'Kelola semua unggahan Makanan-mu',
+                          onTap: () {
+                            // Handle Lihat Unggahan Makanan tap
+                          },
+                        ),
+                        _buildActionButton(
+                          context,
+                          icon: MdiIcons.logoutVariant,
+                          text: 'Keluar',
+                          subText: 'Keluar dari Sesi Akun-mu',
+                          onTap: () async {
+                            final authProvider = Provider.of<AuthProvider>(
+                                context,
+                                listen: false);
+                            await authProvider.signOut();
+                            if (context.mounted) context.go('/login');
+                          },
+                        ),
+                        const SizedBox(height: 24.0),
                       ],
                     ),
                   ),
@@ -101,6 +118,58 @@ class ProfileScreen extends StatelessWidget {
             );
           }
         },
+      ),
+    );
+  }
+
+  Widget _buildActionButton(BuildContext context,
+      {required IconData icon,
+      required String text,
+      required String subText,
+      required VoidCallback onTap}) {
+    Color primary = Theme.of(context).colorScheme.primary;
+    Color onPrimary = Theme.of(context).colorScheme.onPrimary;
+    Color onBackground = Theme.of(context).colorScheme.onBackground;
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 20.0),
+        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 24.0),
+        decoration: BoxDecoration(
+          color: onPrimary,
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(icon, color: primary, size: 26.0),
+                const SizedBox(width: 20.0),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      text,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: onBackground,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    Text(
+                      subText,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: onBackground, fontSize: 13.0, height: 1.15),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            Icon(Icons.arrow_forward_ios, color: primary, size: 16.0),
+          ],
+        ),
       ),
     );
   }

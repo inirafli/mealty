@@ -75,18 +75,12 @@ class ProfileDetails extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 28.0),
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(vertical: 18.0),
-          decoration: BoxDecoration(
-            border: Border.all(color: onBackground, width: 1.0),
-            borderRadius: BorderRadius.circular(12.0),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Column(
+        const SizedBox(height: 32.0),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Row(
@@ -115,7 +109,16 @@ class ProfileDetails extends StatelessWidget {
                   ),
                 ],
               ),
-              Column(
+            ),
+            SizedBox(
+              height: 20.0,
+              child: VerticalDivider(
+                color: onBackground,
+                thickness: 1.0,
+              ),
+            ),
+            Expanded(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
@@ -133,9 +136,9 @@ class ProfileDetails extends StatelessWidget {
                   ),
                 ],
               ),
-            ],
-          ),
-        ),
+            ),
+          ],
+        )
       ],
     );
   }
