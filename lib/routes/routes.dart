@@ -7,6 +7,7 @@ import 'package:mealty/ui/profiletab/profile_food_list_screen.dart';
 import '../ui/food_detail_screen.dart';
 import '../ui/login_screen.dart';
 import '../ui/profile_screen.dart';
+import '../ui/profiletab/profile_edit_screen.dart';
 import '../ui/register_screen.dart';
 import '../ui/splash_screen.dart';
 import '../utils/custom_page_transitions.dart';
@@ -89,6 +90,15 @@ class AppRouter {
               pageBuilder: (context, state) {
                 return createSlideFromBottomTransitionPage(
                   page: const ProfileFoodScreen(),
+                  key: state.pageKey,
+                );
+              },
+            ),
+            GoRoute(
+              path: 'profileEdit',
+              pageBuilder: (context, state) {
+                return createSlideFromBottomTransitionPage(
+                  page: const ProfileEditScreen(),
                   key: state.pageKey,
                 );
               },

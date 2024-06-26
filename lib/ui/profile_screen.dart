@@ -34,8 +34,8 @@ class ProfileScreen extends StatelessWidget {
         builder: (context, profileProvider, child) {
           if (profileProvider.isLoading) {
             return const Center(child: CircularProgressIndicator());
-          } else if (profileProvider.message != null) {
-            return Center(child: Text(profileProvider.message!));
+          } else if (profileProvider.profile == null) {
+            return const Center(child: Text('User profile not found.'));
           } else {
             final profile = profileProvider.profile!;
 
@@ -85,6 +85,7 @@ class ProfileScreen extends StatelessWidget {
                           subText: 'Kelola data Profil-mu.',
                           onTap: () {
                             // Handle Ubah Profil tap
+                            context.go('/main/profileEdit');
                           },
                         ),
                         _buildActionButton(

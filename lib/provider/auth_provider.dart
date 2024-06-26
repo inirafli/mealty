@@ -6,8 +6,11 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mealty/common/auth_state.dart';
 import 'package:mealty/utils/auth_error_handling.dart';
 
+import '../services/firestore_services.dart';
+
 class AuthProvider extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirestoreService _firestoreService = FirestoreService();
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final Completer<void> _initCompleter = Completer<void>();
@@ -75,7 +78,7 @@ class AuthProvider extends ChangeNotifier {
       _authState = AuthState.loading;
       notifyListeners();
 
-      bool isUsernameTaken = await _isUsernameTaken(displayName);
+      bool isUsernameTaken = await _firestoreService.isUsernameUnique(displayName);
       if (isUsernameTaken) {
         _errorMessage = 'Username telah digunakan. Coba yang lain.';
         _authState = AuthState.error;
@@ -201,13 +204,5 @@ class AuthProvider extends ChangeNotifier {
 
       await userDoc.collection('cart').add({});
     }
-  }
-
-  Future<bool> _isUsernameTaken(String username) async {
-    final result = await _firestore
-        .collection('users')
-        .where('username', isEqualTo: username)
-        .get();
-    return result.docs.isNotEmpty;
   }
 }

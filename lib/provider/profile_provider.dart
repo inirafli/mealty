@@ -1,7 +1,13 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' as user_auth;
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../data/model/food.dart';
 import '../data/model/user.dart' as user_model;
@@ -15,6 +21,13 @@ class ProfileProvider with ChangeNotifier {
   user_model.User? _profile;
   List<Food> _userFoodPosts = [];
   String _foodFilter = 'publishedFoods';
+  File? _profileImageFile;
+
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
+
+  double? _latitude;
+  double? _longitude;
 
   ProfileProvider() {
     _user = FirebaseAuth.instance.currentUser;
@@ -38,6 +51,12 @@ class ProfileProvider with ChangeNotifier {
 
   List<Food> get userFoodPosts => _userFoodPosts;
 
+  File? get profileImageFile => _profileImageFile;
+
+  double? get latitude => _latitude;
+
+  double? get longitude => _longitude;
+
   Future<void> _fetchUserProfile() async {
     _isLoading = true;
     notifyListeners();
@@ -46,11 +65,93 @@ class ProfileProvider with ChangeNotifier {
         _profile = await _firestoreService.getUser(_user!.uid);
         if (_profile != null) {
           await _fetchUserFoodPosts();
+
+          usernameController.text = _profile!.username;
+          phoneNumberController.text = _profile!.phoneNumber;
+          _latitude = _profile!.address.latitude;
+          print('ProfileProvider: latitude $_latitude');
+          _longitude = _profile!.address.longitude;
+          print('ProfileProvider: longitude $_longitude');
         }
       }
     } catch (e) {
       _message = e.toString();
     }
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> pickImageFromGallery() async {
+    if (await requestPermission(Permission.storage)) {
+      final pickedFile = await ImagePicker()
+          .pickImage(source: ImageSource.gallery, imageQuality: 85);
+      if (pickedFile != null) {
+        _profileImageFile = File(pickedFile.path);
+        notifyListeners();
+      }
+    }
+  }
+
+  void setLocation(Map<String, double> location) {
+    _latitude = location['latitude'];
+    _longitude = location['longitude'];
+    notifyListeners();
+  }
+
+  Future<bool> isUsernameUnique(String username) async {
+    return await _firestoreService.isUsernameUnique(username);
+  }
+
+  Future<void> updateProfile() async {
+    _isLoading = true;
+    _message = null;
+    notifyListeners();
+
+    try {
+      if (_user == null) throw 'User not authenticated';
+
+      // Check if username is unique
+      if (usernameController.text != _profile!.username) {
+        bool isUnique = await isUsernameUnique(usernameController.text);
+        if (!isUnique) {
+          throw 'Username is already taken';
+        }
+      }
+
+      // Upload new profile image if picked
+      String? profileImageUrl;
+      if (_profileImageFile != null) {
+        String fileName =
+            'profile-${usernameController.text}-${DateFormat('yyyyMMddHHmmss').format(DateTime.now())}';
+        Reference storageRef =
+            FirebaseStorage.instance.ref().child('profiles').child(fileName);
+        UploadTask uploadTask = storageRef.putFile(_profileImageFile!);
+        TaskSnapshot storageSnapshot = await uploadTask.whenComplete(() => {});
+        profileImageUrl = await storageSnapshot.ref.getDownloadURL();
+
+        // Delete old profile image if exists
+        // if (_profile!.photoUrl != null && _profile!.photoUrl!.isNotEmpty) {
+        //   FirebaseStorage.instance.refFromURL(_profile!.photoUrl!).delete();
+        // }
+      }
+
+      // Update Firestore
+      Map<String, dynamic> updatedData = {
+        'username': usernameController.text,
+        'phoneNumber': phoneNumberController.text,
+        'address': GeoPoint(_latitude ?? 0, _longitude ?? 0),
+      };
+      if (profileImageUrl != null) {
+        updatedData['profileImageUrl'] = profileImageUrl;
+      }
+
+      await _firestoreService.updateUserProfile(_user!.uid, updatedData);
+      _message = 'Profile updated successfully';
+      await _fetchUserProfile();
+    } catch (e) {
+      _message = e.toString();
+    }
+
     _isLoading = false;
     notifyListeners();
   }
@@ -95,7 +196,11 @@ class ProfileProvider with ChangeNotifier {
 
   void _clearProfile() {
     _profile = null;
-    _userFoodPosts = [];
+    usernameController.clear();
+    phoneNumberController.clear();
+    _profileImageFile = null;
+    _latitude = null;
+    _longitude = null;
     notifyListeners();
   }
 
@@ -133,9 +238,18 @@ class ProfileProvider with ChangeNotifier {
             .toList();
       case 'publishedFoods':
       default:
-      return _userFoodPosts
-          .where((food) => food.status == 'published')
-          .toList();
+        return _userFoodPosts
+            .where((food) => food.status == 'published')
+            .toList();
+    }
+  }
+
+  Future<bool> requestPermission(Permission permission) async {
+    if (await permission.isGranted) {
+      return true;
+    } else {
+      final result = await permission.request();
+      return result == PermissionStatus.granted;
     }
   }
 }

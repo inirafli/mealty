@@ -51,6 +51,23 @@ class FirestoreService {
     }
   }
 
+  Future<bool> isUsernameUnique(String username) async {
+    try {
+      QuerySnapshot query = await _db.collection('users').where('username', isEqualTo: username).get();
+      return query.docs.isEmpty;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> updateUserProfile(String userId, Map<String, dynamic> data) async {
+    try {
+      await _db.collection('users').doc(userId).update(data);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<void> addToCart(String userId, CartItem cartItem) async {
     await _db
         .collection('users')
