@@ -15,6 +15,7 @@ class FoodPost {
   final Timestamp publishedDate;
   final Timestamp saleTime;
   final String sellingType;
+  final String status;
   final String userId;
   final User user;
   final double distance;
@@ -32,6 +33,7 @@ class FoodPost {
     required this.publishedDate,
     required this.saleTime,
     required this.sellingType,
+    required this.status,
     required this.userId,
     required this.user,
     required this.distance,
@@ -54,6 +56,7 @@ class FoodPost {
       publishedDate: data['publishedDate'],
       saleTime: data['saleTime'],
       sellingType: data['sellingType'],
+      status: data['status'],
       userId: data['userId'],
       user: user,
       distance: distance,
@@ -77,6 +80,7 @@ class FoodPost {
       'formattedDistance': formattedDistance,
       'user': user.toMap(),
       'sellingType': sellingType,
+      'status': status,
       'userId': userId,
     };
   }
@@ -97,6 +101,7 @@ class FoodPost {
       formattedDistance: map['formattedDistance'],
       user: User.fromMap(map['user']),
       sellingType: map['sellingType'],
+      status: map['status'],
       userId: map['userId'],
     );
   }

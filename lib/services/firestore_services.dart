@@ -34,6 +34,14 @@ class FirestoreService {
     }
   }
 
+  Future<void> updateFoodPostStatus(String foodId, String status) async {
+    try {
+      await _db.collection('foods').doc(foodId).update({'status': status});
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<User> getUser(String userId) async {
     try {
       DocumentSnapshot doc = await _db.collection('users').doc(userId).get();

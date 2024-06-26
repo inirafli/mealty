@@ -203,6 +203,7 @@ class ManageFoodProvider with ChangeNotifier {
         'publishedDate': Timestamp.now(),
         'saleTime': Timestamp.fromDate(_saleTime!),
         'sellingType': _selectedSellingType,
+        'status': 'published',
         'userId': user.uid,
       });
 

@@ -34,8 +34,8 @@ class ProfileScreen extends StatelessWidget {
         builder: (context, profileProvider, child) {
           if (profileProvider.isLoading) {
             return const Center(child: CircularProgressIndicator());
-          } else if (profileProvider.errorMessage != null) {
-            return Center(child: Text(profileProvider.errorMessage!));
+          } else if (profileProvider.message != null) {
+            return Center(child: Text(profileProvider.message!));
           } else {
             final profile = profileProvider.profile!;
 
@@ -131,7 +131,7 @@ class ProfileScreen extends StatelessWidget {
     Color onPrimary = Theme.of(context).colorScheme.onPrimary;
     Color onBackground = Theme.of(context).colorScheme.onBackground;
 
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 20.0),

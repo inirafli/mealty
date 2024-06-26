@@ -12,6 +12,7 @@ class Food {
   final Timestamp publishedDate;
   final Timestamp saleTime;
   final String sellingType;
+  final String status;
   final String userId;
 
   Food({
@@ -26,6 +27,7 @@ class Food {
     required this.publishedDate,
     required this.saleTime,
     required this.sellingType,
+    required this.status,
     required this.userId,
   });
 
@@ -43,6 +45,7 @@ class Food {
       publishedDate: data['publishedDate'],
       saleTime: data['saleTime'],
       sellingType: data['sellingType'],
+      status: data['status'],
       userId: data['userId'],
     );
   }
@@ -61,6 +64,7 @@ class Food {
       'location': location,
       'userId': userId,
       'sellingType': sellingType,
+      'status': status,
     };
   }
 
@@ -78,6 +82,7 @@ class Food {
       location: map['location'],
       userId: map['userId'],
       sellingType: map['sellingType'],
+      status: map['status'],
     );
   }
 }

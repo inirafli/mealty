@@ -14,10 +14,10 @@ class FoodFilterWidget extends StatelessWidget {
     final filter = profileProvider.foodFilter;
 
     final filters = {
-      'all': 'Semua',
+      'publishedFoods': 'Terunggah',
+      'archivedFoods': 'Terarsip',
       'emptyStock': 'Stok Habis',
       'exceededSaleTime': 'Waktu Habis',
-      'sharingType': 'Tipe Berbagi',
     };
 
     return SingleChildScrollView(
@@ -28,7 +28,7 @@ class FoodFilterWidget extends StatelessWidget {
           return GestureDetector(
             onTap: () => profileProvider.setFoodFilter(entry.key),
             child: Container(
-              margin: const EdgeInsets.all(8.0),
+              margin: const EdgeInsets.only(top: 8.0, bottom: 8.0, right: 12.0),
               padding:
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               decoration: BoxDecoration(

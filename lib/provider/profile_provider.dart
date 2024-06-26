@@ -11,10 +11,10 @@ class ProfileProvider with ChangeNotifier {
   final FirestoreService _firestoreService = FirestoreService();
   user_auth.User? _user;
   bool _isLoading = true;
-  String? _errorMessage;
+  String? _message;
   user_model.User? _profile;
   List<Food> _userFoodPosts = [];
-  String _foodFilter = 'all';
+  String _foodFilter = 'publishedFoods';
 
   ProfileProvider() {
     _user = FirebaseAuth.instance.currentUser;
@@ -32,7 +32,7 @@ class ProfileProvider with ChangeNotifier {
 
   bool get isLoading => _isLoading;
 
-  String? get errorMessage => _errorMessage;
+  String? get message => _message;
 
   String get foodFilter => _foodFilter;
 
@@ -49,7 +49,7 @@ class ProfileProvider with ChangeNotifier {
         }
       }
     } catch (e) {
-      _errorMessage = e.toString();
+      _message = e.toString();
     }
     _isLoading = false;
     notifyListeners();
@@ -71,12 +71,26 @@ class ProfileProvider with ChangeNotifier {
       _userFoodPosts.sort((a, b) => b.publishedDate
           .compareTo(a.publishedDate)); // Sort by latest publishedDate
     } catch (e) {
-      _errorMessage = e.toString();
+      _message = e.toString();
     }
   }
 
   Future<void> refreshUserFoodPosts() async {
     await _fetchUserProfile();
+  }
+
+  Future<void> archiveFoodPost(String foodId) async {
+    await _firestoreService.updateFoodPostStatus(foodId, 'archived');
+    _message = 'Makanan telah berhasil diarsip';
+    await _fetchUserFoodPosts();
+    notifyListeners();
+  }
+
+  Future<void> unarchiveFoodPost(String foodId) async {
+    await _firestoreService.updateFoodPostStatus(foodId, 'published');
+    _message = 'Makanan telah berhasil diunggah';
+    await _fetchUserFoodPosts();
+    notifyListeners();
   }
 
   void _clearProfile() {
@@ -95,8 +109,8 @@ class ProfileProvider with ChangeNotifier {
     return 0;
   }
 
-  void clearErrorMessage() {
-    _errorMessage = null;
+  void clearMessage() {
+    _message = null;
     notifyListeners();
   }
 
@@ -113,13 +127,15 @@ class ProfileProvider with ChangeNotifier {
         return _userFoodPosts
             .where((food) => food.saleTime.toDate().isBefore(DateTime.now()))
             .toList();
-      case 'sharingType':
+      case 'archivedFoods':
         return _userFoodPosts
-            .where((food) => food.sellingType == 'sharing')
+            .where((food) => food.status == 'archived')
             .toList();
-      case 'all':
+      case 'publishedFoods':
       default:
-        return _userFoodPosts;
+      return _userFoodPosts
+          .where((food) => food.status == 'published')
+          .toList();
     }
   }
 }

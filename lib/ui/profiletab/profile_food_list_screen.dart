@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../provider/profile_provider.dart';
 import '../../utils/data_conversion.dart';
 import '../../widgets/common/custom_loading_indicator.dart';
+import '../../widgets/common/custom_snackbar.dart';
 import '../../widgets/common/sub_screen_header.dart';
 import '../../widgets/profile/profile_food_filter.dart';
 
@@ -42,8 +43,8 @@ class ProfileFoodScreen extends StatelessWidget {
             child: Column(
               children: [
                 const Padding(
-                  padding:
-                      EdgeInsets.only(left: 20.0, right: 20.0, top: 16.0, bottom: 8.0),
+                  padding: EdgeInsets.only(
+                      left: 20.0, right: 20.0, top: 16.0, bottom: 8.0),
                   child: FoodFilterWidget(),
                 ),
                 Expanded(
@@ -57,6 +58,18 @@ class ProfileFoodScreen extends StatelessWidget {
                             strokeWidth: 2.0,
                           ),
                         );
+                      }
+
+                      if (profileProvider.message != null) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            CustomSnackBar(
+                              contentText: profileProvider.message!,
+                              context: context,
+                            ),
+                          );
+                          profileProvider.clearMessage();
+                        });
                       }
 
                       if (profileProvider.filteredUserFoodPosts.isEmpty) {
@@ -74,7 +87,7 @@ class ProfileFoodScreen extends StatelessWidget {
                       }
 
                       return ListView.builder(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 24.0),
                         itemCount: profileProvider.filteredUserFoodPosts.length,
                         itemBuilder: (context, index) {
                           final foodPost =
@@ -209,10 +222,23 @@ class ProfileFoodScreen extends StatelessWidget {
                                                 ),
                                               ),
                                               onPressed: () {
-                                                // TODO: Implement delete Post.
+                                                if (foodPost.status ==
+                                                    'published') {
+                                                  profileProvider
+                                                      .archiveFoodPost(
+                                                          foodPost.id);
+                                                } else {
+                                                  profileProvider
+                                                      .unarchiveFoodPost(
+                                                          foodPost.id);
+                                                }
                                               },
                                               child: Icon(
-                                                MdiIcons.deleteOutline,
+                                                foodPost.status == 'published'
+                                                    ? MdiIcons
+                                                        .archiveArrowDownOutline
+                                                    : MdiIcons
+                                                        .archiveArrowUpOutline,
                                                 color: onBackground,
                                                 size: 20.0,
                                               ),
@@ -231,12 +257,12 @@ class ProfileFoodScreen extends StatelessWidget {
                                                 ),
                                               ),
                                               onPressed: () {
-                                                // TODO: Implement update Post
                                                 context.push(
                                                   '/main/manageFood',
                                                   extra: {
                                                     'isEdit': true,
-                                                    'foodData': foodPost.toMap(),
+                                                    'foodData':
+                                                        foodPost.toMap(),
                                                   },
                                                 );
                                               },

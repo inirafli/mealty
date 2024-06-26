@@ -81,6 +81,7 @@ class FakeDataGenerator {
         postedFoods: [],
       ),
       sellingType: 'komersil',
+      status: 'published',
       userId: 'xxxx',
     );
   }
@@ -116,6 +117,7 @@ class FakeDataGenerator {
           postedFoods: [],
         ),
         sellingType: 'komersil',
+        status: 'published',
         userId: 'xxxx',
       );
     });
