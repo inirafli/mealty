@@ -69,9 +69,9 @@ class ProfileProvider with ChangeNotifier {
           usernameController.text = _profile!.username;
           phoneNumberController.text = _profile!.phoneNumber;
           _latitude = _profile!.address.latitude;
-          print('ProfileProvider: latitude $_latitude');
           _longitude = _profile!.address.longitude;
-          print('ProfileProvider: longitude $_longitude');
+          print(
+              'ProfileProvider: Lat Lon of user Lat:$_latitude, Lon:$_longitude');
         }
       }
     } catch (e) {
@@ -114,7 +114,8 @@ class ProfileProvider with ChangeNotifier {
       if (usernameController.text != _profile!.username) {
         bool isUnique = await isUsernameUnique(usernameController.text);
         if (!isUnique) {
-          throw 'Username is already taken';
+          _message = 'Username sudah terpakai. Coba dengan nama lain';
+          notifyListeners();
         }
       }
 
@@ -191,6 +192,12 @@ class ProfileProvider with ChangeNotifier {
     await _firestoreService.updateFoodPostStatus(foodId, 'published');
     _message = 'Makanan telah berhasil diunggah';
     await _fetchUserFoodPosts();
+    notifyListeners();
+  }
+
+  Future<void> resetState() async {
+    _profile = null;
+    _userFoodPosts = [];
     notifyListeners();
   }
 

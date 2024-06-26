@@ -10,8 +10,21 @@ import '../../widgets/common/custom_snackbar.dart';
 import '../../widgets/common/sub_screen_header.dart';
 import '../../widgets/profile/profile_food_filter.dart';
 
-class ProfileFoodScreen extends StatelessWidget {
+class ProfileFoodScreen extends StatefulWidget {
   const ProfileFoodScreen({super.key});
+
+  @override
+  State<ProfileFoodScreen> createState() => _ProfileFoodScreenState();
+}
+
+class _ProfileFoodScreenState extends State<ProfileFoodScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<ProfileProvider>(context, listen: false).refreshUserFoodPosts();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

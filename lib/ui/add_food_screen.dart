@@ -241,8 +241,6 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                                 ));
                             } else if (manageFoodProvider.postState.status ==
                                 PostStatus.success) {
-                              Provider.of<ProfileProvider>(context, listen: false)
-                                  .refreshUserFoodPosts();
                               ScaffoldMessenger.of(context)
                                 ..hideCurrentSnackBar()
                                 ..showSnackBar(CustomSnackBar(

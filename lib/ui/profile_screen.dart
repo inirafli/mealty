@@ -8,8 +8,21 @@ import '../provider/profile_provider.dart';
 import '../widgets/profile/profile_details.dart';
 import '../widgets/profile/profile_food_types.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<ProfileProvider>(context, listen: false).refreshUserFoodPosts();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +120,7 @@ class ProfileScreen extends StatelessWidget {
                                 context,
                                 listen: false);
                             await authProvider.signOut();
+                            await profileProvider.resetState();
                             if (context.mounted) context.go('/login');
                           },
                         ),
