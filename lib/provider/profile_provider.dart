@@ -70,8 +70,6 @@ class ProfileProvider with ChangeNotifier {
           phoneNumberController.text = _profile!.phoneNumber;
           _latitude = _profile!.address.latitude;
           _longitude = _profile!.address.longitude;
-          print(
-              'ProfileProvider: Lat Lon of user Lat:$_latitude, Lon:$_longitude');
         }
       }
     } catch (e) {
@@ -131,9 +129,13 @@ class ProfileProvider with ChangeNotifier {
         profileImageUrl = await storageSnapshot.ref.getDownloadURL();
 
         // Delete old profile image if exists
-        // if (_profile!.photoUrl != null && _profile!.photoUrl!.isNotEmpty) {
-        //   FirebaseStorage.instance.refFromURL(_profile!.photoUrl!).delete();
-        // }
+        if (_profile!.photoUrl.isNotEmpty) {
+          if (_profile!.photoUrl.contains('firebasestorage.googleapis.com')) {
+            await FirebaseStorage.instance
+                .refFromURL(_profile!.photoUrl)
+                .delete();
+          }
+        }
       }
 
       // Update Firestore
@@ -143,7 +145,7 @@ class ProfileProvider with ChangeNotifier {
         'address': GeoPoint(_latitude ?? 0, _longitude ?? 0),
       };
       if (profileImageUrl != null) {
-        updatedData['profileImageUrl'] = profileImageUrl;
+        updatedData['photoUrl'] = profileImageUrl;
       }
 
       await _firestoreService.updateUserProfile(_user!.uid, updatedData);

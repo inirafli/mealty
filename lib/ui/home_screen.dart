@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mealty/provider/food_provider.dart';
 import 'package:mealty/utils/fake_data_generator.dart';
-import 'package:mealty/widgets/common/custom_loading_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import '../data/model/food_post.dart';
 import '../widgets/home/category_filter_dialog.dart';
 import '../widgets/home/filter_button.dart';
 import '../widgets/home/food_post_card.dart';
@@ -71,7 +69,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     Color primary = Theme.of(context).colorScheme.primary;
-    Color onPrimary = Theme.of(context).colorScheme.onPrimary;
 
     return Scaffold(
       appBar: HomeAppBar(

@@ -30,6 +30,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     Color onPrimary = Theme.of(context).colorScheme.onPrimary;
 
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(54.0),
         child: AppBar(
@@ -53,6 +54,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             final profile = profileProvider.profile!;
 
             return SingleChildScrollView(
+              key: const PageStorageKey<String>('profile_scroll_position'),
               child: Column(
                 children: [
                   Padding(
@@ -63,7 +65,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         Center(
                           child: CircleAvatar(
-                            backgroundImage: NetworkImage(profile.photoUrl == ''
+                            backgroundImage: NetworkImage(profile.photoUrl.isEmpty
                                 ? 'https://ui-avatars.com/api/?name=${profile.username}'
                                 : profile.photoUrl),
                             radius: 54.0,
