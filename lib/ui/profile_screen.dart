@@ -30,7 +30,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     Color onPrimary = Theme.of(context).colorScheme.onPrimary;
 
     return Scaffold(
-      backgroundColor: Colors.grey[200],
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(54.0),
         child: AppBar(

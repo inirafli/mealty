@@ -97,43 +97,47 @@ class OrderInfoWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        isSeller ? 'Informasi Pembeli' : 'Informasi Penjual',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: onBackground,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          isSeller ? 'Informasi Pembeli' : 'Informasi Penjual',
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: onBackground,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 2.0),
-                      Text(
-                        '${user?.username ?? 'user'} - ${user?.phoneNumber ?? '-'}',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: primary,
-                          fontWeight: FontWeight.bold,
+                        const SizedBox(height: 2.0),
+                        Text(
+                          '${user?.username ?? 'user'} - ${user?.phoneNumber ?? '-'}',
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: primary,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   const SizedBox(width: 16.0),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        'Kode Reservasi',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: onBackground,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          'Kode Reservasi',
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: onBackground,
+                          ),
                         ),
-                      ),
-                      Text(
-                        '#${order.orderId}',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: primary,
+                        Text(
+                          '#${order.orderId}',
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: primary,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
