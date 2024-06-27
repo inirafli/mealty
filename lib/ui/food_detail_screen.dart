@@ -72,8 +72,8 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                       },
                     ),
                     background: GestureDetector(
-                      onTap: () => context.push('/main/imageFullScreen', extra: post?.image),
-                      child: post.image != ''
+                      onTap: () => context.push('/main/imageFullScreen', extra: post.image),
+                      child: post.image.isNotEmpty
                           ? Image.network(
                         post.image,
                         fit: BoxFit.cover,
@@ -177,12 +177,15 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
               child: ElevatedButton(
                 onPressed: () {
                   Provider.of<CartProvider>(context, listen: false).addToCart(post, context);
+                  if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
                     CustomSnackBar(
                       contentText: '${post.name} ditambahkan ke dalam Keranjang!',
                       context: context,
                     ),
                   );
+
+                  context.pop();
                 },
                 child: Text(
                   'Tambahkan ke Keranjang',

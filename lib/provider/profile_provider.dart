@@ -107,7 +107,6 @@ class ProfileProvider with ChangeNotifier {
 
     try {
       if (_user == null) throw 'User not authenticated';
-
       // Check if username is unique
       if (usernameController.text != _profile!.username) {
         bool isUnique = await isUsernameUnique(usernameController.text);
@@ -115,6 +114,23 @@ class ProfileProvider with ChangeNotifier {
           _message = 'Username sudah terpakai. Coba dengan nama lain';
           notifyListeners();
         }
+      }
+
+      bool hasChanges = false;
+
+      if (usernameController.text != _profile!.username ||
+          phoneNumberController.text != _profile!.phoneNumber ||
+          _latitude != _profile!.address.latitude ||
+          _longitude != _profile!.address.longitude ||
+          _profileImageFile != null) {
+        hasChanges = true;
+      }
+
+      if (!hasChanges) {
+        _message = 'Tidak ada data yang diubah';
+        _isLoading = false;
+        notifyListeners();
+        return;
       }
 
       // Upload new profile image if picked
@@ -149,7 +165,7 @@ class ProfileProvider with ChangeNotifier {
       }
 
       await _firestoreService.updateUserProfile(_user!.uid, updatedData);
-      _message = 'Profile updated successfully';
+      _message = 'Profil berhasil diperbarui';
       await _fetchUserProfile();
     } catch (e) {
       _message = e.toString();
