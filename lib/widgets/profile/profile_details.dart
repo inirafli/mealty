@@ -38,7 +38,7 @@ class ProfileDetails extends StatelessWidget {
                 ),
           ),
         ),
-        const SizedBox(height: 12.0),
+        const SizedBox(height: 8.0),
         Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -66,7 +66,6 @@ class ProfileDetails extends StatelessWidget {
                   Text(
                     phoneNumber.isEmpty ? '-' : phoneNumber,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontSize: 15.0,
                           color: onBackground,
                         ),
                   ),

@@ -29,11 +29,10 @@ class FilterButtons extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         padding: const EdgeInsets.only(
-            left: 16.0, right: 10.0, top: 6.0, bottom: 6.0),
+            left: 16.0, right: 10.0, top: 8.0, bottom: 8.0),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.onPrimary,
-          border: Border.all(color: Theme.of(context).colorScheme.primary),
-          borderRadius: BorderRadius.circular(8.0),
+          borderRadius: BorderRadius.circular(12.0),
         ),
         child: Row(
           children: [

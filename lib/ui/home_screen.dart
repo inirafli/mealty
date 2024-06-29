@@ -66,18 +66,26 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  double getChildAspectRatio(BuildContext context) {
+    if (MediaQuery.of(context).orientation == Orientation.portrait) {
+      return 0.6;
+    } else {
+      return 1.2;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Color primary = Theme.of(context).colorScheme.primary;
 
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: HomeAppBar(
         searchController: _searchController,
         hasInput: _hasInput,
       ),
       body: Padding(
-        padding: const EdgeInsets.only(
-            top: 16.0, left: 16.0, right: 16.0, bottom: 0.0),
+        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -85,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onCategoryPressed: _showCategoryFilterDialog,
               onSortPressed: _showSortFilterDialog,
             ),
-            const SizedBox(height: 16.0),
+            const SizedBox(height: 12.0),
             Expanded(child:
                 Consumer<FoodProvider>(builder: (context, foodProvider, child) {
               if (foodProvider.posts.isEmpty && !foodProvider.isLoading) {
@@ -148,11 +156,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
+                              SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
-                            crossAxisSpacing: 4.0,
-                            mainAxisSpacing: 12.0,
-                            childAspectRatio: 1.85 / 3,
+                            crossAxisSpacing: 3.5,
+                            mainAxisSpacing: 8.0,
+                            childAspectRatio: getChildAspectRatio(context),
                           ),
                           itemCount: foodProvider.isLoading
                               ? 6

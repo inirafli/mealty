@@ -18,6 +18,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      backgroundColor: Theme.of(context).colorScheme.onPrimary,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
           bottom: Radius.circular(16),
@@ -65,32 +66,44 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                         )
                       : null,
                   prefixIconConstraints: const BoxConstraints(
-                    minWidth: 44,
+                    minWidth: 46,
                     minHeight: 40,
                   ),
                   filled: true,
                   fillColor: Theme.of(context).colorScheme.onPrimary,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.0),
-                    borderSide: BorderSide.none,
                   ),
                   contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 2.0),
+                      horizontal: 16.0, vertical: 12.0),
                 ),
               ),
             ),
           ),
-          const SizedBox(width: 8.0),
-          Container(
+          const SizedBox(width: 10.0),
+          SizedBox(
+            width: 36.0,
             height: 40.0,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.secondary,
-              borderRadius: BorderRadius.circular(12.0),
+            child: IconButton(
+              padding: EdgeInsets.zero,
+              icon: Icon(
+                MdiIcons.bellOutline,
+                size: 24.0,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              onPressed: () {
+                // TODO: Open up the Notifications Tab
+              },
             ),
+          ),
+          const SizedBox(width: 6.0),
+          SizedBox(
+            width: 36.0,
+            height: 40.0,
             child: IconButton(
               icon: Icon(
-                MdiIcons.hamburgerPlus,
-                size: 20.0,
+                MdiIcons.tagPlusOutline,
+                size: 24.0,
                 color: Theme.of(context).colorScheme.primary,
               ),
               onPressed: () {

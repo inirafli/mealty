@@ -27,7 +27,8 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<FoodProvider>(context, listen: false).fetchPostById(widget.postId);
+      Provider.of<FoodProvider>(context, listen: false)
+          .fetchPostById(widget.postId);
     });
   }
 
@@ -56,28 +57,30 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                   flexibleSpace: FlexibleSpaceBar(
                     collapseMode: CollapseMode.parallax,
                     title: LayoutBuilder(
-                      builder: (BuildContext context, BoxConstraints constraints) {
+                      builder:
+                          (BuildContext context, BoxConstraints constraints) {
                         return constraints.biggest.height > 90
                             ? const SizedBox.shrink()
                             : Text(
-                          post.name,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: onPrimary,
-                          ),
-                        );
+                                post.name,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: onPrimary,
+                                    ),
+                              );
                       },
                     ),
                     background: GestureDetector(
-                      onTap: () => context.push('/main/imageFullScreen', extra: post.image),
+                      onTap: () => context.push('/main/imageFullScreen',
+                          extra: post.image),
                       child: post.image.isNotEmpty
                           ? Image.network(
-                        post.image,
-                        fit: BoxFit.cover,
-                      )
+                              post.image,
+                              fit: BoxFit.cover,
+                            )
                           : Container(color: Colors.grey[300]),
                     ),
                   ),
@@ -177,7 +180,6 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
               child: ElevatedButton(
                 onPressed: () {
                   Provider.of<CartProvider>(context, listen: false).addToCart(post, context);
-                  if (!context.mounted) return;
                   ScaffoldMessenger.of(context).showSnackBar(
                     CustomSnackBar(
                       contentText: '${post.name} ditambahkan ke dalam Keranjang!',

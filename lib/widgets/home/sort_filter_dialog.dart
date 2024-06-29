@@ -36,7 +36,7 @@ class SortFilterDialog extends StatelessWidget {
                   color: Theme.of(context).colorScheme.primary,
                 ),
                 onPressed: () {
-                  context.pop();
+                  Navigator.of(context).pop();
                 },
               ),
             ],

@@ -22,18 +22,18 @@ class PostCard extends StatelessWidget {
     Color onPrimary = Theme.of(context).colorScheme.onPrimary;
     Color onBackrgound = Theme.of(context).colorScheme.onBackground;
 
-    return GestureDetector(
-      onTap: () {
-        context.go('/main/foodDetail', extra: post.id);
-      },
-      child: Card(
-        color: onPrimary,
-        surfaceTintColor: Colors.transparent,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        elevation: 2,
-        clipBehavior: Clip.antiAlias,
+    return Card(
+      color: onPrimary,
+      surfaceTintColor: Colors.transparent,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.0),
+      ),
+      elevation: 0,
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () {
+          context.go('/main/foodDetail', extra: post.id);
+        },
         child: Stack(
           children: [
             Column(
