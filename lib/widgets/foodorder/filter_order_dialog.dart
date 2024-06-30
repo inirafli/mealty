@@ -192,6 +192,7 @@ class _FilterDialogState extends State<FilterDialog> {
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: primary,
+                disabledBackgroundColor: primary.withOpacity(0.15),
                 minimumSize: const Size(double.infinity, 40.0),
                 padding: EdgeInsets.zero,
               ),

@@ -15,7 +15,6 @@ class OrderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color primary = Theme.of(context).colorScheme.primary;
-    Color onPrimary = Theme.of(context).colorScheme.onPrimary;
 
     return Consumer<OrderProvider>(
       builder: (context, orderProvider, child) {
@@ -41,21 +40,23 @@ class OrderScreen extends StatelessWidget {
                 title: Text(
                   'Pesanan',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: primary,
-                  ),
+                        fontWeight: FontWeight.bold,
+                        color: primary,
+                      ),
                 ),
                 backgroundColor: Theme.of(context).colorScheme.onPrimary,
                 actions: [
                   IconButton(
                     padding: const EdgeInsets.only(right: 8.0),
-                    icon: Icon(MdiIcons.calendarFilterOutline, color: primary, size: 24.0),
+                    icon: Icon(MdiIcons.calendarFilterOutline,
+                        color: primary, size: 24.0),
                     onPressed: () {
                       showModalBottomSheet(
                         context: context,
                         isScrollControlled: true,
                         shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+                          borderRadius:
+                              BorderRadius.vertical(top: Radius.circular(20.0)),
                         ),
                         builder: (context) => const FilterDialog(),
                       );
@@ -63,13 +64,15 @@ class OrderScreen extends StatelessWidget {
                   ),
                   IconButton(
                     padding: const EdgeInsets.only(right: 8.0),
-                    icon: Icon(MdiIcons.fileDownloadOutline, color: primary, size: 24.0),
+                    icon: Icon(MdiIcons.fileDownloadOutline,
+                        color: primary, size: 24.0),
                     onPressed: () {
                       showModalBottomSheet(
                         context: context,
                         isScrollControlled: true,
                         shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+                          borderRadius:
+                              BorderRadius.vertical(top: Radius.circular(20.0)),
                         ),
                         builder: (context) => const DownloadDialog(),
                       );
@@ -79,8 +82,8 @@ class OrderScreen extends StatelessWidget {
                 bottom: TabBar(
                   labelColor: Theme.of(context).colorScheme.primary,
                   labelStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                        fontWeight: FontWeight.bold,
+                      ),
                   tabs: const [
                     Tab(text: 'Pembelian'),
                     Tab(text: 'Penjualan'),
@@ -91,11 +94,13 @@ class OrderScreen extends StatelessWidget {
             body: const TabBarView(
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
                   child: BuyerOrdersTab(),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
                   child: SellerOrdersTab(),
                 ),
               ],

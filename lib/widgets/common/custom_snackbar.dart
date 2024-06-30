@@ -6,15 +6,13 @@ class CustomSnackBar extends SnackBar {
     required String contentText,
     required BuildContext context,
   }) : super(
-          content: IntrinsicHeight(
-            child: Text(
-              contentText,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    fontWeight: FontWeight.w600,
-                    height: 1.15,
-                  ),
-            ),
+          content: Text(
+            contentText,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  fontWeight: FontWeight.w600,
+                  height: 1.15,
+                ),
           ),
           backgroundColor: Theme.of(context).colorScheme.primary,
           behavior: SnackBarBehavior.floating,

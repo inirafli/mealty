@@ -12,6 +12,8 @@ class OrderProvider with ChangeNotifier {
   User? _user;
   List<FoodOrder> _buyerOrders = [];
   List<FoodOrder> _sellerOrders = [];
+  List<FoodOrder> _originalBuyerOrders = [];
+  List<FoodOrder> _originalSellerOrders = [];
   bool _isLoading = true;
   String _filter = 'all';
   int _selectedRating = 1;
@@ -60,8 +62,12 @@ class OrderProvider with ChangeNotifier {
     _isLoading = true;
     notifyListeners();
     if (_user != null) {
-      _buyerOrders = await _firestoreService.getOrdersByBuyerId(_user!.uid);
-      _sellerOrders = await _firestoreService.getOrdersBySellerId(_user!.uid);
+      _originalBuyerOrders =
+          await _firestoreService.getOrdersByBuyerId(_user!.uid);
+      _originalSellerOrders =
+          await _firestoreService.getOrdersBySellerId(_user!.uid);
+      _buyerOrders = List.from(_originalBuyerOrders);
+      _sellerOrders = List.from(_originalSellerOrders);
       _isLoading = false;
       notifyListeners();
     }
@@ -88,7 +94,8 @@ class OrderProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setDateFilter({required String filter, DateTime? startDate, DateTime? endDate}) {
+  void setDateFilter(
+      {required String filter, DateTime? startDate, DateTime? endDate}) {
     _filterDate = filter;
     _startDate = startDate;
     _endDate = endDate;
@@ -100,21 +107,30 @@ class OrderProvider with ChangeNotifier {
     } else if (filter == 'customDate') {
       filterOrders(startDate, endDate);
     } else {
-      refreshOrders();
+      _buyerOrders = List.from(_originalBuyerOrders);
+      _sellerOrders = List.from(_originalSellerOrders);
     }
     notifyListeners();
   }
 
   void filterOrders(DateTime? startDate, DateTime? endDate) {
     if (startDate == null || endDate == null) {
+      _buyerOrders = List.from(_originalBuyerOrders);
+      _sellerOrders = List.from(_originalSellerOrders);
       notifyListeners();
       return;
     }
 
-    _buyerOrders = _buyerOrders.where((order) =>
-    order.orderDate.toDate().isAfter(startDate) && order.orderDate.toDate().isBefore(endDate)).toList();
-    _sellerOrders = _sellerOrders.where((order) =>
-    order.orderDate.toDate().isAfter(startDate) && order.orderDate.toDate().isBefore(endDate)).toList();
+    _buyerOrders = _originalBuyerOrders
+        .where((order) =>
+            order.orderDate.toDate().isAfter(startDate) &&
+            order.orderDate.toDate().isBefore(endDate))
+        .toList();
+    _sellerOrders = _originalSellerOrders
+        .where((order) =>
+            order.orderDate.toDate().isAfter(startDate) &&
+            order.orderDate.toDate().isBefore(endDate))
+        .toList();
 
     notifyListeners();
   }
@@ -151,7 +167,7 @@ class OrderProvider with ChangeNotifier {
     try {
       final order = _buyerOrders.firstWhere((order) => order.orderId == orderId,
           orElse: () => _sellerOrders.firstWhere(
-                  (order) => order.orderId == orderId,
+              (order) => order.orderId == orderId,
               orElse: () => throw 'Order not found'));
       await _firestoreService.updateOrderStatus(orderId, newStatus, order);
       await _fetchOrders();
@@ -166,31 +182,33 @@ class OrderProvider with ChangeNotifier {
     await _fetchOrders();
   }
 
-  Future<void> downloadSummary(BuildContext context, DateTime startDate, DateTime endDate) async {
+  Future<void> downloadSummary(
+      BuildContext context, DateTime startDate, DateTime endDate) async {
     if (_buyerOrders.where((order) => order.status == 'completed').isEmpty &&
         _sellerOrders.where((order) => order.status == 'completed').isEmpty) {
       _errorMessage =
-      'Sepertinya kamu belum pernah melakukan Pembelian atau Penjualan.';
+          'Sepertinya kamu belum pernah melakukan Pembelian atau Penjualan.';
       notifyListeners();
       return;
     }
 
-    final filteredBuyerOrders = _buyerOrders
+    final filteredBuyerOrders = _originalBuyerOrders
         .where((order) =>
-    order.status == 'completed' &&
-        order.orderDate.toDate().isAfter(startDate) &&
-        order.orderDate.toDate().isBefore(endDate))
+            order.status == 'completed' &&
+            order.orderDate.toDate().isAfter(startDate) &&
+            order.orderDate.toDate().isBefore(endDate))
         .toList();
 
-    final filteredSellerOrders = _sellerOrders
+    final filteredSellerOrders = _originalSellerOrders
         .where((order) =>
-    order.status == 'completed' &&
-        order.orderDate.toDate().isAfter(startDate) &&
-        order.orderDate.toDate().isBefore(endDate))
+            order.status == 'completed' &&
+            order.orderDate.toDate().isAfter(startDate) &&
+            order.orderDate.toDate().isBefore(endDate))
         .toList();
 
     if (filteredBuyerOrders.isEmpty && filteredSellerOrders.isEmpty) {
-      _errorMessage = 'Tidak ada pesanan yang selesai dalam rentang tanggal ini.';
+      _errorMessage =
+          'Tidak ada pesanan yang selesai dalam rentang tanggal ini.';
       notifyListeners();
       return;
     }
