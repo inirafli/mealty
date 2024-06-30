@@ -16,6 +16,9 @@ class OrderProvider with ChangeNotifier {
   String _filter = 'all';
   int _selectedRating = 1;
   String? _errorMessage;
+  String _filterDate = 'allDate';
+  DateTime? _startDate;
+  DateTime? _endDate;
 
   OrderProvider() {
     _user = FirebaseAuth.instance.currentUser;
@@ -47,6 +50,12 @@ class OrderProvider with ChangeNotifier {
 
   String? get errorMessage => _errorMessage;
 
+  String get filterDate => _filterDate;
+
+  DateTime? get startDate => _startDate;
+
+  DateTime? get endDate => _endDate;
+
   Future<void> _fetchOrders() async {
     _isLoading = true;
     notifyListeners();
@@ -76,6 +85,37 @@ class OrderProvider with ChangeNotifier {
   void setSelectedRating(int rating) {
     if (rating < 1) rating = 1;
     _selectedRating = rating;
+    notifyListeners();
+  }
+
+  void setDateFilter({required String filter, DateTime? startDate, DateTime? endDate}) {
+    _filterDate = filter;
+    _startDate = startDate;
+    _endDate = endDate;
+    if (filter == '7days' || filter == '15days' || filter == '30days') {
+      final int days = int.parse(filter.replaceAll('days', ''));
+      final DateTime endDate = DateTime.now();
+      final DateTime startDate = endDate.subtract(Duration(days: days));
+      filterOrders(startDate, endDate);
+    } else if (filter == 'customDate') {
+      filterOrders(startDate, endDate);
+    } else {
+      refreshOrders();
+    }
+    notifyListeners();
+  }
+
+  void filterOrders(DateTime? startDate, DateTime? endDate) {
+    if (startDate == null || endDate == null) {
+      notifyListeners();
+      return;
+    }
+
+    _buyerOrders = _buyerOrders.where((order) =>
+    order.orderDate.toDate().isAfter(startDate) && order.orderDate.toDate().isBefore(endDate)).toList();
+    _sellerOrders = _sellerOrders.where((order) =>
+    order.orderDate.toDate().isAfter(startDate) && order.orderDate.toDate().isBefore(endDate)).toList();
+
     notifyListeners();
   }
 
@@ -111,7 +151,7 @@ class OrderProvider with ChangeNotifier {
     try {
       final order = _buyerOrders.firstWhere((order) => order.orderId == orderId,
           orElse: () => _sellerOrders.firstWhere(
-              (order) => order.orderId == orderId,
+                  (order) => order.orderId == orderId,
               orElse: () => throw 'Order not found'));
       await _firestoreService.updateOrderStatus(orderId, newStatus, order);
       await _fetchOrders();

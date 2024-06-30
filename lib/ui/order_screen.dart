@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../provider/order_provider.dart';
 import '../widgets/common/custom_snackbar.dart';
 import '../widgets/foodorder/download_order_dialog.dart';
+import '../widgets/foodorder/filter_order_dialog.dart';
 import 'ordertab/buyer_orders_tab.dart';
 import 'ordertab/seller_order_tab.dart';
 
@@ -46,6 +47,20 @@ class OrderScreen extends StatelessWidget {
                 ),
                 backgroundColor: Theme.of(context).colorScheme.onPrimary,
                 actions: [
+                  IconButton(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    icon: Icon(MdiIcons.calendarFilterOutline, color: primary, size: 24.0),
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+                        ),
+                        builder: (context) => const FilterDialog(),
+                      );
+                    },
+                  ),
                   IconButton(
                     padding: const EdgeInsets.only(right: 8.0),
                     icon: Icon(MdiIcons.fileDownloadOutline, color: primary, size: 24.0),
