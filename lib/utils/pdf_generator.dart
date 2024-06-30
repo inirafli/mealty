@@ -100,7 +100,7 @@ class PDFGenerator {
           children: [
             pw.Text('x${item.quantity} $foodName'),
             pw.Text('Total: ${formatPrice(order.totalPrice)}'),
-            pw.Text('pada: ${formatDate(order.completionDate!)}'),
+            pw.Text('pada: ${formatDate(order.orderDate)}'),
             pw.Text(
                 '${isBuyer ? 'Dibeli dari' : 'Dijual kepada'}: ${userDoc.username} - ${userDoc.phoneNumber}'),
             pw.SizedBox(height: 10),

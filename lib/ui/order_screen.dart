@@ -14,6 +14,7 @@ class OrderScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color primary = Theme.of(context).colorScheme.primary;
+    Color onPrimary = Theme.of(context).colorScheme.onPrimary;
 
     return Consumer<OrderProvider>(
       builder: (context, orderProvider, child) {
@@ -47,11 +48,14 @@ class OrderScreen extends StatelessWidget {
                 actions: [
                   IconButton(
                     padding: const EdgeInsets.only(right: 8.0),
-                    icon:
-                    Icon(MdiIcons.fileDownloadOutline, color: primary, size: 24.0),
+                    icon: Icon(MdiIcons.fileDownloadOutline, color: primary, size: 24.0),
                     onPressed: () {
-                      showDialog(
+                      showModalBottomSheet(
                         context: context,
+                        isScrollControlled: true,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+                        ),
                         builder: (context) => const DownloadDialog(),
                       );
                     },

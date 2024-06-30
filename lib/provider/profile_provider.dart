@@ -17,6 +17,7 @@ class ProfileProvider with ChangeNotifier {
   final FirestoreService _firestoreService = FirestoreService();
   user_auth.User? _user;
   bool _isLoading = true;
+  bool _isError = false;
   String? _message;
   user_model.User? _profile;
   List<Food> _userFoodPosts = [];
@@ -44,6 +45,8 @@ class ProfileProvider with ChangeNotifier {
   user_model.User? get profile => _profile;
 
   bool get isLoading => _isLoading;
+
+  bool get isError => _isError;
 
   String? get message => _message;
 
@@ -103,16 +106,20 @@ class ProfileProvider with ChangeNotifier {
   Future<void> updateProfile() async {
     _isLoading = true;
     _message = null;
+    _isError = false;
     notifyListeners();
 
     try {
       if (_user == null) throw 'User not authenticated';
+
       // Check if username is unique
       if (usernameController.text != _profile!.username) {
         bool isUnique = await isUsernameUnique(usernameController.text);
         if (!isUnique) {
           _message = 'Username sudah terpakai. Coba dengan nama lain';
+          _isError = true;
           notifyListeners();
+          return;
         }
       }
 
@@ -128,6 +135,7 @@ class ProfileProvider with ChangeNotifier {
 
       if (!hasChanges) {
         _message = 'Tidak ada data yang diubah';
+        _isError = true;
         _isLoading = false;
         notifyListeners();
         return;
@@ -139,7 +147,7 @@ class ProfileProvider with ChangeNotifier {
         String fileName =
             'profile-${usernameController.text}-${DateFormat('yyyyMMddHHmmss').format(DateTime.now())}';
         Reference storageRef =
-            FirebaseStorage.instance.ref().child('profiles').child(fileName);
+        FirebaseStorage.instance.ref().child('profiles').child(fileName);
         UploadTask uploadTask = storageRef.putFile(_profileImageFile!);
         TaskSnapshot storageSnapshot = await uploadTask.whenComplete(() => {});
         profileImageUrl = await storageSnapshot.ref.getDownloadURL();
@@ -169,6 +177,7 @@ class ProfileProvider with ChangeNotifier {
       await _fetchUserProfile();
     } catch (e) {
       _message = e.toString();
+      _isError = true;
     }
 
     _isLoading = false;

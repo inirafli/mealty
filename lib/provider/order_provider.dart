@@ -126,11 +126,31 @@ class OrderProvider with ChangeNotifier {
     await _fetchOrders();
   }
 
-  Future<void> downloadSummary(BuildContext context) async {
+  Future<void> downloadSummary(BuildContext context, DateTime startDate, DateTime endDate) async {
     if (_buyerOrders.where((order) => order.status == 'completed').isEmpty &&
         _sellerOrders.where((order) => order.status == 'completed').isEmpty) {
       _errorMessage =
-          'Sepertinya kamu belum pernah melakukan Pembelian atau Penjualan.';
+      'Sepertinya kamu belum pernah melakukan Pembelian atau Penjualan.';
+      notifyListeners();
+      return;
+    }
+
+    final filteredBuyerOrders = _buyerOrders
+        .where((order) =>
+    order.status == 'completed' &&
+        order.orderDate.toDate().isAfter(startDate) &&
+        order.orderDate.toDate().isBefore(endDate))
+        .toList();
+
+    final filteredSellerOrders = _sellerOrders
+        .where((order) =>
+    order.status == 'completed' &&
+        order.orderDate.toDate().isAfter(startDate) &&
+        order.orderDate.toDate().isBefore(endDate))
+        .toList();
+
+    if (filteredBuyerOrders.isEmpty && filteredSellerOrders.isEmpty) {
+      _errorMessage = 'Tidak ada pesanan yang selesai dalam rentang tanggal ini.';
       notifyListeners();
       return;
     }
@@ -139,8 +159,8 @@ class OrderProvider with ChangeNotifier {
     final currentUser = await _firestoreService.getUser(_user!.uid);
     final pdfFile = await pdfGenerator.generateSummaryPDF(
       currentUser,
-      _buyerOrders.where((order) => order.status == 'completed').toList(),
-      _sellerOrders.where((order) => order.status == 'completed').toList(),
+      filteredBuyerOrders,
+      filteredSellerOrders,
     );
 
     OpenFilex.open(pdfFile.path);
