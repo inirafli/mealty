@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:mealty/ui/add_food_screen.dart';
+import 'package:mealty/ui/hometab/notifications_screen.dart';
 import 'package:mealty/ui/location_picker_screen.dart';
 import 'package:mealty/ui/main_screen.dart';
 import 'package:mealty/ui/profiletab/profile_food_list_screen.dart';
@@ -99,6 +100,15 @@ class AppRouter {
               pageBuilder: (context, state) {
                 return createSlideFromBottomTransitionPage(
                   page: const ProfileEditScreen(),
+                  key: state.pageKey,
+                );
+              },
+            ),
+            GoRoute(
+              path: 'notifications',
+              pageBuilder: (context, state) {
+                return createSlideFromBottomTransitionPage(
+                  page: const NotificationScreen(),
                   key: state.pageKey,
                 );
               },

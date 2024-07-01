@@ -4,6 +4,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:provider/provider.dart';
 
 import '../../provider/food_provider.dart';
+import '../../provider/notification_provider.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final TextEditingController searchController;
@@ -17,6 +18,9 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final hasNotifications = context.watch<NotificationProvider>().notifications.isNotEmpty;
+    final bellIcon = hasNotifications ? MdiIcons.bellBadgeOutline : MdiIcons.bellOutline;
+
     return AppBar(
       backgroundColor: Theme.of(context).colorScheme.onPrimary,
       shape: const RoundedRectangleBorder(
@@ -87,12 +91,12 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             child: IconButton(
               padding: EdgeInsets.zero,
               icon: Icon(
-                MdiIcons.bellOutline,
+                bellIcon,
                 size: 24.0,
                 color: Theme.of(context).colorScheme.primary,
               ),
               onPressed: () {
-                // TODO: Open up the Notifications Tab
+                context.go('/main/notifications');
               },
             ),
           ),

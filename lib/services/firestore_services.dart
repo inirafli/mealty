@@ -3,6 +3,7 @@ import 'package:mealty/data/model/user.dart';
 import 'package:mealty/data/model/food_order.dart';
 
 import '../data/model/cart.dart';
+import '../data/model/food.dart';
 import '../utils/random_id_utils.dart';
 
 class FirestoreService {
@@ -26,7 +27,8 @@ class FirestoreService {
     }
   }
 
-  Future<void> updateFoodPost(String postId, Map<String, dynamic> updatedData) async {
+  Future<void> updateFoodPost(
+      String postId, Map<String, dynamic> updatedData) async {
     try {
       await _db.collection('foods').doc(postId).update(updatedData);
     } catch (e) {
@@ -53,14 +55,18 @@ class FirestoreService {
 
   Future<bool> isUsernameUnique(String username) async {
     try {
-      QuerySnapshot query = await _db.collection('users').where('username', isEqualTo: username).get();
+      QuerySnapshot query = await _db
+          .collection('users')
+          .where('username', isEqualTo: username)
+          .get();
       return query.docs.isEmpty;
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<void> updateUserProfile(String userId, Map<String, dynamic> data) async {
+  Future<void> updateUserProfile(
+      String userId, Map<String, dynamic> data) async {
     try {
       await _db.collection('users').doc(userId).update(data);
     } catch (e) {
@@ -139,10 +145,10 @@ class FirestoreService {
   }
 
   Future<void> updateOrderStatus(
-      String orderId,
-      String newStatus,
-      FoodOrder order,
-      ) async {
+    String orderId,
+    String newStatus,
+    FoodOrder order,
+  ) async {
     final orderRef = _db.collection('orders').doc(orderId);
     final buyerRef = _db.collection('users').doc(order.buyerId);
     final sellerRef = _db.collection('users').doc(order.sellerId);
@@ -243,5 +249,35 @@ class FirestoreService {
       'starRating': newRating,
       'countRating': countRating + 1,
     });
+  }
+
+  // Method for listening to Changes
+  Stream<List<Food>> getFoodPostsStream(String userId) {
+    return _db
+        .collection('foods')
+        .where('userId', isEqualTo: userId)
+        .snapshots()
+        .map((snapshot) =>
+            snapshot.docs.map((doc) => Food.fromFirestore(doc)).toList());
+  }
+
+  Stream<List<FoodOrder>> getOrdersStream(String userId) {
+    return _db
+        .collection('orders')
+        .where('buyerId', isEqualTo: userId)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => FoodOrder.fromMap(doc.data()))
+            .toList());
+  }
+
+  Stream<List<FoodOrder>> getSellerOrdersStream(String sellerId) {
+    return _db
+        .collection('orders')
+        .where('sellerId', isEqualTo: sellerId)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => FoodOrder.fromMap(doc.data()))
+            .toList());
   }
 }

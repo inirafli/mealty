@@ -8,6 +8,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:mealty/provider/manage_food_provider.dart';
 import 'package:mealty/provider/cart_provider.dart';
 import 'package:mealty/provider/food_provider.dart';
+import 'package:mealty/provider/notification_provider.dart';
 import 'package:mealty/provider/order_provider.dart';
 import 'package:mealty/provider/profile_provider.dart';
 import 'package:mealty/routes/routes.dart';
@@ -32,6 +33,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => ManageFoodProvider()),
         ChangeNotifierProvider(create: (context) => CartProvider()),
         ChangeNotifierProvider(create: (context) => OrderProvider()),
+        ChangeNotifierProvider(create: (context) => NotificationProvider()),
         ChangeNotifierProvider(create: (context) => ProfileProvider())
       ],
       child: const MyApp(),
