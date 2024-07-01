@@ -1,5 +1,5 @@
 import 'package:go_router/go_router.dart';
-import 'package:mealty/ui/add_food_screen.dart';
+import 'package:mealty/ui/manage_food_screen.dart';
 import 'package:mealty/ui/hometab/notifications_screen.dart';
 import 'package:mealty/ui/location_picker_screen.dart';
 import 'package:mealty/ui/main_screen.dart';
@@ -7,7 +7,6 @@ import 'package:mealty/ui/profiletab/profile_food_list_screen.dart';
 
 import '../ui/food_detail_screen.dart';
 import '../ui/login_screen.dart';
-import '../ui/profile_screen.dart';
 import '../ui/profiletab/profile_edit_screen.dart';
 import '../ui/register_screen.dart';
 import '../ui/splash_screen.dart';
@@ -60,7 +59,7 @@ class AppRouter {
                 final Map<String, dynamic>? foodData = extra?['foodData'];
 
                 return createSlideFromBottomTransitionPage(
-                  page: AddFoodScreen(isEdit: isEdit, foodData: foodData),
+                  page: ManageFoodScreen(isEdit: isEdit, foodData: foodData),
                   key: state.pageKey,
                 );
               },

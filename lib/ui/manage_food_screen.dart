@@ -19,17 +19,17 @@ import '../widgets/foodpost/food_type_selector.dart';
 import '../widgets/foodpost/sale_time_input.dart';
 import '../widgets/foodpost/selling_type_selector.dart';
 
-class AddFoodScreen extends StatefulWidget {
+class ManageFoodScreen extends StatefulWidget {
   final bool isEdit;
   final Map<String, dynamic>? foodData;
 
-  const AddFoodScreen({super.key, this.isEdit = false, this.foodData});
+  const ManageFoodScreen({super.key, this.isEdit = false, this.foodData});
 
   @override
-  State<AddFoodScreen> createState() => _AddFoodScreenState();
+  State<ManageFoodScreen> createState() => _ManageFoodScreenState();
 }
 
-class _AddFoodScreenState extends State<AddFoodScreen> {
+class _ManageFoodScreenState extends State<ManageFoodScreen> {
   @override
   void initState() {
     super.initState();
@@ -106,13 +106,13 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                                     FoodTextFields(
                                       nameController:
                                           manageFoodProvider.nameController,
-                                      descriptionController:
-                                          manageFoodProvider.descriptionController,
+                                      descriptionController: manageFoodProvider
+                                          .descriptionController,
                                     ),
                                     const SizedBox(height: 24.0),
                                     FoodTypeSelector(
-                                      selectedType:
-                                          manageFoodProvider.selectedFoodCategory,
+                                      selectedType: manageFoodProvider
+                                          .selectedFoodCategory,
                                       onSelectType:
                                           manageFoodProvider.selectFoodCategory,
                                     ),
@@ -133,8 +133,8 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                                   children: [
                                     const SizedBox(height: 6.0),
                                     SellingTypeSelector(
-                                      selectedType:
-                                          manageFoodProvider.selectedSellingType,
+                                      selectedType: manageFoodProvider
+                                          .selectedSellingType,
                                       onSelectType:
                                           manageFoodProvider.selectSellingType,
                                     ),
@@ -143,8 +143,8 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                                       children: [
                                         Expanded(
                                           child: PriceInput(
-                                            controller:
-                                                manageFoodProvider.priceController,
+                                            controller: manageFoodProvider
+                                                .priceController,
                                             isEditable: manageFoodProvider
                                                     .selectedSellingType ==
                                                 'commercial',
@@ -153,8 +153,8 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                                         const SizedBox(width: 8.0),
                                         Expanded(
                                           child: StockInput(
-                                            controller:
-                                                manageFoodProvider.stockController,
+                                            controller: manageFoodProvider
+                                                .stockController,
                                           ),
                                         ),
                                       ],
@@ -165,7 +165,8 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                                           manageFoodProvider.saleTimeController,
                                       onSelectDateTime:
                                           manageFoodProvider.selectSaleTime,
-                                      initialDateTime: manageFoodProvider.saleTime,
+                                      initialDateTime:
+                                          manageFoodProvider.saleTime,
                                     ),
                                     const SizedBox(height: 8.0),
                                   ],
@@ -214,8 +215,9 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 22.0, vertical: 16.0),
         child: SizedBox(
           width: double.infinity,
-          child: Consumer2<ManageFoodProvider, FoodProvider>(
-            builder: (context, manageFoodProvider, foodProvider, child) {
+          child: Consumer3<ManageFoodProvider, FoodProvider, ProfileProvider>(
+            builder: (context, manageFoodProvider, foodProvider,
+                profileProvider, child) {
               return ElevatedButton(
                 onPressed:
                     manageFoodProvider.postState.status == PostStatus.loading
@@ -250,11 +252,12 @@ class _AddFoodScreenState extends State<AddFoodScreen> {
                                   context: context,
                                 ));
 
+                              await foodProvider.fetchPosts();
+                              await profileProvider.refreshUserFoodPosts();
+
                               if (context.mounted) {
                                 context.pop();
                               }
-
-                              await foodProvider.fetchPosts();
                             }
                           },
                 child: manageFoodProvider.postState.status == PostStatus.loading

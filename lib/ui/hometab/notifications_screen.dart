@@ -1,12 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/notification_provider.dart';
+import '../../widgets/common/custom_loading_indicator.dart';
 import '../../widgets/common/sub_screen_header.dart';
 
-class NotificationScreen extends StatelessWidget {
+class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
+
+  @override
+  State<NotificationScreen> createState() => _NotificationScreenState();
+}
+
+class _NotificationScreenState extends State<NotificationScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final notificationProvider =
+      Provider.of<NotificationProvider>(context, listen: false);
+      notificationProvider.fetchNotifications();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +51,28 @@ class NotificationScreen extends StatelessWidget {
             padding: const EdgeInsets.only(top: 66.0),
             child: Consumer<NotificationProvider>(
               builder: (context, provider, child) {
+                if (provider.isLoading) {
+                  return Center(
+                    child: CustomProgressIndicator(
+                      color: primary,
+                      size: 24.0,
+                      strokeWidth: 2.0,
+                    ),
+                  );
+                }
+
+                if (provider.notifications.isEmpty) {
+                  return Center(
+                    child: Text(
+                      'Belum ada Pemberitahuan untuk Anda',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: primary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  );
+                }
+
                 return ListView.builder(
                   padding: const EdgeInsets.all(8.0),
                   itemCount: provider.notifications.length,

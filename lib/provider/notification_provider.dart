@@ -10,8 +10,11 @@ class NotificationProvider with ChangeNotifier {
   final FirestoreService _firestoreService = FirestoreService();
   final List<NotificationItem> _notifications = [];
   User? _user;
+  bool _isLoading = false;
 
   List<NotificationItem> get notifications => _notifications;
+
+  bool get isLoading => _isLoading;
 
   NotificationProvider() {
     _user = FirebaseAuth.instance.currentUser;
@@ -19,9 +22,7 @@ class NotificationProvider with ChangeNotifier {
       _user = user;
       if (_user != null) {
         _clearNotifications();
-        _listenForFoodPosts();
-        _listenForOrders();
-        _listenForSellerOrders();
+        fetchNotifications();
       } else {
         _clearNotifications();
       }
@@ -33,7 +34,19 @@ class NotificationProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void _listenForFoodPosts() {
+  Future<void> fetchNotifications() async {
+    _isLoading = true;
+    notifyListeners();
+    await Future.wait([
+      _listenForFoodPosts(),
+      _listenForOrders(),
+      _listenForSellerOrders(),
+    ]);
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> _listenForFoodPosts() async {
     if (_user == null) return;
     _firestoreService.getFoodPostsStream(_user!.uid).listen((foodPosts) {
       final now = Timestamp.now();
@@ -43,14 +56,16 @@ class NotificationProvider with ChangeNotifier {
           newNotifications.add(NotificationItem(
             category: 'saleIsOver',
             title: 'Waktu Jual Habis',
-            description: 'Stok makanan "${post.name}" masih ada, tetapi waktu jual telah habis.',
+            description:
+                'Stok makanan "${post.name}" masih ada, tetapi waktu jual telah habis.',
             icon: MdiIcons.timerAlertOutline,
           ));
         } else if (post.stock == 0 && post.saleTime.compareTo(now) > 0) {
           newNotifications.add(NotificationItem(
             category: 'emptyStock',
             title: 'Stok Habis',
-            description: 'Stok makanan "${post.name}" habis, tetapi waktu jual masih tersisa.',
+            description:
+                'Stok makanan "${post.name}" habis, tetapi waktu jual masih tersisa.',
             icon: MdiIcons.packageVariantRemove,
           ));
         }
@@ -59,7 +74,7 @@ class NotificationProvider with ChangeNotifier {
     });
   }
 
-  void _listenForOrders() {
+  Future<void> _listenForOrders() async {
     if (_user == null) return;
     _firestoreService.getOrdersStream(_user!.uid).listen((orders) {
       final newNotifications = <NotificationItem>[];
@@ -68,14 +83,16 @@ class NotificationProvider with ChangeNotifier {
           newNotifications.add(NotificationItem(
             category: 'orderConfirmed',
             title: 'Pesanan Dikonfirmasi',
-            description: 'Pesanan Anda dengan ID ${order.orderId} telah dikonfirmasi.',
+            description:
+                'Pesanan Anda dengan ID ${order.orderId} telah dikonfirmasi.',
             icon: MdiIcons.basketCheckOutline,
           ));
         } else if (order.status == 'canceled') {
           newNotifications.add(NotificationItem(
             category: 'orderDeclined',
             title: 'Pesanan Ditolak',
-            description: 'Pesanan Anda dengan ID ${order.orderId} telah dibatalkan.',
+            description:
+                'Pesanan Anda dengan ID ${order.orderId} telah dibatalkan.',
             icon: MdiIcons.basketRemoveOutline,
           ));
         }
@@ -84,7 +101,7 @@ class NotificationProvider with ChangeNotifier {
     });
   }
 
-  void _listenForSellerOrders() {
+  Future<void> _listenForSellerOrders() async {
     if (_user == null) return;
     _firestoreService.getSellerOrdersStream(_user!.uid).listen((orders) {
       final newNotifications = <NotificationItem>[];
@@ -103,8 +120,11 @@ class NotificationProvider with ChangeNotifier {
   }
 
   void _updateNotifications(List<NotificationItem> newNotifications) {
-    final existingDescriptions = _notifications.map((n) => n.description).toSet();
-    final uniqueNotifications = newNotifications.where((n) => !existingDescriptions.contains(n.description)).toList();
+    final existingDescriptions =
+        _notifications.map((n) => n.description).toSet();
+    final uniqueNotifications = newNotifications
+        .where((n) => !existingDescriptions.contains(n.description))
+        .toList();
 
     _notifications.addAll(uniqueNotifications);
     notifyListeners();
