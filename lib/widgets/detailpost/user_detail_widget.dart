@@ -48,7 +48,7 @@ class UserProfileWidget extends StatelessWidget {
                       color: Colors.orange, size: 15.0),
                   const SizedBox(width: 4.0),
                   Text(
-                    '${user.starRating}/5.0',
+                    '${user.starRating.toStringAsFixed(1)}/5.0',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontSize: 13.0,
                           color: onBackground,

@@ -57,3 +57,9 @@ String formatDate(Timestamp timestamp) {
   final DateFormat dateFormat = DateFormat('d MMMM yyyy, h:mm a', 'id_ID');
   return dateFormat.format(dateTime);
 }
+
+String formatOnlyDate(Timestamp timestamp) {
+  final dateTime = timestamp.toDate();
+  final DateFormat dateFormat = DateFormat('d MMMM yyyy', 'id_ID');
+  return dateFormat.format(dateTime);
+}

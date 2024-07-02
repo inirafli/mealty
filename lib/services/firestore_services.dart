@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mealty/data/model/food_review.dart';
 import 'package:mealty/data/model/user.dart';
 import 'package:mealty/data/model/food_order.dart';
 
@@ -261,9 +262,9 @@ class FirestoreService {
     });
   }
 
-  Future<List<Map<String, dynamic>>> getFoodReviews(String foodId) async {
+  Future<List<FoodReview>> getFoodReviews(String foodId) async {
     QuerySnapshot snapshot = await _db.collection('foods').doc(foodId).collection('reviews').orderBy('timeReview', descending: true).get();
-    return snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+    return snapshot.docs.map((doc) => FoodReview.fromFirestore(doc)).toList();
   }
 
   // Method for listening to Changes

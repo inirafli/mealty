@@ -4,6 +4,7 @@ import 'package:location/location.dart';
 import 'package:mealty/utils/fake_data_generator.dart';
 
 import '../data/model/food_post.dart';
+import '../data/model/food_review.dart';
 import '../services/firestore_services.dart';
 
 class FoodProvider with ChangeNotifier {
@@ -12,7 +13,7 @@ class FoodProvider with ChangeNotifier {
   List<FoodPost> _posts = [];
   List<FoodPost> _filteredPosts = [];
   FoodPost? _selectedPost;
-  List<Map<String, dynamic>>? _reviews;
+  List<FoodReview> _reviews = [];
   bool _isLoading = true;
   bool _isDetailLoading = true;
 
@@ -28,7 +29,7 @@ class FoodProvider with ChangeNotifier {
 
   List<FoodPost> get posts => _filteredPosts;
 
-  List<Map<String, dynamic>>? get reviews => _reviews;
+  List<FoodReview> get reviews => _reviews;
 
   bool get isLoading => _isLoading;
 

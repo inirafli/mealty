@@ -198,7 +198,7 @@ class PostCard extends StatelessWidget {
                           ),
                           const SizedBox(width: 2.0),
                           Text(
-                            post.user.starRating.toString(),
+                            post.user.starRating.toStringAsFixed(1),
                             style:
                                 Theme.of(context).textTheme.bodySmall?.copyWith(
                                       fontSize: 13.0,

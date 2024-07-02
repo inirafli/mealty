@@ -92,7 +92,7 @@ class ProfileDetails extends StatelessWidget {
                       ),
                       const SizedBox(width: 8.0),
                       Text(
-                        '$starRating/5.0',
+                        '${starRating.toStringAsFixed(1)}/5.0',
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                               color: onBackground,
                               fontWeight: FontWeight.bold,
@@ -104,6 +104,7 @@ class ProfileDetails extends StatelessWidget {
                     'dari $countRating ulasan',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: onBackground,
+                          height: 1.0,
                         ),
                   ),
                 ],
@@ -131,6 +132,7 @@ class ProfileDetails extends StatelessWidget {
                     'telah diselamatkan',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: onBackground,
+                          height: 1.0,
                         ),
                   ),
                 ],

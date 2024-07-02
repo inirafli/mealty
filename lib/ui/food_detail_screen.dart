@@ -4,16 +4,15 @@ import 'package:mealty/widgets/detailpost/category_stock_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-import '../data/model/user.dart';
 import '../provider/cart_provider.dart';
 import '../provider/food_provider.dart';
-import '../services/firestore_services.dart';
 import '../widgets/common/custom_snackbar.dart';
 import '../widgets/detailpost/countdown_timer_widget.dart';
 import '../widgets/detailpost/food_location_widget.dart';
 import '../widgets/detailpost/name_description_widget.dart';
 import '../widgets/detailpost/price_type_widgets.dart';
 import '../widgets/detailpost/user_detail_widget.dart';
+import '../widgets/detailpost/food_review_list.dart';
 
 class FoodDetailScreen extends StatefulWidget {
   final String postId;
@@ -42,7 +41,6 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
       body: Consumer<FoodProvider>(
         builder: (context, foodProvider, child) {
           final post = foodProvider.selectedPost;
-          final reviews = foodProvider.reviews;
 
           if (post == null) {
             return const Center(
@@ -163,89 +161,30 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                             formattedDistance: post.formattedDistance,
                           ),
                         ),
-                        const SizedBox(height: 10.0),
-                        if (reviews != null)
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
-                            itemCount: reviews.length,
-                            itemBuilder: (context, index) {
-                              final review = reviews[index];
-                              return FutureBuilder<User>(
-                                future: FirestoreService()
-                                    .getUser(review['userId']),
-                                builder: (context, snapshot) {
-                                  if (!snapshot.hasData) {
-                                    return CircularProgressIndicator();
-                                  }
-                                  final user = snapshot.data as User;
-                                  return Container(
-                                    padding: const EdgeInsets.all(8.0),
-                                    margin: const EdgeInsets.only(bottom: 10.0),
-                                    decoration: BoxDecoration(
-                                      color: onPrimary,
-                                      borderRadius: BorderRadius.circular(8.0),
-                                    ),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        CircleAvatar(
-                                          backgroundImage:
-                                              NetworkImage(user.photoUrl),
-                                        ),
-                                        const SizedBox(width: 10.0),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                user.username,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyMedium
-                                                    ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                              ),
-                                              Text(review['reviewMessage']),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(width: 10.0),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: [
-                                            Row(
-                                              children: List.generate(5, (i) {
-                                                return Icon(
-                                                  i < review['rating']
-                                                      ? Icons.star
-                                                      : Icons.star_border,
-                                                  color: Colors.orange,
-                                                );
-                                              }),
-                                            ),
-                                            Text(
-                                              review['timeReview']
-                                                  .toDate()
-                                                  .toString(),
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall,
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              );
-                            },
+                        const SizedBox(height: 14.0),
+                        Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 16.0, horizontal: 20.0),
+                          decoration: BoxDecoration(
+                            color: onPrimary,
+                            borderRadius: BorderRadius.circular(12.0),
                           ),
+                          child: Text(
+                            'Ulasan Pembeli',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onBackground,
+                                ),
+                          ),
+                        ),
+                        const SizedBox(height: 14.0),
+                        const FoodReviewList(),
                       ],
                     ),
                   ),

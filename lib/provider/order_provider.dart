@@ -177,14 +177,13 @@ class OrderProvider with ChangeNotifier {
     }
   }
 
-  Future<void> submitOrderRating(String orderId, int rating) async {
+  Future<void> submitOrderRatingAndReview(
+      String orderId, String foodId, int rating, String reviewMessage) async {
+    final effectiveReviewMessage =
+        reviewMessage.isEmpty ? ratingMessage : reviewMessage;
     await _firestoreService.addOrderRating(orderId, rating);
-    await _fetchOrders();
-  }
-
-  Future<void> submitOrderRatingAndReview(String orderId, String foodId, int rating, String reviewMessage) async {
-    await _firestoreService.addOrderRating(orderId, rating);
-    await _firestoreService.addFoodReview(foodId, _user!.uid, reviewMessage, rating);
+    await _firestoreService.addFoodReview(
+        foodId, _user!.uid, effectiveReviewMessage, rating);
     await _fetchOrders();
   }
 
