@@ -16,7 +16,7 @@ class OrderProvider with ChangeNotifier {
   List<FoodOrder> _originalSellerOrders = [];
   bool _isLoading = true;
   String _filter = 'all';
-  int _selectedRating = 1;
+  int _selectedRating = 5;
   String? _errorMessage;
   String _filterDate = 'allDate';
   DateTime? _startDate;
@@ -179,6 +179,12 @@ class OrderProvider with ChangeNotifier {
 
   Future<void> submitOrderRating(String orderId, int rating) async {
     await _firestoreService.addOrderRating(orderId, rating);
+    await _fetchOrders();
+  }
+
+  Future<void> submitOrderRatingAndReview(String orderId, String foodId, int rating, String reviewMessage) async {
+    await _firestoreService.addOrderRating(orderId, rating);
+    await _firestoreService.addFoodReview(foodId, _user!.uid, reviewMessage, rating);
     await _fetchOrders();
   }
 

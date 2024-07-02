@@ -251,6 +251,21 @@ class FirestoreService {
     });
   }
 
+  Future<void> addFoodReview(String foodId, String userId, String reviewMessage, int rating) async {
+    final reviewId = 'review-${generateRandomId(8)}';
+    await _db.collection('foods').doc(foodId).collection('reviews').doc(reviewId).set({
+      'userId': userId,
+      'reviewMessage': reviewMessage,
+      'rating': rating,
+      'timeReview': Timestamp.now(),
+    });
+  }
+
+  Future<List<Map<String, dynamic>>> getFoodReviews(String foodId) async {
+    QuerySnapshot snapshot = await _db.collection('foods').doc(foodId).collection('reviews').orderBy('timeReview', descending: true).get();
+    return snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+  }
+
   // Method for listening to Changes
   Stream<List<Food>> getFoodPostsStream(String userId) {
     return _db

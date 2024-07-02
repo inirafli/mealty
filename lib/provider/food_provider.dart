@@ -12,6 +12,7 @@ class FoodProvider with ChangeNotifier {
   List<FoodPost> _posts = [];
   List<FoodPost> _filteredPosts = [];
   FoodPost? _selectedPost;
+  List<Map<String, dynamic>>? _reviews;
   bool _isLoading = true;
   bool _isDetailLoading = true;
 
@@ -26,6 +27,8 @@ class FoodProvider with ChangeNotifier {
   String get searchKeyword => _searchKeyword;
 
   List<FoodPost> get posts => _filteredPosts;
+
+  List<Map<String, dynamic>>? get reviews => _reviews;
 
   bool get isLoading => _isLoading;
 
@@ -89,13 +92,13 @@ class FoodProvider with ChangeNotifier {
     notifyListeners();
 
     final LocationData userLocation = await _location.getLocation();
-    final GeoPoint userGeoPoint =
-        GeoPoint(userLocation.latitude!, userLocation.longitude!);
+    final GeoPoint userGeoPoint = GeoPoint(userLocation.latitude!, userLocation.longitude!);
 
     final doc = await _firestoreService.getFoodPostById(id);
     if (doc != null) {
       final userData = await _firestoreService.getUser(doc['userId']);
       _selectedPost = FoodPost.fromFirestore(doc, userData, userGeoPoint);
+      _reviews = await _firestoreService.getFoodReviews(id);
     } else {
       _selectedPost = null;
     }

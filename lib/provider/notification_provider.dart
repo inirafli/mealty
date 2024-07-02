@@ -36,6 +36,7 @@ class NotificationProvider with ChangeNotifier {
 
   Future<void> fetchNotifications() async {
     _isLoading = true;
+    _clearNotifications();
     notifyListeners();
     await Future.wait([
       _listenForFoodPosts(),

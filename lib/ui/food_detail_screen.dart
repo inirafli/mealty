@@ -4,8 +4,10 @@ import 'package:mealty/widgets/detailpost/category_stock_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
+import '../data/model/user.dart';
 import '../provider/cart_provider.dart';
 import '../provider/food_provider.dart';
+import '../services/firestore_services.dart';
 import '../widgets/common/custom_snackbar.dart';
 import '../widgets/detailpost/countdown_timer_widget.dart';
 import '../widgets/detailpost/food_location_widget.dart';
@@ -40,6 +42,7 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
       body: Consumer<FoodProvider>(
         builder: (context, foodProvider, child) {
           final post = foodProvider.selectedPost;
+          final reviews = foodProvider.reviews;
 
           if (post == null) {
             return const Center(
@@ -160,6 +163,89 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                             formattedDistance: post.formattedDistance,
                           ),
                         ),
+                        const SizedBox(height: 10.0),
+                        if (reviews != null)
+                          ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: reviews.length,
+                            itemBuilder: (context, index) {
+                              final review = reviews[index];
+                              return FutureBuilder<User>(
+                                future: FirestoreService()
+                                    .getUser(review['userId']),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData) {
+                                    return CircularProgressIndicator();
+                                  }
+                                  final user = snapshot.data as User;
+                                  return Container(
+                                    padding: const EdgeInsets.all(8.0),
+                                    margin: const EdgeInsets.only(bottom: 10.0),
+                                    decoration: BoxDecoration(
+                                      color: onPrimary,
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        CircleAvatar(
+                                          backgroundImage:
+                                              NetworkImage(user.photoUrl),
+                                        ),
+                                        const SizedBox(width: 10.0),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                user.username,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyMedium
+                                                    ?.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                              ),
+                                              Text(review['reviewMessage']),
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(width: 10.0),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Row(
+                                              children: List.generate(5, (i) {
+                                                return Icon(
+                                                  i < review['rating']
+                                                      ? Icons.star
+                                                      : Icons.star_border,
+                                                  color: Colors.orange,
+                                                );
+                                              }),
+                                            ),
+                                            Text(
+                                              review['timeReview']
+                                                  .toDate()
+                                                  .toString(),
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ),
                       ],
                     ),
                   ),
@@ -174,15 +260,18 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
           final post = foodProvider.selectedPost;
           if (post == null) return const SizedBox.shrink();
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 22.0, vertical: 16.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 22.0, vertical: 16.0),
             child: SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  Provider.of<CartProvider>(context, listen: false).addToCart(post, context);
+                  Provider.of<CartProvider>(context, listen: false)
+                      .addToCart(post, context);
                   ScaffoldMessenger.of(context).showSnackBar(
                     CustomSnackBar(
-                      contentText: '${post.name} ditambahkan ke dalam Keranjang!',
+                      contentText:
+                          '${post.name} ditambahkan ke dalam Keranjang!',
                       context: context,
                     ),
                   );
@@ -192,9 +281,9 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                 child: Text(
                   'Tambahkan ke Keranjang',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
                 ),
               ),
             ),
