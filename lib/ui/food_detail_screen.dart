@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mealty/widgets/detailpost/category_stock_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -35,12 +36,14 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Color primary = Theme.of(context).colorScheme.primary;
     Color onPrimary = Theme.of(context).colorScheme.onPrimary;
 
     return Scaffold(
       body: Consumer<FoodProvider>(
         builder: (context, foodProvider, child) {
           final post = foodProvider.selectedPost;
+          final reviewCount = foodProvider.reviews.length;
 
           if (post == null) {
             return const Center(
@@ -162,29 +165,71 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                           ),
                         ),
                         const SizedBox(height: 14.0),
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 16.0, horizontal: 20.0),
-                          decoration: BoxDecoration(
-                            color: onPrimary,
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          child: Text(
-                            'Ulasan Pembeli',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onBackground,
+                        Skeletonizer(
+                          enabled: foodProvider.isDetailLoading,
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 16.0, horizontal: 20.0),
+                            decoration: BoxDecoration(
+                              color: onPrimary,
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Ulasan Pembeli',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onBackground,
+                                      ),
                                 ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 5.5, horizontal: 10.0),
+                                  decoration: BoxDecoration(
+                                    color: primary,
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        MdiIcons.forumOutline,
+                                        size: 16.0,
+                                        color: onPrimary,
+                                      ),
+                                      const SizedBox(width: 4.0),
+                                      Text(
+                                        '$reviewCount Ulasan',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium
+                                            ?.copyWith(
+                                              color: onPrimary,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 13.0,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                         const SizedBox(height: 14.0),
-                        const FoodReviewList(),
+                        Skeletonizer(
+                            enabled: foodProvider.isDetailLoading,
+                            child: const FoodReviewList()),
                       ],
                     ),
                   ),

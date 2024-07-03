@@ -20,7 +20,7 @@ class FoodReviewList extends StatelessWidget {
     final reviews = Provider.of<FoodProvider>(context).reviews;
 
     if (reviews.isEmpty) {
-      return const Center(child: Text('Belum ada Ulasan dari Pembeli'));
+      return Container();
     }
 
     return ListView.builder(
