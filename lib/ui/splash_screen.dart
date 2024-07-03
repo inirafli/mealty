@@ -59,8 +59,8 @@ class _SplashScreenState extends State<SplashScreen>
           const Spacer(flex: 3),
           FadeTransition(
             opacity: _animationController,
-            child: Image.asset('images/mealty_icon.png',
-                width: 300), // Ensure you have the correct asset path
+            child: Image.asset('images/mealty_app_icon.png',
+                width: 260), // Ensure you have the correct asset path
           ),
           const Spacer(), // Takes up available space
           Align(

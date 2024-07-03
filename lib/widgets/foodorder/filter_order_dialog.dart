@@ -99,8 +99,7 @@ class _FilterDialogState extends State<FilterDialog> {
         });
       },
       child: Container(
-        height: 38.0,
-        padding: const EdgeInsets.only(left: 14.0, right: 16.0, top: 6.0, bottom: 6.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         decoration: BoxDecoration(
           color: isSelected
               ? Theme.of(context).colorScheme.primary
@@ -129,6 +128,7 @@ class _FilterDialogState extends State<FilterDialog> {
   @override
   Widget build(BuildContext context) {
     Color primary = Theme.of(context).colorScheme.primary;
+    Color onBackground = Theme.of(context).colorScheme.onBackground;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16.0),
@@ -145,8 +145,8 @@ class _FilterDialogState extends State<FilterDialog> {
             children: [
               Text(
                 'Filter Tanggal Pesanan',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: primary,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: onBackground,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -193,7 +193,7 @@ class _FilterDialogState extends State<FilterDialog> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: primary,
                 disabledBackgroundColor: primary.withOpacity(0.15),
-                minimumSize: const Size(double.infinity, 40.0),
+                minimumSize: const Size(double.infinity, 42.0),
                 padding: EdgeInsets.zero,
               ),
               onPressed: (_selectedFilter == 'customDate' && (_startDate == null || _endDate == null))

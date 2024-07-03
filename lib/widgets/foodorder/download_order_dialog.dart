@@ -116,7 +116,7 @@ class _DownloadDialogState extends State<DownloadDialog> {
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: primary,
-                minimumSize: const Size(double.infinity, 40.0),
+                minimumSize: const Size(double.infinity, 42.0),
                 disabledBackgroundColor: primary.withOpacity(0.15),
                 padding: EdgeInsets.zero,
               ),

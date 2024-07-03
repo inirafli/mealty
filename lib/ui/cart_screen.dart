@@ -223,7 +223,7 @@ class _CartScreenState extends State<CartScreen> {
               return Visibility(
                 visible: cartProvider.cartItems.isNotEmpty,
                 child: Positioned(
-                  bottom: 16,
+                  bottom: 24,
                   left: 20,
                   right: 20,
                   child: Container(
