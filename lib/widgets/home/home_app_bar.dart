@@ -18,8 +18,11 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hasNotifications = context.watch<NotificationProvider>().notifications.isNotEmpty;
-    final bellIcon = hasNotifications ? MdiIcons.bellBadgeOutline : MdiIcons.bellOutline;
+    final notificationProvider = context.watch<NotificationProvider>();
+    final notificationCount = notificationProvider.notifications.length;
+
+    Color primary = Theme.of(context).colorScheme.primary;
+    Color onPrimary = Theme.of(context).colorScheme.onPrimary;
 
     return AppBar(
       backgroundColor: Theme.of(context).colorScheme.onPrimary,
@@ -85,20 +88,45 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
           const SizedBox(width: 10.0),
-          SizedBox(
-            width: 36.0,
-            height: 40.0,
-            child: IconButton(
-              padding: EdgeInsets.zero,
-              icon: Icon(
-                bellIcon,
-                size: 24.0,
-                color: Theme.of(context).colorScheme.primary,
+          Stack(
+            children: [
+              IconButton(
+                padding: EdgeInsets.zero,
+                icon: Icon(
+                  MdiIcons.bellOutline,
+                  size: 24.0,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                onPressed: () {
+                  context.go('/main/notifications');
+                },
               ),
-              onPressed: () {
-                context.go('/main/notifications');
-              },
-            ),
+              if (notificationCount > 0)
+                Positioned(
+                  right: 4,
+                  top: 4,
+                  child: Container(
+                    padding: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      color: primary,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    constraints: const BoxConstraints(
+                      minWidth: 16,
+                      minHeight: 16,
+                    ),
+                    child: Text(
+                      '$notificationCount',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: onPrimary,
+                        fontSize: 10.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+            ],
           ),
           const SizedBox(width: 6.0),
           SizedBox(

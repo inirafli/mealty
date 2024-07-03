@@ -5,23 +5,8 @@ import '../../provider/notification_provider.dart';
 import '../../widgets/common/custom_loading_indicator.dart';
 import '../../widgets/common/sub_screen_header.dart';
 
-class NotificationScreen extends StatefulWidget {
+class NotificationScreen extends StatelessWidget {
   const NotificationScreen({super.key});
-
-  @override
-  State<NotificationScreen> createState() => _NotificationScreenState();
-}
-
-class _NotificationScreenState extends State<NotificationScreen> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final notificationProvider =
-      Provider.of<NotificationProvider>(context, listen: false);
-      notificationProvider.fetchNotifications();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
