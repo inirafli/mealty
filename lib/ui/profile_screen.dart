@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:mealty/provider/notification_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/auth_provider.dart';
@@ -20,7 +21,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ProfileProvider>(context, listen: false).refreshUserFoodPosts();
+      Provider.of<ProfileProvider>(context, listen: false)
+          .refreshUserFoodPosts();
     });
   }
 
@@ -63,7 +65,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         Center(
                           child: CircleAvatar(
-                            backgroundImage: NetworkImage(profile.photoUrl.isEmpty
+                            backgroundImage: NetworkImage(profile
+                                    .photoUrl.isEmpty
                                 ? 'https://ui-avatars.com/api/?name=${profile.username}'
                                 : profile.photoUrl),
                             radius: 54.0,
@@ -119,12 +122,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             final authProvider = Provider.of<AuthProvider>(
                                 context,
                                 listen: false);
+                            final notificationProvider =
+                                Provider.of<NotificationProvider>(context,
+                                    listen: false);
+                            await notificationProvider.cleanNotifications();
                             await authProvider.signOut();
                             await profileProvider.resetState();
                             if (context.mounted) context.go('/login');
                           },
                         ),
-                        const SizedBox(height: 24.0),
+                        const SizedBox(height: 16.0),
                       ],
                     ),
                   ),
