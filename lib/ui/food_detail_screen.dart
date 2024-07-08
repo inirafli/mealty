@@ -37,6 +37,19 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
     });
   }
 
+  bool _isButtonEnabled(FoodProvider foodProvider) {
+    final post = foodProvider.selectedPost;
+    if (foodProvider.isDetailLoading || post == null) {
+      return false;
+    }
+    final DateTime currentTime = DateTime.now();
+    final DateTime saleEndTime = post.saleTime.toDate();
+    if (post.stock <= 0 || saleEndTime.isBefore(currentTime)) {
+      return false;
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     Color primary = Theme.of(context).colorScheme.primary;
@@ -256,19 +269,23 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
             child: SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  Provider.of<CartProvider>(context, listen: false)
-                      .addToCart(post, context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    CustomSnackBar(
-                      contentText:
-                          '${post.name} ditambahkan ke dalam Keranjang!',
-                      context: context,
-                    ),
-                  );
-
-                  context.pop();
-                },
+                style: ElevatedButton.styleFrom(
+                  disabledBackgroundColor: primary.withOpacity(0.15),
+                ),
+                onPressed: _isButtonEnabled(foodProvider)
+                    ? () {
+                        Provider.of<CartProvider>(context, listen: false)
+                            .addToCart(post, context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          CustomSnackBar(
+                            contentText:
+                                '${post.name} ditambahkan ke dalam Keranjang!',
+                            context: context,
+                          ),
+                        );
+                        context.pop();
+                      }
+                    : null,
                 child: Text(
                   'Tambahkan ke Keranjang',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(

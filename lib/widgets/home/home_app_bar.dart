@@ -46,24 +46,28 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.w600,
+                      fontSize: 13.0,
+                      height: 1.0,
                     ),
                 decoration: InputDecoration(
-                  isDense: true,
                   hintText: 'Mau cari makan apa hari ini?',
                   hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Theme.of(context).colorScheme.primary,
+                        fontSize: 13.0,
+                        height: 1.0,
                       ),
                   prefixIcon: hasInput
                       ? null
                       : Icon(
                           CupertinoIcons.search,
-                          size: 20.0,
+                          size: 18.0,
                           color: Theme.of(context).colorScheme.primary,
                         ),
                   suffixIcon: hasInput
                       ? IconButton(
                           icon: Icon(
                             Icons.close,
+                            size: 18.0,
                             color: Theme.of(context).colorScheme.primary,
                           ),
                           onPressed: () {
@@ -74,60 +78,78 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                         )
                       : null,
                   prefixIconConstraints: const BoxConstraints(
-                    minWidth: 46,
+                    minWidth: 36,
+                    minHeight: 40,
+                  ),
+                  suffixIconConstraints: const BoxConstraints(
+                    minWidth: 36,
                     minHeight: 40,
                   ),
                   filled: true,
-                  fillColor: Theme.of(context).colorScheme.onPrimary,
+                  fillColor: Colors.grey[200],
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.0),
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide(
+                      color: primary,
+                      width: 1.0,
+                    ),
                   ),
                   contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 12.0),
+                    vertical: 0.0,
+                    horizontal: 16.0,
+                  ),
                 ),
               ),
             ),
           ),
           const SizedBox(width: 10.0),
-          Stack(
-            children: [
-              IconButton(
-                padding: EdgeInsets.zero,
-                icon: Icon(
-                  MdiIcons.bellOutline,
-                  size: 24.0,
-                  color: Theme.of(context).colorScheme.primary,
+          SizedBox(
+            width: 36.0,
+            height: 40.0,
+            child: Stack(
+              children: [
+                IconButton(
+                  padding: EdgeInsets.zero,
+                  icon: Icon(
+                    MdiIcons.bellOutline,
+                    size: 24.0,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  onPressed: () {
+                    context.go('/main/notifications');
+                  },
                 ),
-                onPressed: () {
-                  context.go('/main/notifications');
-                },
-              ),
-              if (notificationCount > 0)
-                Positioned(
-                  right: 4,
-                  top: 4,
-                  child: Container(
-                    padding: const EdgeInsets.all(2),
-                    decoration: BoxDecoration(
-                      color: primary,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    constraints: const BoxConstraints(
-                      minWidth: 16,
-                      minHeight: 16,
-                    ),
-                    child: Text(
-                      '$notificationCount',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: onPrimary,
-                        fontSize: 10.0,
-                        fontWeight: FontWeight.bold,
+                if (notificationCount > 0)
+                  Positioned(
+                    right: 1,
+                    top: 1,
+                    child: Container(
+                      padding: const EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                        color: primary,
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                      textAlign: TextAlign.center,
+                      constraints: const BoxConstraints(
+                        minWidth: 16,
+                        minHeight: 16,
+                      ),
+                      child: Text(
+                        '$notificationCount',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: onPrimary,
+                              fontSize: 9.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
           const SizedBox(width: 6.0),
           SizedBox(
@@ -150,5 +172,5 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(66.0);
+  Size get preferredSize => const Size.fromHeight(64.0);
 }

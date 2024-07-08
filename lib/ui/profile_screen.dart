@@ -70,12 +70,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 radius: 54.0,
                                 backgroundColor: Colors.grey,
                               ),
-                              child: CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                    profile.photoUrl.isEmpty
-                                        ? generateAvatarUrl(profile.username)
-                                        : profile.photoUrl),
-                                radius: 54.0,
+                              child: InkWell(
+                                onTap: () {
+                                  final imageUrl = profile.photoUrl.isEmpty
+                                      ? generateAvatarUrl(profile.username)
+                                      : profile.photoUrl;
+                                  context.go('/main/imageFullScreen', extra: imageUrl);
+                                },
+                                child: CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                      profile.photoUrl.isEmpty
+                                          ? generateAvatarUrl(profile.username)
+                                          : profile.photoUrl),
+                                  radius: 54.0,
+                                ),
                               ),
                             ),
                           ),

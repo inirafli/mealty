@@ -122,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Row(
                         children: [
                           Text(
-                            'Eksplorasi Pilihan Mealty',
+                            'Katalog Mealty',
                             style: Theme.of(context)
                                 .textTheme
                                 .titleMedium

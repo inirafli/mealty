@@ -12,7 +12,6 @@ import 'package:mealty/provider/order_provider.dart';
 import 'package:mealty/provider/profile_provider.dart';
 import 'package:mealty/routes/routes.dart';
 import 'package:provider/provider.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 import 'firebase_options.dart';
 import 'provider/auth_provider.dart';
@@ -49,6 +48,7 @@ class MyApp extends StatelessWidget {
     final GoRouter router = AppRouter.configureRouter();
 
     return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       routerConfig: router,
       title: 'Mealty',
       theme: ThemeData(

@@ -39,7 +39,7 @@ class PasswordTextField extends StatelessWidget {
               ),
           decoration: InputDecoration(
             filled: true,
-            fillColor: Theme.of(context).colorScheme.surface.withOpacity(0.2),
+            fillColor: Colors.grey[200],
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             hintText: hintText,
@@ -48,11 +48,11 @@ class PasswordTextField extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(12.0),
               borderSide: BorderSide.none,
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(12.0),
               borderSide: BorderSide(
                   color:
                       Theme.of(context).colorScheme.primary.withOpacity(0.65),
