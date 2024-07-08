@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mealty/widgets/common/alert_text.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/notification_provider.dart';
@@ -47,15 +48,8 @@ class NotificationScreen extends StatelessWidget {
                 }
 
                 if (provider.notifications.isEmpty) {
-                  return Center(
-                    child: Text(
-                      'Belum ada Pemberitahuan untuk Anda',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: primary,
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                  );
+                  return const AlertText(
+                      displayText: 'Belum ada Pemberitahuan');
                 }
 
                 return ListView.builder(

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:mealty/widgets/common/alert_text.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/cart_provider.dart';
@@ -54,12 +55,7 @@ class _CartScreenState extends State<CartScreen> {
           Consumer<CartProvider>(
             builder: (context, cartProvider, child) {
               if (cartProvider.cartItems.isEmpty) {
-                return Center(
-                  child: Text(
-                    'Keranjang Kosong',
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                );
+                return const AlertText(displayText: 'Keranjnag masih Kosong');
               }
 
               return ListView.builder(

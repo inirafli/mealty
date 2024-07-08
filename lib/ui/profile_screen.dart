@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:mealty/provider/notification_provider.dart';
+import 'package:mealty/utils/data_conversion.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
-import '../provider/auth_provider.dart';
 import '../provider/profile_provider.dart';
+import '../widgets/profile/logout_dialog.dart';
 import '../widgets/profile/profile_details.dart';
 import '../widgets/profile/profile_food_types.dart';
 
@@ -47,95 +48,107 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       body: Consumer<ProfileProvider>(
         builder: (context, profileProvider, child) {
-          if (profileProvider.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (profileProvider.profile == null) {
+          if (profileProvider.profile == null) {
             return const Center(child: Text('User profile not found.'));
           } else {
             final profile = profileProvider.profile!;
 
             return SingleChildScrollView(
               key: const PageStorageKey<String>('profile_scroll_position'),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Center(
-                          child: CircleAvatar(
-                            backgroundImage: NetworkImage(profile
-                                    .photoUrl.isEmpty
-                                ? 'https://ui-avatars.com/api/?name=${profile.username}'
-                                : profile.photoUrl),
-                            radius: 54.0,
+              child: Skeletonizer(
+                enabled: profileProvider.isLoading,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: Skeleton.replace(
+                              replacement: const CircleAvatar(
+                                radius: 54.0,
+                                backgroundColor: Colors.grey,
+                              ),
+                              child: CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                    profile.photoUrl.isEmpty
+                                        ? generateAvatarUrl(profile.username)
+                                        : profile.photoUrl),
+                                radius: 54.0,
+                              ),
+                            ),
                           ),
-                        ),
-                        ProfileDetails(
-                          username: profile.username,
-                          phoneNumber: profile.phoneNumber,
-                          email: profile.email,
-                          starRating: profile.starRating,
-                          countRating: profile.countRating,
-                          totalCompletedFoodTypes:
-                              profileProvider.totalCompletedFoodTypes,
-                        ),
-                        ProfileFoodTypes(
-                          completedFoodTypes: profile.completedFoodTypes,
-                        ),
-                      ],
+                          Skeletonizer(
+                            enabled: profileProvider.isLoading,
+                            child: ProfileDetails(
+                              username: profile.username,
+                              phoneNumber: profile.phoneNumber,
+                              email: profile.email,
+                              starRating: profile.starRating,
+                              countRating: profile.countRating,
+                              totalCompletedFoodTypes:
+                                  profileProvider.totalCompletedFoodTypes,
+                            ),
+                          ),
+                          Skeletonizer(
+                            enabled: profileProvider.isLoading,
+                            child: ProfileFoodTypes(
+                              completedFoodTypes: profile.completedFoodTypes,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    color: Colors.grey[200],
-                    width: double.infinity,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 12.0),
-                        _buildActionButton(
-                          context,
-                          icon: MdiIcons.accountEditOutline,
-                          text: 'Ubah Profil',
-                          subText: 'Kelola data Profil-mu.',
-                          onTap: () {
-                            // Handle Ubah Profil tap
-                            context.go('/main/profileEdit');
-                          },
-                        ),
-                        _buildActionButton(
-                          context,
-                          icon: MdiIcons.foodOutline,
-                          text: 'Unggahan Makanan',
-                          subText: 'Kelola semua unggahan Makanan-mu',
-                          onTap: () {
-                            context.go('/main/profileFoodList');
-                          },
-                        ),
-                        _buildActionButton(
-                          context,
-                          icon: MdiIcons.logoutVariant,
-                          text: 'Keluar',
-                          subText: 'Keluar dari Sesi Akun-mu',
-                          onTap: () async {
-                            final authProvider = Provider.of<AuthProvider>(
-                                context,
-                                listen: false);
-                            final notificationProvider =
-                                Provider.of<NotificationProvider>(context,
-                                    listen: false);
-                            await notificationProvider.cleanNotifications();
-                            await authProvider.signOut();
-                            await profileProvider.resetState();
-                            if (context.mounted) context.go('/login');
-                          },
-                        ),
-                        const SizedBox(height: 16.0),
-                      ],
+                    Container(
+                      color: Colors.grey[200],
+                      width: double.infinity,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(height: 12.0),
+                          _buildActionButton(
+                            context,
+                            icon: MdiIcons.accountEditOutline,
+                            text: 'Ubah Profil',
+                            subText: 'Kelola data Profil-mu.',
+                            onTap: () {
+                              // Handle Ubah Profil tap
+                              context.go('/main/profileEdit');
+                            },
+                          ),
+                          _buildActionButton(
+                            context,
+                            icon: MdiIcons.foodOutline,
+                            text: 'Unggahan Makanan',
+                            subText: 'Kelola semua unggahan Makanan-mu',
+                            onTap: () {
+                              context.go('/main/profileFoodList');
+                            },
+                          ),
+                          _buildActionButton(
+                            context,
+                            icon: MdiIcons.logoutVariant,
+                            text: 'Keluar',
+                            subText: 'Keluar dari Sesi Akun-mu',
+                            onTap: () {
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20.0)),
+                                ),
+                                builder: (context) => const LogoutDialog(),
+                              );
+                            },
+                          ),
+                          const SizedBox(height: 20.0),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             );
           }

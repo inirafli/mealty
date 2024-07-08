@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mealty/provider/food_provider.dart';
 import 'package:mealty/utils/fake_data_generator.dart';
+import 'package:mealty/widgets/common/alert_text.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import '../provider/notification_provider.dart';
@@ -28,7 +29,8 @@ class _HomeScreenState extends State<HomeScreen> {
     _searchController.addListener(_updateInputStatus);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final notificationProvider = Provider.of<NotificationProvider>(context, listen: false);
+      final notificationProvider =
+          Provider.of<NotificationProvider>(context, listen: false);
       notificationProvider.fetchNotifications();
     });
   }
@@ -103,26 +105,9 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(child:
                 Consumer<FoodProvider>(builder: (context, foodProvider, child) {
               if (foodProvider.posts.isEmpty && !foodProvider.isLoading) {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        'images/food_not_found.png',
-                        fit: BoxFit.cover,
-                        height: 104.0,
-                      ),
-                      Text(
-                        'Belum ada Makanan atau Minuman\n yang tersedia.',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: primary,
-                              fontWeight: FontWeight.bold,
-                            ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                );
+                return const AlertText(
+                    displayText:
+                        'Belum ada Makanan atau Minuman yang tersedia');
               }
 
               return RefreshIndicator(

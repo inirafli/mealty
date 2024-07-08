@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mealty/widgets/common/alert_text.dart';
 import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -25,14 +26,8 @@ class SellerOrdersTab extends StatelessWidget {
           children: [
             const OrderFilterWidget(),
             if (orders.isEmpty)
-              Expanded(
-                child: Center(
-                  child: Text(
-                    'Belum ada Penjualan Makanan',
-                    style: Theme.of(context).textTheme.titleMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+              const Expanded(
+                child: AlertText(displayText: 'Belum ada Penjualan Makanan'),
               )
             else
               Expanded(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:mealty/widgets/common/alert_text.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/profile_provider.dart';
@@ -22,7 +23,8 @@ class _ProfileFoodScreenState extends State<ProfileFoodScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<ProfileProvider>(context, listen: false).refreshUserFoodPosts();
+      Provider.of<ProfileProvider>(context, listen: false)
+          .refreshUserFoodPosts();
     });
   }
 
@@ -86,24 +88,17 @@ class _ProfileFoodScreenState extends State<ProfileFoodScreen> {
                       }
 
                       if (profileProvider.filteredUserFoodPosts.isEmpty) {
-                        return Center(
-                          child: Text(
-                            'Belum ada Makanan',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                  color: onBackground,
-                                ),
-                          ),
-                        );
+                        return const AlertText(
+                            displayText: 'Belum ada Makanan yang kamu Unggah');
                       }
 
                       return RefreshIndicator(
                         onRefresh: profileProvider.refreshUserFoodPosts,
                         child: ListView.builder(
-                          padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 24.0),
-                          itemCount: profileProvider.filteredUserFoodPosts.length,
+                          padding: const EdgeInsets.only(
+                              left: 20.0, right: 20.0, bottom: 24.0),
+                          itemCount:
+                              profileProvider.filteredUserFoodPosts.length,
                           itemBuilder: (context, index) {
                             final foodPost =
                                 profileProvider.filteredUserFoodPosts[index];
@@ -233,7 +228,8 @@ class _ProfileFoodScreenState extends State<ProfileFoodScreen> {
                                                   padding: EdgeInsets.zero,
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
-                                                        BorderRadius.circular(50),
+                                                        BorderRadius.circular(
+                                                            50),
                                                   ),
                                                 ),
                                                 onPressed: () {
@@ -268,7 +264,8 @@ class _ProfileFoodScreenState extends State<ProfileFoodScreen> {
                                                   padding: EdgeInsets.zero,
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
-                                                        BorderRadius.circular(50),
+                                                        BorderRadius.circular(
+                                                            50),
                                                   ),
                                                 ),
                                                 onPressed: () {
@@ -282,7 +279,8 @@ class _ProfileFoodScreenState extends State<ProfileFoodScreen> {
                                                   );
                                                 },
                                                 child: Icon(
-                                                  MdiIcons.storefrontEditOutline,
+                                                  MdiIcons
+                                                      .storefrontEditOutline,
                                                   color: secondary,
                                                   size: 20.0,
                                                 ),

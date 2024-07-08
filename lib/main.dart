@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:mealty/common/styles.dart';
@@ -13,6 +12,7 @@ import 'package:mealty/provider/order_provider.dart';
 import 'package:mealty/provider/profile_provider.dart';
 import 'package:mealty/routes/routes.dart';
 import 'package:provider/provider.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import 'firebase_options.dart';
 import 'provider/auth_provider.dart';
@@ -47,13 +47,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GoRouter router = AppRouter.configureRouter();
-
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.light,
-      ),
-    );
 
     return MaterialApp.router(
       routerConfig: router,

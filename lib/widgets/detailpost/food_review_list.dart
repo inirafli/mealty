@@ -39,8 +39,6 @@ class FoodReviewList extends StatelessWidget {
             }
 
             final user = snapshot.data as User;
-            String placeholderImageUrl =
-                'https://ui-avatars.com/api/?name=${user.username}';
 
             return Container(
               padding:
@@ -56,7 +54,7 @@ class FoodReviewList extends StatelessWidget {
                   CircleAvatar(
                     backgroundImage: NetworkImage(user.photoUrl.isNotEmpty
                         ? user.photoUrl
-                        : placeholderImageUrl),
+                        : generateAvatarUrl(user.username)),
                   ),
                   const SizedBox(width: 16.0),
                   Expanded(

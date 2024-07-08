@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -55,8 +56,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                   prefixIcon: hasInput
                       ? null
                       : Icon(
-                          MdiIcons.storeSearchOutline,
-                          size: 18.5,
+                          CupertinoIcons.search,
+                          size: 20.0,
                           color: Theme.of(context).colorScheme.primary,
                         ),
                   suffixIcon: hasInput

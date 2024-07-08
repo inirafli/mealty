@@ -63,3 +63,7 @@ String formatOnlyDate(Timestamp timestamp) {
   final DateFormat dateFormat = DateFormat('d MMMM yyyy', 'id_ID');
   return dateFormat.format(dateTime);
 }
+
+String generateAvatarUrl(String username) {
+  return 'https://ui-avatars.com/api/?name=$username&color=FFF9F6&background=854F6C';
+}
