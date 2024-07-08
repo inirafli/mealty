@@ -4,12 +4,13 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final String labelText;
   final String hintText;
+  final TextInputType inputType;
 
   const CustomTextField({
     super.key,
     required this.controller,
     required this.labelText,
-    required this.hintText,
+    required this.hintText, required this.inputType,
   });
 
   @override
@@ -22,14 +23,17 @@ class CustomTextField extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onBackground,
                 fontWeight: FontWeight.w600,
+                fontSize: 13.0,
               ),
         ),
         const SizedBox(height: 8),
         TextField(
+          keyboardType: inputType,
           controller: controller,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onBackground,
                 fontWeight: FontWeight.w600,
+                fontSize: 15.0,
               ),
           decoration: InputDecoration(
             filled: true,

@@ -4,12 +4,16 @@ class PasswordTextField extends StatelessWidget {
   final TextEditingController controller;
   final bool obscureText;
   final VoidCallback togglePasswordVisibility;
+  final String labelText;
+  final String hintText;
 
   const PasswordTextField({
     super.key,
     required this.controller,
     required this.obscureText,
     required this.togglePasswordVisibility,
+    required this.labelText,
+    required this.hintText,
   });
 
   @override
@@ -18,10 +22,11 @@ class PasswordTextField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Kata Sandi',
+          labelText,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onBackground,
                 fontWeight: FontWeight.w600,
+                fontSize: 13.0,
               ),
         ),
         const SizedBox(height: 8),
@@ -30,13 +35,14 @@ class PasswordTextField extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                 color: Theme.of(context).colorScheme.onBackground,
                 fontWeight: FontWeight.w600,
+                fontSize: 15.0,
               ),
           decoration: InputDecoration(
             filled: true,
             fillColor: Theme.of(context).colorScheme.surface.withOpacity(0.2),
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            hintText: 'Masukkan Kata Sandi-mu',
+            hintText: hintText,
             hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onBackground,
                   fontWeight: FontWeight.w500,

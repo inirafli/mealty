@@ -65,10 +65,23 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> createUserWithEmailPassword(
-      String email, String password, String displayName) async {
-    if (email.isEmpty || password.isEmpty || displayName.isEmpty) {
-      _errorMessage = 'Email, username, dan kata sandi tidak boleh kosong.';
+  Future<void> createUserWithEmailPassword(String email, String password,
+      [String? confirmPassword, String? displayName]) async {
+    if (email.isEmpty ||
+        password.isEmpty ||
+        displayName == null ||
+        displayName.isEmpty ||
+        confirmPassword == null ||
+        confirmPassword.isEmpty) {
+      _errorMessage =
+          'Email, username, kata sandi, atau konfirmasi kata sandi tidak boleh kosong.';
+      _authState = AuthState.error;
+      notifyListeners();
+      return;
+    }
+
+    if (password != confirmPassword) {
+      _errorMessage = 'Konfirmasi kata sandi tidak cocok.';
       _authState = AuthState.error;
       notifyListeners();
       return;
@@ -78,8 +91,9 @@ class AuthProvider extends ChangeNotifier {
       _authState = AuthState.loading;
       notifyListeners();
 
-      bool isUsernameTaken = await _firestoreService.isUsernameUnique(displayName);
-      if (isUsernameTaken) {
+      bool isUsernameUnique =
+          await _firestoreService.isUsernameUnique(displayName);
+      if (!isUsernameUnique) {
         _errorMessage = 'Username telah digunakan. Coba yang lain.';
         _authState = AuthState.error;
         notifyListeners();

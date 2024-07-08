@@ -9,15 +9,17 @@ import '../common/custom_snackbar.dart';
 class AuthActionButton extends StatelessWidget {
   final TextEditingController emailController;
   final TextEditingController passwordController;
+  final TextEditingController? confirmPasswordController;
   final TextEditingController? usernameController;
   final String buttonText;
-  final Future<void> Function(String email, String password, [String? username]) action;
+  final Future<void> Function(String email, String password, [String? confirmPassword, String? username]) action;
   final VoidCallback onSuccess;
 
   const AuthActionButton({
     super.key,
     required this.emailController,
     required this.passwordController,
+    this.confirmPasswordController,
     this.usernameController,
     required this.buttonText,
     required this.action,
@@ -36,9 +38,10 @@ class AuthActionButton extends StatelessWidget {
                 : () async {
               String email = emailController.text.trim();
               String password = passwordController.text.trim();
+              String? confirmPassword = confirmPasswordController?.text.trim();
               String? username = usernameController?.text.trim();
 
-              await action(email, password, username);
+              await action(email, password, confirmPassword, username);
 
               if (!context.mounted) return;
 
@@ -55,7 +58,8 @@ class AuthActionButton extends StatelessWidget {
                 ScaffoldMessenger.of(context)
                   ..hideCurrentSnackBar()
                   ..showSnackBar(CustomSnackBar(
-                    contentText: 'Berhasil melakukan registrasi, silahkan masuk dengan akun',
+                    contentText:
+                    'Berhasil melakukan registrasi, silahkan masuk dengan akun',
                     context: context,
                   ));
                 onSuccess();

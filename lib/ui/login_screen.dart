@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mealty/widgets/auth/auth_bottom_action.dart';
 import 'package:provider/provider.dart';
@@ -36,6 +37,15 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(0.0),
+        child: AppBar(
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: Theme.of(context).colorScheme.primary,
+            statusBarIconBrightness: Brightness.light,
+          ),
+        ),
+      ),
       backgroundColor: Theme.of(context).colorScheme.primary,
       body: SafeArea(
         child: CustomScrollView(
@@ -79,11 +89,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           const SizedBox(height: 48.0),
                           CustomTextField(
+                            inputType: TextInputType.emailAddress,
                             controller: _emailController,
                             labelText: 'Email',
                             hintText: 'Masukkan Email-mu',
                           ),
-                          const SizedBox(height: 24.0),
+                          const SizedBox(height: 18.0),
                           PasswordTextField(
                             controller: _passwordController,
                             obscureText: _passwordObscure,
@@ -92,14 +103,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                 _passwordObscure = !_passwordObscure;
                               });
                             },
+                            labelText: 'Kata Sandi',
+                            hintText: 'Masukkan Kata Sandi-mu',
                           ),
-                          const SizedBox(height: 36.0),
+                          const SizedBox(height: 32.0),
                           AuthActionButton(
                             emailController: _emailController,
                             passwordController: _passwordController,
                             buttonText: 'Masuk',
                             action: (String email, String password,
-                                [String? username]) {
+                                [String? confirmPassword, String? username]) {
                               return Provider.of<AuthProvider>(context,
                                       listen: false)
                                   .signInWithEmailPassword(email, password);
