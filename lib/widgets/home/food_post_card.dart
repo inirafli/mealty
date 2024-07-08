@@ -1,9 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:mealty/utils/cache_utils.dart';
 
 import 'package:mealty/utils/data_conversion.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -51,26 +52,13 @@ class PostCard extends StatelessWidget {
                       ),
                       child: post.image.isNotEmpty
                           ? CachedNetworkImage(
-                        cacheKey: 'image-cache-${post.image}',
+                        cacheKey: 'image-cache-${post.id}',
                         imageUrl: post.image,
                         height: 153,
                         width: double.infinity,
                         fit: BoxFit.cover,
-                        placeholder: (context, url) => SizedBox(
-                          height: 153,
-                          width: double.infinity,
-                          child: Center(
-                            child: Image.asset(
-                              'assets/loading_primary.gif',
-                              width: 44,
-                              height: 44,
-                            ),
-                          ),
-                        ),
-                        cacheManager: CacheManager(Config(
-                          'image-cache-${post.image}',
-                          stalePeriod: const Duration(days: 1),
-                        )),
+                        placeholder: (context, url) => SpinKitChasingDots(color: primary, size: 24.0),
+                        cacheManager: AppCacheManager.instance
                       )
                           : Container(
                         color: Colors.grey[300],

@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mealty/widgets/common/alert_text.dart';
@@ -8,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../provider/cart_provider.dart';
 import '../provider/order_provider.dart';
 import '../services/firestore_services.dart';
+import '../utils/cache_utils.dart';
 import '../utils/data_conversion.dart';
 import '../widgets/common/custom_loading_indicator.dart';
 
@@ -100,11 +103,16 @@ class _CartScreenState extends State<CartScreen> {
                                 borderRadius: const BorderRadius.only(
                                     topLeft: Radius.circular(10),
                                     bottomLeft: Radius.circular(10)),
-                                child: Image.network(
-                                  foodData['image'],
+                                child: CachedNetworkImage(
+                                  cacheKey: 'image-cache-${item.foodId}',
+                                  imageUrl: foodData['image'],
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) =>
+                                      SpinKitChasingDots(
+                                          color: primary, size: 24.0),
                                   width: 100,
                                   height: 120,
-                                  fit: BoxFit.cover,
+                                  cacheManager: AppCacheManager.instance,
                                 ),
                               ),
                             ),

@@ -79,23 +79,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ),
                           ),
-                          Skeletonizer(
-                            enabled: profileProvider.isLoading,
-                            child: ProfileDetails(
-                              username: profile.username,
-                              phoneNumber: profile.phoneNumber,
-                              email: profile.email,
-                              starRating: profile.starRating,
-                              countRating: profile.countRating,
-                              totalCompletedFoodTypes:
-                                  profileProvider.totalCompletedFoodTypes,
-                            ),
+                          ProfileDetails(
+                            username: profile.username,
+                            phoneNumber: profile.phoneNumber,
+                            email: profile.email,
+                            starRating: profile.starRating,
+                            countRating: profile.countRating,
+                            totalCompletedFoodTypes:
+                                profileProvider.totalCompletedFoodTypes,
                           ),
-                          Skeletonizer(
-                            enabled: profileProvider.isLoading,
-                            child: ProfileFoodTypes(
-                              completedFoodTypes: profile.completedFoodTypes,
-                            ),
+                          ProfileFoodTypes(
+                            completedFoodTypes: profile.completedFoodTypes,
                           ),
                         ],
                       ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../common/auth_state.dart';
@@ -66,11 +67,11 @@ class _SplashScreenState extends State<SplashScreen>
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          const Spacer(flex: 3),
+          const Spacer(flex: 1),
           FadeTransition(
             opacity: _animationController,
             child: Image.asset('images/mealty_app_icon.png',
-                width: 260), // Ensure you have the correct asset path
+                width: 200), // Ensure you have the correct asset path
           ),
           const Spacer(), // Takes up available space
           Align(
@@ -103,7 +104,10 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
                 ),
                 const SizedBox(height: 24),
-                Image.asset('assets/loading_secondary.gif', width: 44),
+                SpinKitThreeBounce(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  size: 18.0,
+                ),
                 const SizedBox(height: 36),
               ],
             ),

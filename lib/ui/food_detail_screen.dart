@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mealty/widgets/detailpost/category_stock_widget.dart';
@@ -7,6 +9,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 import '../provider/cart_provider.dart';
 import '../provider/food_provider.dart';
+import '../utils/cache_utils.dart';
 import '../widgets/common/custom_snackbar.dart';
 import '../widgets/detailpost/countdown_timer_widget.dart';
 import '../widgets/detailpost/food_location_widget.dart';
@@ -81,9 +84,13 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                       onTap: () => context.push('/main/imageFullScreen',
                           extra: post.image),
                       child: post.image.isNotEmpty
-                          ? Image.network(
-                              post.image,
+                          ? CachedNetworkImage(
+                              cacheKey: 'image-cache-${post.id}',
+                              imageUrl: post.image,
                               fit: BoxFit.cover,
+                              placeholder: (context, url) => SpinKitChasingDots(
+                                  color: primary, size: 36.0),
+                              cacheManager: AppCacheManager.instance,
                             )
                           : Container(color: Colors.grey[300]),
                     ),
