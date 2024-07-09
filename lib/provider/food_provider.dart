@@ -81,7 +81,6 @@ class FoodProvider with ChangeNotifier {
       return FoodPost.fromFirestore(doc, userData, userGeoPoint);
     });
     _posts = await Future.wait(futures);
-    _filteredPosts = _posts;
     _applyFilters();
     _isLoading = false;
     notifyListeners();
@@ -93,7 +92,8 @@ class FoodProvider with ChangeNotifier {
     notifyListeners();
 
     final LocationData userLocation = await _location.getLocation();
-    final GeoPoint userGeoPoint = GeoPoint(userLocation.latitude!, userLocation.longitude!);
+    final GeoPoint userGeoPoint =
+        GeoPoint(userLocation.latitude!, userLocation.longitude!);
 
     final doc = await _firestoreService.getFoodPostById(id);
     if (doc != null) {
@@ -141,41 +141,60 @@ class FoodProvider with ChangeNotifier {
   }
 
   void _applyFilters() {
-    _filteredPosts = _posts.where((post) {
-      if (_selectedCategories.contains('all')) return true;
-      return _selectedCategories.contains(post.category);
-    }).toList();
+    List<FoodPost> availablePosts = [];
+    List<FoodPost> unavailablePosts = [];
 
-    if (_searchKeyword.isNotEmpty) {
-      _filteredPosts = _filteredPosts
-          .where((post) =>
-              post.name.toLowerCase().contains(_searchKeyword.toLowerCase()))
-          .toList();
+    for (var post in _posts) {
+      if (post.stock > 0 && post.saleTime.toDate().isAfter(DateTime.now())) {
+        availablePosts.add(post);
+      } else {
+        unavailablePosts.add(post);
+      }
     }
 
-    _sortPosts();
+    availablePosts = _applyCategoryAndSearchFilters(availablePosts);
+    unavailablePosts = _applyCategoryAndSearchFilters(unavailablePosts);
+
+    _sortPosts(availablePosts);
+    _sortPosts(unavailablePosts);
+
+    _filteredPosts = [
+      ...availablePosts,
+      ...unavailablePosts,
+    ];
+
     notifyListeners();
   }
 
-  void _sortPosts() {
+  List<FoodPost> _applyCategoryAndSearchFilters(List<FoodPost> posts) {
+    return posts.where((post) {
+      if (_selectedCategories.contains('all')) return true;
+      return _selectedCategories.contains(post.category);
+    }).where((post) {
+      if (_searchKeyword.isEmpty) return true;
+      return post.name.toLowerCase().contains(_searchKeyword.toLowerCase());
+    }).toList();
+  }
+
+  void _sortPosts(List<FoodPost> posts) {
     switch (_selectedSortType) {
       case 'latestPost':
-        _filteredPosts.sort((a, b) {
+        posts.sort((a, b) {
           return b.publishedDate.compareTo(a.publishedDate);
         });
         break;
       case 'nearestLocation':
-        _filteredPosts.sort((a, b) {
+        posts.sort((a, b) {
           return a.distance.compareTo(b.distance);
         });
         break;
       case 'cheapestPrice':
-        _filteredPosts.sort((a, b) {
+        posts.sort((a, b) {
           return a.price.compareTo(b.price);
         });
         break;
       case 'timeLeft':
-        _filteredPosts.sort((a, b) {
+        posts.sort((a, b) {
           return a.saleTime.compareTo(b.saleTime);
         });
         break;

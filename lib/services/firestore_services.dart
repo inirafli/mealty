@@ -12,7 +12,9 @@ class FirestoreService {
 
   Future<List<DocumentSnapshot>> getFoodPosts() async {
     try {
-      QuerySnapshot snapshot = await _db.collection('foods').get();
+      QuerySnapshot snapshot = await _db.collection('foods')
+          .where('status', isEqualTo: 'published')
+          .get();
       return snapshot.docs;
     } catch (e) {
       return [];

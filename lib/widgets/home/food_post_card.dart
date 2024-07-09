@@ -21,10 +21,12 @@ class PostCard extends StatelessWidget {
     Color primary = Theme.of(context).colorScheme.primary;
     Color secondary = Theme.of(context).colorScheme.secondary;
     Color onPrimary = Theme.of(context).colorScheme.onPrimary;
-    Color onBackrgound = Theme.of(context).colorScheme.onBackground;
+    Color onBackground = Theme.of(context).colorScheme.onBackground;
+
+    bool isAvailable = post.stock > 0 && post.saleTime.toDate().isAfter(DateTime.now());
 
     return Card(
-      color: onPrimary,
+      color: isAvailable ? onPrimary : onPrimary.withOpacity(0.5),
       surfaceTintColor: Colors.transparent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12.0),
@@ -169,14 +171,14 @@ class PostCard extends StatelessWidget {
                             style:
                                 Theme.of(context).textTheme.bodySmall?.copyWith(
                                       fontSize: 13.0,
-                                      color: onBackrgound,
+                                      color: onBackground,
                                     ),
                           ),
                           const SizedBox(width: 8.0),
                           Icon(
                             MdiIcons.circle,
                             size: 4.0,
-                            color: onBackrgound,
+                            color: onBackground,
                           ),
                           const SizedBox(width: 6.0),
                           const Icon(
@@ -190,7 +192,7 @@ class PostCard extends StatelessWidget {
                             style:
                                 Theme.of(context).textTheme.bodySmall?.copyWith(
                                       fontSize: 13.0,
-                                      color: onBackrgound,
+                                      color: onBackground,
                                     ),
                           ),
                         ],
@@ -200,6 +202,26 @@ class PostCard extends StatelessWidget {
                 ),
               ],
             ),
+            if (!isAvailable)
+              Positioned.fill(
+                child: Container(
+                  color: Colors.grey[100]?.withOpacity(0.5),
+                  child: Center(
+                    child: Container(
+                      color: secondary,
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
+                      child: Text(
+                        'Tidak Tersedia',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: onBackground,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             Positioned(
               bottom: 10,
               right: 10,
@@ -208,7 +230,7 @@ class PostCard extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       fontSize: 16.0,
                       fontWeight: FontWeight.w800,
-                      color: primary,
+                      color: isAvailable ? primary : primary.withOpacity(0.5),
                     ),
               ),
             ),

@@ -119,24 +119,26 @@ class ManageFoodProvider with ChangeNotifier {
   }
 
   Future<void> captureImageWithCamera() async {
-    _postState = PostState.loadingCompress();
-    notifyListeners();
-    final pickedFile = await ImagePicker()
-        .pickImage(source: ImageSource.camera, imageQuality: 85);
-    if (pickedFile != null) {
-      File imageFile = File(pickedFile.path);
-      if (await imageFile.length() > 8 * 1024 * 1024) {
-        _postState =
-            PostState.errorCompress('Ukuran Gambar melebihi batas 8 MB.');
-        notifyListeners();
+    if (await requestPermission(Permission.camera)) {
+      _postState = PostState.loadingCompress();
+      notifyListeners();
+      final pickedFile = await ImagePicker()
+          .pickImage(source: ImageSource.camera, imageQuality: 85);
+      if (pickedFile != null) {
+        File imageFile = File(pickedFile.path);
+        if (await imageFile.length() > 8 * 1024 * 1024) {
+          _postState =
+              PostState.errorCompress('Ukuran Gambar melebihi batas 8 MB.');
+          notifyListeners();
+        } else {
+          setImage(imageFile);
+          _postState = PostState.initial();
+          notifyListeners();
+        }
       } else {
-        setImage(imageFile);
         _postState = PostState.initial();
         notifyListeners();
       }
-    } else {
-      _postState = PostState.initial();
-      notifyListeners();
     }
   }
 

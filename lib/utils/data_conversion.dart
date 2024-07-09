@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'dart:math' as math;
 
 String formatPrice(int price) {
@@ -15,6 +14,8 @@ String formatSaleTime(Timestamp saleTime) {
 
   if (difference.isNegative) {
     return 'Telah Selesai';
+  } else if (difference.inHours < 1) {
+    return '${difference.inMinutes} menit';
   } else if (difference.inHours < 24) {
     return '${difference.inHours} jam lagi';
   } else {
