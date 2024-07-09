@@ -18,7 +18,6 @@ class CategoryStockWidget extends StatelessWidget {
         // Category Container
         Expanded(
           child: Container(
-            height: 180.0,
             padding:
                 const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
             decoration: BoxDecoration(
@@ -69,7 +68,6 @@ class CategoryStockWidget extends StatelessWidget {
         const SizedBox(width: 14.0),
         Expanded(
           child: Container(
-            height: 180.0,
             padding:
                 const EdgeInsets.symmetric(vertical: 16.0, horizontal: 8.0),
             decoration: BoxDecoration(

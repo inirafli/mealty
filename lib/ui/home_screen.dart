@@ -74,14 +74,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  double getChildAspectRatio(BuildContext context) {
-    if (MediaQuery.of(context).orientation == Orientation.portrait) {
-      return 0.6;
-    } else {
-      return 1.2;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     Color primary = Theme.of(context).colorScheme.primary;
@@ -114,6 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 onRefresh: foodProvider.refreshPosts,
                 child: SingleChildScrollView(
                   controller: _scrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
                   key: const PageStorageKey<String>('home_scroll_position'),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,9 +120,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 .textTheme
                                 .titleMedium
                                 ?.copyWith(
-                                  color: primary,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              color: primary,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           const SizedBox(width: 12.0),
                           Expanded(
@@ -141,35 +134,44 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                       const SizedBox(height: 16.0),
-                      Skeletonizer(
-                        enabled: foodProvider.isLoading,
-                        child: GridView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          gridDelegate:
+                      LayoutBuilder(
+                        builder: (context, constraints) {
+                          final width = constraints.maxWidth;
+                          const itemHeight = 308.0;
+                          final itemWidth = (width - 20.0) / 2;
+                          final childAspectRatio = itemWidth / itemHeight;
+
+                          final posts = foodProvider.isLoading
+                              ? FakeDataGenerator.generateListPosts()
+                              : foodProvider.posts;
+
+                          return Skeletonizer(
+                            enabled: foodProvider.isLoading,
+                            child: GridView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 3.5,
-                            mainAxisSpacing: 8.0,
-                            childAspectRatio: getChildAspectRatio(context),
-                          ),
-                          itemCount: foodProvider.isLoading
-                              ? 6
-                              : foodProvider.posts.length,
-                          itemBuilder: (context, index) {
-                            final post = foodProvider.isLoading
-                                ? FakeDataGenerator.generateListPosts()[index]
-                                : foodProvider.posts[index];
-                            return PostCard(post: post);
-                          },
-                        ),
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 4.0,
+                                mainAxisSpacing: 6.0,
+                                childAspectRatio: childAspectRatio,
+                              ),
+                              itemCount: posts.length,
+                              itemBuilder: (context, index) {
+                                final post = posts[index];
+                                return PostCard(post: post);
+                              },
+                            ),
+                          );
+                        },
                       ),
                       const SizedBox(height: 16.0),
                     ],
                   ),
                 ),
               );
-            })),
+                })),
           ],
         ),
       ),

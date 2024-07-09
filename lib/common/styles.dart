@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-const primaryColor = Color(0xFF854F6C);
-const secondaryColor = Color(0xFFFBE4D8);
-const surfaceColor = Color(0xFFDFB6B2);
-const onBackgroundColor = Color(0xFF522B5B);
-const onPrimaryColor = Color(0xFFFFF9F6);
+const lightPrimaryColor = Color(0xFF854F6C);
+const lightSecondaryColor = Color(0xFFFBE4D8);
+const lightSurfaceColor = Color(0xFFDFB6B2);
+const lightOnBackgroundColor = Color(0xFF522B5B);
+const lightOnPrimaryColor = Color(0xFFFFF9F6);
 
 final TextTheme appTextTheme = TextTheme(
   displayLarge: GoogleFonts.nunitoSans(
@@ -32,4 +32,32 @@ final TextTheme appTextTheme = TextTheme(
       fontSize: 12, fontWeight: FontWeight.w500, letterSpacing: 0.4),
   labelSmall: GoogleFonts.nunitoSans(
       fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 1.5),
+);
+
+final ThemeData lightTheme = ThemeData(
+  colorScheme: const ColorScheme.light(
+    primary: lightPrimaryColor,
+    secondary: lightSecondaryColor,
+    surface: lightSurfaceColor,
+    onBackground: lightOnBackgroundColor,
+    onPrimary: lightOnPrimaryColor,
+  ),
+  appBarTheme: const AppBarTheme(
+    scrolledUnderElevation: 0.8,
+    backgroundColor: lightPrimaryColor,
+    foregroundColor: lightOnPrimaryColor,
+  ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: lightPrimaryColor,
+      foregroundColor: lightOnPrimaryColor,
+      disabledBackgroundColor: lightPrimaryColor,
+      disabledForegroundColor: lightOnPrimaryColor,
+      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+    ),
+  ),
+  textTheme: appTextTheme,
 );

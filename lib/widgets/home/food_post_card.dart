@@ -1,15 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mealty/utils/cache_utils.dart';
 
 import 'package:mealty/utils/data_conversion.dart';
+import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../data/model/food_post.dart';
+import '../../provider/food_provider.dart';
 
 class PostCard extends StatelessWidget {
   final FoodPost post;
@@ -22,6 +25,8 @@ class PostCard extends StatelessWidget {
     Color secondary = Theme.of(context).colorScheme.secondary;
     Color onPrimary = Theme.of(context).colorScheme.onPrimary;
     Color onBackground = Theme.of(context).colorScheme.onBackground;
+
+    final foodProvider = Provider.of<FoodProvider>(context, listen:  false);
 
     bool isAvailable = post.stock > 0 && post.saleTime.toDate().isAfter(DateTime.now());
 
@@ -118,49 +123,52 @@ class PostCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 6.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8.0, vertical: 4.0),
-                            decoration: BoxDecoration(
-                              color: secondary,
-                              borderRadius: BorderRadius.circular(4.0),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8.0, vertical: 4.0),
+                              decoration: BoxDecoration(
+                                color: secondary,
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                              child: Text(
+                                formatSaleTime(post.saleTime),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
+                                      color: primary,
+                                      fontSize: 11.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
                             ),
-                            child: Text(
-                              formatSaleTime(post.saleTime),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.copyWith(
-                                    color: primary,
-                                    fontSize: 11.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                            const SizedBox(width: 8.0),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8.0, vertical: 4.0),
+                              decoration: BoxDecoration(
+                                color: secondary,
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                              child: Text(
+                                post.formattedDistance,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall
+                                    ?.copyWith(
+                                      color: primary,
+                                      fontSize: 11.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
                             ),
-                          ),
-                          const SizedBox(width: 8.0),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 8.0, vertical: 4.0),
-                            decoration: BoxDecoration(
-                              color: secondary,
-                              borderRadius: BorderRadius.circular(4.0),
-                            ),
-                            child: Text(
-                              post.formattedDistance,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodySmall
-                                  ?.copyWith(
-                                    color: primary,
-                                    fontSize: 11.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       const SizedBox(height: 7.0),
                       Row(
@@ -202,7 +210,7 @@ class PostCard extends StatelessWidget {
                 ),
               ],
             ),
-            if (!isAvailable)
+            if (!isAvailable && !foodProvider.isLoading)
               Positioned.fill(
                 child: Container(
                   color: Colors.grey[100]?.withOpacity(0.5),

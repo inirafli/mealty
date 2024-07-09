@@ -172,12 +172,12 @@ class ManageFoodProvider with ChangeNotifier {
 
     try {
       String formattedDate =
-      DateFormat('yyyyMMddHHmmss').format(DateTime.now());
+          DateFormat('yyyyMMddHHmmss').format(DateTime.now());
 
       // Upload image to Firebase Storage
       String fileName = 'foods-$formattedDate';
       Reference storageRef =
-      FirebaseStorage.instance.ref().child('foods').child(fileName);
+          FirebaseStorage.instance.ref().child('foods').child(fileName);
       UploadTask uploadTask = storageRef.putFile(_imageFile!);
       TaskSnapshot storageSnapshot = await uploadTask.whenComplete(() => {});
       String downloadUrl = await storageSnapshot.ref.getDownloadURL();
@@ -210,7 +210,10 @@ class ManageFoodProvider with ChangeNotifier {
       });
 
       // Add the new post ID to the user's postedFoods field
-      await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .update({
         'postedFoods': FieldValue.arrayUnion([newPostRef.id])
       });
 
@@ -261,12 +264,26 @@ class ManageFoodProvider with ChangeNotifier {
 
       String? downloadUrl;
       if (_imageFile != null) {
-        String formattedDate = DateFormat('yyyyMMddHHmmss').format(DateTime.now());
+        String formattedDate =
+            DateFormat('yyyyMMddHHmmss').format(DateTime.now());
         String fileName = 'foods-$formattedDate';
-        Reference storageRef = FirebaseStorage.instance.ref().child('foods').child(fileName);
+        Reference storageRef =
+            FirebaseStorage.instance.ref().child('foods').child(fileName);
         UploadTask uploadTask = storageRef.putFile(_imageFile!);
         TaskSnapshot storageSnapshot = await uploadTask.whenComplete(() => {});
         downloadUrl = await storageSnapshot.ref.getDownloadURL();
+
+        // Delete old food post image if it exists
+        if (_originalData!['image'] != downloadUrl &&
+            _originalData!['image'].isNotEmpty) {
+          if (_originalData!['image']
+              .contains('firebasestorage.googleapis.com')) {
+            await FirebaseStorage.instance
+                .refFromURL(_originalData!['image'])
+                .delete();
+          }
+        }
+
         if (_originalData!['image'] != downloadUrl) {
           updatedData['image'] = downloadUrl;
           hasChanged = true;
@@ -297,7 +314,9 @@ class ManageFoodProvider with ChangeNotifier {
       descriptionController.text = foodData['description'];
       priceController.text = foodData['price'].toString();
       stockController.text = foodData['stock'].toString();
-      saleTimeController.text = DateFormat.yMMMMd('en_US').add_jms().format((foodData['saleTime'] as Timestamp).toDate());
+      saleTimeController.text = DateFormat.yMMMMd('en_US')
+          .add_jms()
+          .format((foodData['saleTime'] as Timestamp).toDate());
       _selectedFoodCategory = foodData['category'];
       _selectedSellingType = foodData['sellingType'];
       _saleTime = (foodData['saleTime'] as Timestamp).toDate();

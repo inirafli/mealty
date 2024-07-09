@@ -158,7 +158,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
             child: IconButton(
               icon: Icon(
                 MdiIcons.tagPlusOutline,
-                size: 24.0,
+                size: 23.0,
                 color: Theme.of(context).colorScheme.primary,
               ),
               onPressed: () {
