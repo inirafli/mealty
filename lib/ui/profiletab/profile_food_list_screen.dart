@@ -125,7 +125,7 @@ class _ProfileFoodScreenState extends State<ProfileFoodScreen> {
                                       child: Image.network(
                                         foodPost.image,
                                         width: 120,
-                                        height: 146,
+                                        height: 150,
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -145,6 +145,7 @@ class _ProfileFoodScreenState extends State<ProfileFoodScreen> {
                                                 .bodyLarge
                                                 ?.copyWith(
                                                   fontWeight: FontWeight.bold,
+                                                  fontSize: 15.0,
                                                   color: primary,
                                                 ),
                                             maxLines: 1,
@@ -224,7 +225,7 @@ class _ProfileFoodScreenState extends State<ProfileFoodScreen> {
                                                   elevation: 0.0,
                                                   backgroundColor: secondary,
                                                   minimumSize:
-                                                      const Size(46.0, 40.0),
+                                                      const Size(42.0, 36.0),
                                                   padding: EdgeInsets.zero,
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
@@ -251,16 +252,16 @@ class _ProfileFoodScreenState extends State<ProfileFoodScreen> {
                                                       : MdiIcons
                                                           .archiveArrowUpOutline,
                                                   color: onBackground,
-                                                  size: 20.0,
+                                                  size: 18.0,
                                                 ),
                                               ),
-                                              const SizedBox(width: 10.0),
+                                              const SizedBox(width: 8.0),
                                               ElevatedButton(
                                                 style: ElevatedButton.styleFrom(
                                                   elevation: 0.0,
                                                   backgroundColor: onBackground,
                                                   minimumSize:
-                                                      const Size(46.0, 40.0),
+                                                      const Size(42.0, 36.0),
                                                   padding: EdgeInsets.zero,
                                                   shape: RoundedRectangleBorder(
                                                     borderRadius:
@@ -282,7 +283,7 @@ class _ProfileFoodScreenState extends State<ProfileFoodScreen> {
                                                   MdiIcons
                                                       .storefrontEditOutline,
                                                   color: secondary,
-                                                  size: 20.0,
+                                                  size: 18.0,
                                                 ),
                                               ),
                                             ],

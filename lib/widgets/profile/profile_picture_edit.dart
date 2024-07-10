@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mealty/utils/data_conversion.dart';
 import 'package:provider/provider.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -28,10 +29,10 @@ class ProfilePictureEdit extends StatelessWidget {
                 Text(
                   'Ubah Foto Profil',
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontSize: 15.0,
-                    color: primary,
-                    fontWeight: FontWeight.bold,
-                  ),
+                        fontSize: 15.0,
+                        color: primary,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 const SizedBox(height: 16.0),
                 Stack(
@@ -40,11 +41,12 @@ class ProfilePictureEdit extends StatelessWidget {
                       radius: 56,
                       backgroundImage: profileProvider.profileImageFile != null
                           ? FileImage(profileProvider.profileImageFile!)
-                          : profileProvider.profile?.photoUrl.isNotEmpty ?? false
-                          ? NetworkImage(profileProvider.profile!.photoUrl)
-                      as ImageProvider
-                          : NetworkImage(
-                          'https://ui-avatars.com/api/?name=${profileProvider.profile?.username}'),
+                          : profileProvider.profile?.photoUrl.isNotEmpty ??
+                                  false
+                              ? NetworkImage(profileProvider.profile!.photoUrl)
+                                  as ImageProvider
+                              : NetworkImage(generateAvatarUrl(
+                                  profileProvider.profile!.username)),
                     ),
                     Positioned(
                       bottom: 0,

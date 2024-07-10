@@ -110,8 +110,9 @@ class _ProfileEditScreenState extends State<ProfileEditScreen> {
                   : () async {
                       await profileProvider.updateProfile();
 
-                      if (!profileProvider.isError && context.mounted)
+                      if (!profileProvider.isError && context.mounted) {
                         context.pop();
+                      }
                     },
               child: profileProvider.isLoading
                   ? CustomProgressIndicator(

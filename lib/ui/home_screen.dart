@@ -84,36 +84,44 @@ class _HomeScreenState extends State<HomeScreen> {
         searchController: _searchController,
         hasInput: _hasInput,
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            FilterButtons(
-              onCategoryPressed: _showCategoryFilterDialog,
-              onSortPressed: _showSortFilterDialog,
-            ),
-            const SizedBox(height: 12.0),
-            Expanded(child:
-                Consumer<FoodProvider>(builder: (context, foodProvider, child) {
-              if (foodProvider.posts.isEmpty && !foodProvider.isLoading) {
-                return const AlertText(
-                    displayText:
-                        'Belum ada Makanan atau Minuman yang tersedia');
-              }
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          FilterButtons(
+            onCategoryPressed: _showCategoryFilterDialog,
+            onSortPressed: _showSortFilterDialog,
+          ),
+          const SizedBox(height: 12.0),
+          Expanded(child:
+              Consumer<FoodProvider>(builder: (context, foodProvider, child) {
+            if (foodProvider.posts.isEmpty && !foodProvider.isLoading) {
+              return const AlertText(
+                  displayText:
+                      'Belum ada Makanan atau Minuman yang tersedia');
+            }
 
-              return RefreshIndicator(
-                onRefresh: foodProvider.refreshPosts,
-                child: SingleChildScrollView(
-                  controller: _scrollController,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  key: const PageStorageKey<String>('home_scroll_position'),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 8.0),
-                      Row(
+            return RefreshIndicator(
+              onRefresh: foodProvider.refreshPosts,
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
+                key: const PageStorageKey<String>('home_scroll_position'),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 8.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Row(
                         children: [
+                          SizedBox(
+                            width: 24.0,
+                            child: Divider(
+                              color: primary,
+                              thickness: 1.25,
+                            ),
+                          ),
+                          const SizedBox(width: 8.0),
                           Text(
                             'Katalog Mealty',
                             style: Theme.of(context)
@@ -124,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(width: 12.0),
+                          const SizedBox(width: 8.0),
                           Expanded(
                             child: Divider(
                               color: primary,
@@ -133,47 +141,47 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 16.0),
-                      LayoutBuilder(
-                        builder: (context, constraints) {
-                          final width = constraints.maxWidth;
-                          const itemHeight = 308.0;
-                          final itemWidth = (width - 20.0) / 2;
-                          final childAspectRatio = itemWidth / itemHeight;
+                    ),
+                    LayoutBuilder(
+                      builder: (context, constraints) {
+                        final width = constraints.maxWidth;
+                        const itemHeight = 320.0;
+                        final itemWidth = (width - 20.0) / 2;
+                        final childAspectRatio = itemWidth / itemHeight;
 
-                          final posts = foodProvider.isLoading
-                              ? FakeDataGenerator.generateListPosts()
-                              : foodProvider.posts;
+                        final posts = foodProvider.isLoading
+                            ? FakeDataGenerator.generateListPosts()
+                            : foodProvider.posts;
 
-                          return Skeletonizer(
-                            enabled: foodProvider.isLoading,
-                            child: GridView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 4.0,
-                                mainAxisSpacing: 6.0,
-                                childAspectRatio: childAspectRatio,
-                              ),
-                              itemCount: posts.length,
-                              itemBuilder: (context, index) {
-                                final post = posts[index];
-                                return PostCard(post: post);
-                              },
+                        return Skeletonizer(
+                          enabled: foodProvider.isLoading,
+                          child: GridView.builder(
+                            padding: const EdgeInsets.all(12.0),
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            gridDelegate:
+                            SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 4.0,
+                              mainAxisSpacing: 6.0,
+                              childAspectRatio: childAspectRatio,
                             ),
-                          );
-                        },
-                      ),
-                      const SizedBox(height: 16.0),
-                    ],
-                  ),
+                            itemCount: posts.length,
+                            itemBuilder: (context, index) {
+                              final post = posts[index];
+                              return PostCard(post: post);
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 16.0),
+                  ],
                 ),
-              );
-                })),
-          ],
-        ),
+              ),
+            );
+              })),
+        ],
       ),
     );
   }

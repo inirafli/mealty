@@ -80,7 +80,7 @@ class _SaleTimeInputState extends State<SaleTimeInput> {
         );
 
         widget.controller.text =
-        "${DateFormat.yMMMMd('en_US').add_jms().format(finalDateTime)} UTC+7";
+        DateFormat('d MMMM yyyy, h:mm a', 'id_ID').format(finalDateTime);
         widget.onSelectDateTime(finalDateTime);
       }
     }

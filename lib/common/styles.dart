@@ -27,11 +27,11 @@ final TextTheme appTextTheme = TextTheme(
   bodyMedium: GoogleFonts.nunitoSans(
       fontSize: 14, fontWeight: FontWeight.w400, letterSpacing: 0.25),
   labelLarge: GoogleFonts.nunitoSans(
-      fontSize: 14, fontWeight: FontWeight.w600, letterSpacing: 1.25),
+      fontSize: 14, fontWeight: FontWeight.w700, letterSpacing: 0.4),
   bodySmall: GoogleFonts.nunitoSans(
       fontSize: 12, fontWeight: FontWeight.w500, letterSpacing: 0.4),
   labelSmall: GoogleFonts.nunitoSans(
-      fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 1.5),
+      fontSize: 12, fontWeight: FontWeight.w400, letterSpacing: 0.4),
 );
 
 final ThemeData lightTheme = ThemeData(

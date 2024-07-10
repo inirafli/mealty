@@ -13,13 +13,16 @@ class FilterButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        _buildFilterButton(context, 'Kategori', onCategoryPressed),
-        const SizedBox(width: 10.0),
-        _buildFilterButton(context, 'Urutkan dari', onSortPressed),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          _buildFilterButton(context, 'Kategori', onCategoryPressed),
+          const SizedBox(width: 10.0),
+          _buildFilterButton(context, 'Urutkan dari', onSortPressed),
+        ],
+      ),
     );
   }
 
@@ -41,7 +44,7 @@ class FilterButtons extends StatelessWidget {
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                     color: Theme.of(context).colorScheme.primary,
                     fontWeight: FontWeight.bold,
-                letterSpacing: 0.7,
+                letterSpacing: 0.55,
                   ),
             ),
             const SizedBox(width: 4.0),

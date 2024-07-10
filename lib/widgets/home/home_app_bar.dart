@@ -126,7 +126,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
                 if (notificationCount > 0)
                   Positioned(
                     right: 1,
-                    top: 1,
+                    top: 6,
                     child: Container(
                       padding: const EdgeInsets.all(2),
                       decoration: BoxDecoration(

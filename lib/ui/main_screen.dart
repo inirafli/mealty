@@ -61,13 +61,13 @@ class _MainScreenState extends State<MainScreen> {
         iconSize: 27.0,
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(MdiIcons.textBoxMultiple),
-        inactiveIcon: Icon(MdiIcons.textBoxMultipleOutline),
+        icon: Icon(MdiIcons.clipboardTextClock),
+        inactiveIcon: Icon(MdiIcons.clipboardTextClockOutline),
         title: ("Riwayat"),
         textStyle: textStyle,
         activeColorPrimary: primary,
         inactiveColorPrimary: primary.withOpacity(0.6),
-        iconSize: 24.0,
+        iconSize: 27.0,
       ),
       PersistentBottomNavBarItem(
         icon: Icon(MdiIcons.account),
