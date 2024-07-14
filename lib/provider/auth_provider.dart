@@ -127,12 +127,6 @@ class AuthProvider extends ChangeNotifier {
             'fruitsVeg': 0,
           },
         });
-
-        await _firestore
-            .collection('users')
-            .doc(user.uid)
-            .collection('cart')
-            .add({});
       }
 
       _authState = AuthState.registered;
@@ -215,8 +209,6 @@ class AuthProvider extends ChangeNotifier {
           'fruitsVeg': 0,
         },
       });
-
-      await userDoc.collection('cart').add({});
     }
   }
 }
