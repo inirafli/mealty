@@ -14,9 +14,6 @@ class _StockInputState extends State<StockInput> {
   void initState() {
     super.initState();
     widget.controller.addListener(_handleInputChange);
-    if (widget.controller.text.isEmpty) {
-      widget.controller.text = '1';
-    }
   }
 
   @override

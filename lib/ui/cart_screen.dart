@@ -58,7 +58,7 @@ class _CartScreenState extends State<CartScreen> {
           Consumer<CartProvider>(
             builder: (context, cartProvider, child) {
               if (cartProvider.cartItems.isEmpty) {
-                return const AlertText(displayText: 'Keranjnag masih Kosong');
+                return const AlertText(displayText: 'Keranjang masih Kosong');
               }
 
               return ListView.builder(

@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../provider/order_provider.dart';
-import '../../widgets/common/custom_loading_indicator.dart';
 import '../../widgets/foodorder/order_filter_widget.dart';
 import '../../widgets/foodorder/order_info_widget.dart';
 import '../../widgets/foodorder/order_item_widget.dart';
@@ -14,7 +13,6 @@ class SellerOrdersTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primary = Theme.of(context).colorScheme.primary;
     final onPrimary = Theme.of(context).colorScheme.onPrimary;
 
     return Consumer<OrderProvider>(
@@ -25,55 +23,63 @@ class SellerOrdersTab extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const OrderFilterWidget(),
-            if (orders.isEmpty)
-              const Expanded(
-                child: AlertText(displayText: 'Belum ada Penjualan Makanan'),
-              )
-            else
-              Expanded(
-                child: Skeletonizer(
-                  enabled: orderProvider.isLoading,
-                  child: RefreshIndicator(
-                    onRefresh: orderProvider.refreshOrders,
-                    child: ListView.builder(
-                      itemCount: orders.length,
-                      itemBuilder: (context, index) {
-                        final order = orders[index];
-                        return Container(
-                          margin: const EdgeInsets.symmetric(vertical: 6.0),
-                          decoration: BoxDecoration(
-                            color: onPrimary,
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ...order.foodItems.map((item) {
-                                  return OrderItemWidget(
-                                    item: item,
-                                    totalPrice: order.totalPrice,
-                                  );
-                                }),
-                                const SizedBox(height: 16.0),
-                                OrderInfoWidget(
-                                  order: order,
-                                  isSeller: true,
-                                  onUpdateStatus: (newStatus) {
-                                    orderProvider.updateOrderStatus(
-                                        order.orderId, newStatus);
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
+            Expanded(
+              child: Skeletonizer(
+                enabled: orderProvider.isLoading,
+                child: RefreshIndicator(
+                  onRefresh: orderProvider.refreshOrders,
+                  child: orders.isEmpty
+                      ? SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height - 275,
+                      child: const Center(
+                        child: AlertText(
+                          displayText: 'Belum ada Penjualan Makanan',
+                        ),
+                      ),
                     ),
+                  )
+                      : ListView.builder(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    itemCount: orders.length,
+                    itemBuilder: (context, index) {
+                      final order = orders[index];
+                      return Container(
+                        margin: const EdgeInsets.symmetric(vertical: 6.0),
+                        decoration: BoxDecoration(
+                          color: onPrimary,
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ...order.foodItems.map((item) {
+                                return OrderItemWidget(
+                                  item: item,
+                                  totalPrice: order.totalPrice,
+                                );
+                              }),
+                              const SizedBox(height: 8.0),
+                              OrderInfoWidget(
+                                order: order,
+                                isSeller: true,
+                                onUpdateStatus: (newStatus) {
+                                  orderProvider.updateOrderStatus(
+                                      order.orderId, newStatus);
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),
+            ),
           ],
         );
       },

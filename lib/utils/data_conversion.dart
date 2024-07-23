@@ -18,6 +18,8 @@ String formatSaleTime(Timestamp saleTime) {
     return '${difference.inMinutes} menit';
   } else if (difference.inHours < 24) {
     return '${difference.inHours} jam lagi';
+  } else if (difference.inDays > 10) {
+    return '>10 Hari';
   } else {
     return '${difference.inDays} hari lagi';
   }

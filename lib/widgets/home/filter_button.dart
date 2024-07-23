@@ -28,13 +28,16 @@ class FilterButtons extends StatelessWidget {
 
   Widget _buildFilterButton(
       BuildContext context, String text, VoidCallback onPressed) {
+    Color primary = Theme.of(context).colorScheme.primary;
+    Color onPrimary = Theme.of(context).colorScheme.onPrimary;
+
     return GestureDetector(
       onTap: onPressed,
       child: Container(
         padding: const EdgeInsets.only(
             left: 16.0, right: 10.0, top: 8.0, bottom: 8.0),
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.onPrimary,
+          color: onPrimary,
           borderRadius: BorderRadius.circular(12.0),
         ),
         child: Row(
@@ -42,7 +45,7 @@ class FilterButtons extends StatelessWidget {
             Text(
               text,
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
+                    color: primary,
                     fontWeight: FontWeight.bold,
                 letterSpacing: 0.55,
                   ),
@@ -51,7 +54,7 @@ class FilterButtons extends StatelessWidget {
             Icon(
               MdiIcons.chevronDown,
               size: 20.0,
-              color: Theme.of(context).colorScheme.primary,
+              color: primary,
             ),
           ],
         ),

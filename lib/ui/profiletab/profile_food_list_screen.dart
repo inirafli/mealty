@@ -1,10 +1,13 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:mealty/widgets/common/alert_text.dart';
 import 'package:provider/provider.dart';
 
 import '../../provider/profile_provider.dart';
+import '../../utils/cache_utils.dart';
 import '../../utils/data_conversion.dart';
 import '../../widgets/common/custom_loading_indicator.dart';
 import '../../widgets/common/custom_snackbar.dart';
@@ -122,11 +125,15 @@ class _ProfileFoodScreenState extends State<ProfileFoodScreen> {
                                         topLeft: Radius.circular(10),
                                         bottomLeft: Radius.circular(10),
                                       ),
-                                      child: Image.network(
-                                        foodPost.image,
+                                      child: CachedNetworkImage(
+                                        cacheKey: 'image-cache-${foodPost.id}',
+                                        imageUrl:  foodPost.image,
+                                        fit: BoxFit.cover,
+                                        placeholder: (context, url) => SpinKitChasingDots(
+                                            color: primary, size: 12.0),
                                         width: 120,
                                         height: 150,
-                                        fit: BoxFit.cover,
+                                        cacheManager: AppCacheManager.instance,
                                       ),
                                     ),
                                   ),

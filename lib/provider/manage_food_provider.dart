@@ -16,7 +16,7 @@ class ManageFoodProvider with ChangeNotifier {
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController priceController =
       TextEditingController(text: '0');
-  final TextEditingController stockController = TextEditingController();
+  final TextEditingController stockController = TextEditingController(text: '1');
   final TextEditingController saleTimeController = TextEditingController();
   final FirestoreService _firestoreService = FirestoreService();
 
@@ -155,6 +155,7 @@ class ManageFoodProvider with ChangeNotifier {
   Future<void> addFoodPost() async {
     // Checking for null fields
     if (nameController.text.isEmpty ||
+        stockController.text.isEmpty ||
         descriptionController.text.isEmpty ||
         _selectedFoodCategory.isEmpty ||
         _selectedSellingType.isEmpty ||
@@ -228,6 +229,7 @@ class ManageFoodProvider with ChangeNotifier {
   Future<void> updateFoodPost(String postId) async {
     if (nameController.text.isEmpty ||
         descriptionController.text.isEmpty ||
+        stockController.text.isEmpty ||
         _selectedFoodCategory.isEmpty ||
         _selectedSellingType.isEmpty ||
         _saleTime == null ||

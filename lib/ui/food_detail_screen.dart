@@ -83,6 +83,8 @@ class _FoodDetailScreenState extends State<FoodDetailScreen> {
                             ? const SizedBox.shrink()
                             : Text(
                                 post.name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyLarge

@@ -42,73 +42,79 @@ class OrderItemWidget extends StatelessWidget {
             onTap: () {
               context.push('/main/foodDetail', extra: item.foodId);
             },
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Skeleton.replace(
-                  width: 64,
-                  height: 64,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: CachedNetworkImage(
-                      cacheKey: 'image-cache-${item.foodId}',
-                      imageUrl:  foodData['image'],
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => SpinKitChasingDots(
-                          color: primary, size: 12.0),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Skeleton.replace(
                       width: 64,
                       height: 64,
-                      cacheManager: AppCacheManager.instance,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 16.0),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        foodData['name'],
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15.0,
-                          color: primary,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10.0),
+                        child: CachedNetworkImage(
+                          cacheKey: 'image-cache-${item.foodId}',
+                          imageUrl:  foodData['image'],
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => SpinKitChasingDots(
+                              color: primary, size: 12.0),
+                          width: 64,
+                          height: 64,
+                          cacheManager: AppCacheManager.instance,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    ),
+                    const SizedBox(width: 16.0),
+                    Expanded(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            formatPrice(foodData['price']),
+                            foodData['name'],
                             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: onBackground,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15.0,
+                              color: primary,
                             ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          Text(
-                            'x${item.quantity}',
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: onBackground,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                formatPrice(foodData['price']),
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  color: onBackground,
+                                ),
+                              ),
+                              Text(
+                                'x${item.quantity}',
+                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                  color: onBackground,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 1.0),
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: Text(
+                              formatPrice(item.price * item.quantity),
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                color: primary,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 1.0),
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: Text(
-                          formatPrice(totalPrice),
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: primary,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
+                const SizedBox(height: 8.0),
               ],
             ),
           ),

@@ -171,39 +171,42 @@ class PostCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 7.0),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            post.user.username,
-                            style:
-                                Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      fontSize: 13.0,
-                                      color: onBackground,
-                                    ),
-                          ),
-                          const SizedBox(width: 8.0),
-                          Icon(
-                            MdiIcons.circle,
-                            size: 4.0,
-                            color: onBackground,
-                          ),
-                          const SizedBox(width: 6.0),
-                          const Icon(
-                            CupertinoIcons.star_fill,
-                            size: 14.0,
-                            color: Colors.orange,
-                          ),
-                          const SizedBox(width: 2.0),
-                          Text(
-                            post.user.starRating.toStringAsFixed(1),
-                            style:
-                                Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      fontSize: 13.0,
-                                      color: onBackground,
-                                    ),
-                          ),
-                        ],
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              post.user.username,
+                              style:
+                                  Theme.of(context).textTheme.bodySmall?.copyWith(
+                                        fontSize: 13.0,
+                                        color: onBackground,
+                                      ),
+                            ),
+                            const SizedBox(width: 8.0),
+                            Icon(
+                              MdiIcons.circle,
+                              size: 4.0,
+                              color: onBackground,
+                            ),
+                            const SizedBox(width: 6.0),
+                            const Icon(
+                              CupertinoIcons.star_fill,
+                              size: 14.0,
+                              color: Colors.orange,
+                            ),
+                            const SizedBox(width: 2.0),
+                            Text(
+                              post.user.starRating.toStringAsFixed(1),
+                              style:
+                                  Theme.of(context).textTheme.bodySmall?.copyWith(
+                                        fontSize: 13.0,
+                                        color: onBackground,
+                                      ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),

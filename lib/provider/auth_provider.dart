@@ -127,6 +127,8 @@ class AuthProvider extends ChangeNotifier {
             'fruitsVeg': 0,
           },
         });
+
+        signOut();
       }
 
       _authState = AuthState.registered;

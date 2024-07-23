@@ -95,7 +95,7 @@ class OrderScreen extends StatelessWidget {
               children: [
                 Padding(
                   padding:
-                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
+                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
                   child: BuyerOrdersTab(),
                 ),
                 Padding(

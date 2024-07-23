@@ -87,6 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          const SizedBox(height: 12.0),
           FilterButtons(
             onCategoryPressed: _showCategoryFilterDialog,
             onSortPressed: _showSortFilterDialog,
