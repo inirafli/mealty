@@ -10,33 +10,32 @@ dependencies:
   flutter:
     sdk: flutter
 
-  pdf: ^3.10.8
-  intl: ^0.19.0
-  path: ^1.9.0
-  sqflite: ^2.2.8
-  provider: ^6.1.2
-  location: ^6.0.2
-  geocoding: ^3.0.0
-  open_filex: ^4.4.0
-  go_router: ^14.1.1
-  photo_view: ^0.14.0
-  skeletonizer: ^1.3.0
-  image_picker: ^1.1.2
-  google_fonts: ^6.1.0
-  path_provider: ^2.1.3
-  firebase_core: ^2.31.0
-  firebase_auth: ^4.19.5
-  google_sign_in: ^6.2.1
-  flutter_spinkit: ^5.2.1
-  cupertino_icons: ^1.0.6
-  cloud_firestore: ^4.17.3
-  firebase_storage: ^11.7.5
-  permission_handler: ^11.3.1
-  google_maps_flutter: ^2.6.1
-  cached_network_image: ^3.3.1
-  flutter_cache_manager: ^3.3.1
-  persistent_bottom_nav_bar: ^5.0.2
-  material_design_icons_flutter: ^7.0.7296
+  pdf:
+  intl:
+  path:
+  provider:
+  location:
+  geocoding:
+  open_filex:
+  go_router:
+  photo_view:
+  skeletonizer:
+  image_picker:
+  google_fonts:
+  path_provider:
+  firebase_core:
+  firebase_auth:
+  google_sign_in:
+  flutter_spinkit:
+  cupertino_icons:
+  cloud_firestore:
+  firebase_storage:
+  permission_handler:
+  google_maps_flutter:
+  cached_network_image:
+  flutter_cache_manager:
+  persistent_bottom_nav_bar:
+  material_design_icons_flutter:
 
 
 dev_dependencies:
