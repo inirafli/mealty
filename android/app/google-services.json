@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "555789029975",
+    "project_id": "mealty-408b8",
+    "storage_bucket": "mealty-408b8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:555789029975:android:c52d08c73ec06084468912",
+        "android_client_info": {
+          "package_name": "com.mealty.mealty"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8obV6axhHi9UkLeu81x6LBAZZ7viVpP0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
