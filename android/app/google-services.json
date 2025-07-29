@@ -12,7 +12,20 @@
           "package_name": "com.mealty.mealty"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "555789029975-n8la3o9k4g0kebqaevkak3hocos8tg9p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mealty.mealty",
+            "certificate_hash": "bee8f925d2855f317caf6313b1143db400f83801"
+          }
+        },
+        {
+          "client_id": "555789029975-62ng4c52l71hc6jfrtjbdja8h6ho5aub.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyB8obV6axhHi9UkLeu81x6LBAZZ7viVpP0"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "555789029975-62ng4c52l71hc6jfrtjbdja8h6ho5aub.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "555789029975-8rg1cuql0tkmt3t72rdni2ffscrelv16.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mealty.mealty"
+              }
+            }
+          ]
         }
       }
     }
